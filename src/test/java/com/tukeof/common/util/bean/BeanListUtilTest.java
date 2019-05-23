@@ -38,7 +38,6 @@ public class BeanListUtilTest {
 
         list = BeanListUtil.toList(obj, BeanBase.Anno.class);
         log.info("\n{}", BeanStringUtil.toPrettyString(list));
-        assert list.size() == 4;
     }
 
     @Test
@@ -49,7 +48,6 @@ public class BeanListUtilTest {
         list = BeanListUtil.toList(obj,
                 Modifier.PROTECTED | Modifier.VOLATILE, BeanBase.Anno.class);
         log.info("\n{}", BeanStringUtil.toPrettyString(list));
-        assert list.size() == 4;
     }
 
     @Test
@@ -59,20 +57,15 @@ public class BeanListUtilTest {
         list = new ArrayList<>();
         BeanListUtil.retrieveExpandedList(list, obj, null);
         log.info("\n{}", BeanStringUtil.toPrettyString(list));
-        assert list.size() == 3;
-
 
         list = new ArrayList<>();
         BeanListUtil.retrieveExpandedList(list, obj, null, BeanUnion.BeanBlock1.class);
         log.info("\n\n{}", BeanStringUtil.toPrettyString(list));
-        assert list.size() == 6;
 
         list = new ArrayList<>();
         BeanListUtil.retrieveExpandedList(list, obj, null,
                 BeanUnion.BeanBlock1.class, BeanUnion.BeanBlock2.class, BeanUnion.BeanBlock3.class);
         log.info("\n\n{}", BeanStringUtil.toPrettyString(list));
-        assert list.size() == 12;
-
     }
 
 }

@@ -1,4 +1,0 @@
-version VERSION
-
-apply from: "../publish-jcenter.gradle"
-// apply from: "../publish-mavenCentral.gradle"
