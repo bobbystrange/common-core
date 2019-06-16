@@ -1,4 +1,4 @@
-package org.dreamcat.common.util.bean;
+package org.dreamcat.common.util;
 
 import org.dreamcat.common.util.ReflectUtil;
 

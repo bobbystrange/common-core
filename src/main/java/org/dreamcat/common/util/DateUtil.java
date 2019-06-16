@@ -44,4 +44,40 @@ public class DateUtil {
         return format(LocalDate.now(), pattern);
     }
 
+    public static String yyMMddHHmmssSSS() {
+        return yyMMddHHmmssSSS(new Date());
+    }
+
+    public static String yyMMddHHmmssSSS(Date date) {
+        return new SimpleDateFormat("yyMMddHHmmssSSS")
+                .format(date);
+    }
+
+    public static String yyMMddHHmmss() {
+        return yyMMddHHmmss(new Date());
+    }
+
+    public static String yyMMddHHmmss(Date date) {
+        return new SimpleDateFormat("yyMMddHHmmss")
+                .format(date);
+    }
+
+    public static String yyMMddHHmm() {
+        return yyMMddHHmm(new Date());
+    }
+
+    public static String yyMMddHHmm(Date date) {
+        return new SimpleDateFormat("yyMMddHHmm")
+                .format(date);
+    }
+
+    public static String yyMMdd() {
+        return yyMMdd(new Date());
+    }
+
+    public static String yyMMdd(Date date) {
+        return new SimpleDateFormat("yyMMdd")
+                .format(date);
+    }
+
 }

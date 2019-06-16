@@ -1,4 +1,4 @@
-package org.dreamcat.common.core.component;
+package org.dreamcat.common.core;
 
 import org.dreamcat.common.util.ObjectUtil;
 import lombok.Getter;
@@ -18,13 +18,18 @@ import java.util.stream.Collectors;
 /**
  * Create by tuke on 2018/11/9
  */
-public class BeanComponent {
+public class BeanConstructor {
     @Getter
     private final Map<Class, Function<String, Object>> mapper = new HashMap<>();
     private final List<String> format = new ArrayList<>();
 
-    public <T> T fromStringList(Class<T> clazz, List<String> list) throws IllegalAccessException, InstantiationException {
-        T bean = clazz.newInstance();
+    public <T> T fromStringList(Class<T> clazz, List<String> list) {
+        T bean;
+        try {
+            bean = clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
         Field[] fields = clazz.getDeclaredFields();
         List<Class> types = Arrays.stream(fields)
                 .map(Field::getType)
@@ -37,12 +42,20 @@ public class BeanComponent {
             Object value = mapper.get(key).apply(list.get(i));
 
             fields[i].setAccessible(true);
-            fields[i].set(bean, value);
+            try {
+                fields[i].set(bean, value);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
         return bean;
     }
 
-    public BeanComponent(String... patterns) {
+    public <T> T fromStringArray(Class<T> clazz, String[] strings) {
+        return fromStringList(clazz, Arrays.asList(strings));
+    }
+
+    public BeanConstructor(String... patterns) {
         registerMapper();
         if (ObjectUtil.isEmpty(patterns))
             registerFormat();

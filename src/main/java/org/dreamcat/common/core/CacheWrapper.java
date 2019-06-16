@@ -1,4 +1,4 @@
-package org.dreamcat.common.core.component;
+package org.dreamcat.common.core;
 
 import org.dreamcat.common.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -10,17 +10,17 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Create by tuke on 2018-12-17
  */
-public class CacheComponent {
+public class CacheWrapper {
 
     private final ConcurrentMap<Object, ValueWrapper> store;
     // milli seconds
     private final long defaultTtl;
 
-    public CacheComponent() {
+    public CacheWrapper() {
         this(Long.MAX_VALUE);
     }
 
-    public CacheComponent(long defaultTtl) {
+    public CacheWrapper(long defaultTtl) {
         this.store = new ConcurrentHashMap<>();
         this.defaultTtl = defaultTtl;
     }

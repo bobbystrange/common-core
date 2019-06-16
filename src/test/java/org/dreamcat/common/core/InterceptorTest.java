@@ -6,7 +6,7 @@ import org.dreamcat.common.core.chain.RealCall;
 import org.dreamcat.common.core.chain.RealInterceptTarget;
 import org.junit.Test;
 
-import static org.dreamcat.common.util.bean.BeanStringUtil.toPrettyString;
+import static org.dreamcat.common.util.BeanUtil.toPrettyString;
 
 public class InterceptorTest {
 

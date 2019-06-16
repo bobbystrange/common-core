@@ -1,9 +1,9 @@
 package org.dreamcat.common.util.collection;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.test.BeanKey;
 import org.dreamcat.common.test.BeanUnion;
-import org.dreamcat.common.util.bean.BeanStringUtil;
-import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.BeanUtil;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -14,7 +14,7 @@ import java.util.List;
  * Create by tuke on 2019-01-28
  */
 @Slf4j
-public class BasicCollectionUnionUtilTest {
+public class CollectionUnionBasicUtilTest {
 
     private static final List<BeanUnion.BeanBlock1> list1 = BeanUnion.ofSub1();
     private static final List<BeanUnion.BeanBlock2> list2 = BeanUnion.ofSub2();
@@ -24,8 +24,8 @@ public class BasicCollectionUnionUtilTest {
     @SuppressWarnings("unchecked")
     @Test
     public void unionVerticalBlocks() {
-        List<String> stringList = BeanStringUtil.toStringList(list1.get(0));
-        log.info("\n{}", BeanStringUtil.toPrettyString(stringList));
+        List<String> stringList = BeanUtil.toStringList(list1.get(0));
+        log.info("\n{}", BeanUtil.toPrettyString(stringList));
 
 
         List<List<String>> data = CollectionUnionUtil.unionVertical(
@@ -48,7 +48,7 @@ public class BasicCollectionUnionUtilTest {
 
         log.info("{}", data.size());
         for (List<String> list : data) {
-            log.info("\n{}", BeanStringUtil.toPrettyString(list));
+            log.info("\n{}", BeanUtil.toPrettyString(list));
         }
     }
 

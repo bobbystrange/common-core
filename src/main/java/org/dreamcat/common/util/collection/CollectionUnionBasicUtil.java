@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Create by tuke on 2019-02-14
  */
-public class BasicCollectionUnionUtil {
+public class CollectionUnionBasicUtil {
 
     @SuppressWarnings("unchecked")
     public static <K, T> List<List<String>> unionVertical(
@@ -130,7 +130,7 @@ public class BasicCollectionUnionUtil {
     /**
      * vertical union
      *
-     * @param keyColumnFormatter    create common fileds by the key object
+     * @param keyColumnFormatter    create common fields by the key object
      * @param blockColumnFormatters every block has its own formatter
      * @param keys                  key object list
      * @param blockWidths           if blockWidth eq null, then ignore it

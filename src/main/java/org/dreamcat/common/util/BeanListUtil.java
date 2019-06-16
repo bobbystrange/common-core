@@ -1,7 +1,6 @@
-package org.dreamcat.common.util.bean;
+package org.dreamcat.common.util;
 
 import org.dreamcat.common.annotation.Nullable;
-import org.dreamcat.common.util.ReflectUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

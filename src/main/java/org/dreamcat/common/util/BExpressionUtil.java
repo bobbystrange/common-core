@@ -1,8 +1,9 @@
-package org.dreamcat.common.util.bean;
+package org.dreamcat.common.util;
 
-import org.dreamcat.common.exception.InvalidBeanExpressionException;
-import org.dreamcat.common.util.ReflectUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.exception.InvalidBeanExpressionException;
+import org.dreamcat.common.util.BeanUtil;
+import org.dreamcat.common.util.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
  * Create by tuke on 2018-12-27
  */
 @Slf4j
-public class BeanExpressionUtil {
+public class BExpressionUtil {
 
     /**
      * set the value of some fields to null
@@ -135,7 +136,7 @@ public class BeanExpressionUtil {
                 if (!keptFiledNames.contains(fieldName)) {
                     Field field = clazz.getDeclaredField(fieldName);
                     field.setAccessible(true);
-                    BeanModUtil.nullifyField(bean, field);
+                    BeanUtil.nullifyField(bean, field);
                 }
             }
         }
