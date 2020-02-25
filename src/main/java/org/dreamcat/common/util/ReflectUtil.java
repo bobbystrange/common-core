@@ -1,7 +1,7 @@
 package org.dreamcat.common.util;
 
-import org.dreamcat.common.annotation.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.annotation.NotNull;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -24,6 +24,7 @@ public class ReflectUtil {
             "value", "name"
     };
 
+    @SuppressWarnings("rawtypes")
     public static void retrieveSuperClasses(List<Class> classList, Class<?> clazz) {
         Class superClazz = clazz.getSuperclass();
         classList.add(superClazz);
@@ -32,6 +33,7 @@ public class ReflectUtil {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static void retrieveMethods(List<Method> methodList, Class<?> clazz) {
         Method[] methods = clazz.getDeclaredMethods();
         methodList.addAll(Arrays.asList(methods));
@@ -42,6 +44,7 @@ public class ReflectUtil {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static void retrieveFields(List<Field> fieldList, Class<?> clazz) {
         Field[] fields = clazz.getDeclaredFields();
         fieldList.addAll(Arrays.asList(fields));
@@ -72,6 +75,7 @@ public class ReflectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    @SuppressWarnings("rawtypes")
     public static void retrieveFields(Class<?> clazz, Map<String, Field> fieldMap, Class... annotationClasses) {
         Field[] fields = clazz.getDeclaredFields();
         Arrays.stream(fields)
@@ -87,6 +91,7 @@ public class ReflectUtil {
     }
 
     // hasModifiersAndAnyAnnotation static, transient, volatile
+    @SuppressWarnings("rawtypes")
     public static void retrieveFieldNames(Class<?> clazz, List<String> fieldNameList, Class... annotationClasses) {
         Field[] fields = clazz.getDeclaredFields();
         fieldNameList.addAll(Arrays.stream(fields)
@@ -106,6 +111,7 @@ public class ReflectUtil {
     }
 
     // not excluding strategy
+    @SuppressWarnings("rawtypes")
     public static String retrieveFieldName(Field field, Class... annotationClasses) {
         String fieldName = field.getName();
         Annotation[] annotations = field.getAnnotations();
@@ -142,6 +148,7 @@ public class ReflectUtil {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     public static boolean hasModifiersAndAnyAnnotation(
             Field field, int modifiers, Class... annotationClasses) {
         boolean exclude = hasAnyAnnotation(field, annotationClasses);
@@ -149,13 +156,14 @@ public class ReflectUtil {
         return exclude || (fieldModifiers & modifiers) > 0;
     }
 
+    @SuppressWarnings("rawtypes")
     public static boolean isStaticAndHasExtraModifiersAndAnyAnnotation(
             Field field, int extraModifiers, Class... annotationClasses) {
         int modifiers = extraModifiers | Modifier.STATIC;
         return hasModifiersAndAnyAnnotation(field, modifiers, annotationClasses);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static boolean hasAnyAnnotation(Field field, Class... annotationClasses) {
         if (ObjectUtil.isEmpty(annotationClasses)) return false;
 
@@ -170,6 +178,7 @@ public class ReflectUtil {
         return false;
     }
 
+    @SuppressWarnings("rawtypes")
     public static boolean hasAnySuperClass(Class<?> clazz, Class... classes) {
         if (ObjectUtil.isEmpty(classes)) return false;
 

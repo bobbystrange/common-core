@@ -1,8 +1,7 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.crypto.DHCryptoEnum;
-import org.dreamcat.common.util.ByteUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ByteUtil;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;

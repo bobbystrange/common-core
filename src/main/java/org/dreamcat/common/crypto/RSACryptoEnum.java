@@ -29,11 +29,11 @@ public enum RSACryptoEnum {
 
     private static final int MAX_ENCRYPT_BLOCK = 117;
     private static final int MAX_DECRYPT_BLOCK = 128;
+    private static final int KEY_SIZE = 1024;
 
     private final String algorithm;
     private final String PUBLIC_KEY;
     private final String PRIVATE_KEY;
-    private int keySize = 1024;
 
     RSACryptoEnum(String algorithm) {
         this.algorithm = algorithm;
@@ -117,8 +117,8 @@ public enum RSACryptoEnum {
                 .getInstance(algorithm);
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.setSeed(UUID.randomUUID().toString().getBytes());
-        keyPairGen.initialize(keySize, secureRandom);
-        keyPairGen.initialize(keySize);
+        keyPairGen.initialize(KEY_SIZE, secureRandom);
+        keyPairGen.initialize(KEY_SIZE);
         KeyPair keyPair = keyPairGen.generateKeyPair();
 
         Map<String, Key> pair = new HashMap<>(2);

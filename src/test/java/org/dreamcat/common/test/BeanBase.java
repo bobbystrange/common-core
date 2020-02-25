@@ -1,12 +1,12 @@
 package org.dreamcat.common.test;
 
-import org.dreamcat.common.util.DateUtil;
-import org.dreamcat.common.util.RandomUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.DateUtil;
+import org.dreamcat.common.util.RandomUtil;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -36,11 +36,11 @@ public class BeanBase {
     public static BeanBase newInstance() {
 
         BeanBase obj = new BeanBase();
-        obj.setName(RandomUtil.generateUuid32());
+        obj.setName(RandomUtil.uuid());
         obj.setTimestamp(new Date());
         obj.setRandom(Math.random());
         obj.setTab(new BeanBase.Table(
-                RandomUtil.nonce32(10),
+                RandomUtil.choose36(10),
 
                 DateUtil.from(1752, 9, 14, 0, 0, 0),
                 DateUtil.from(1999, 12, 31, 23, 59, 59),

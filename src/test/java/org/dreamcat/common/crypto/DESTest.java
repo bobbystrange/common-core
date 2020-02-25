@@ -1,8 +1,7 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.DESUtil;
-import org.dreamcat.common.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
 
 /**
@@ -15,10 +14,13 @@ public class DESTest {
     public void test() throws Exception {
 
         String key = "FxAmNDB8";
-        String text = key;
+        String text = RandomUtil.choose72(36);
+        log.info("source {}", text);
         log.info("before {}", MD5Util.md5Hex(text));
         String result = DESUtil.encryptToBase64(text, key);
         log.info("after {}", MD5Util.md5Hex(result));
+        String decrypted = DESUtil.decryptFromBase64(result, key);
+        log.info("decrypted {}", MD5Util.md5Hex(decrypted));
 
     }
 }

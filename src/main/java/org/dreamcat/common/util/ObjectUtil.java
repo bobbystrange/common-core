@@ -54,6 +54,10 @@ public final class ObjectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    public static <T> boolean isEmpty(String o) {
+        return !isNotEmpty(o);
+    }
+
     public static <T> boolean isEmpty(Collection<T> o) {
         return !isNotEmpty(o);
     }
@@ -76,6 +80,10 @@ public final class ObjectUtil {
 
     public static <T> boolean isEmpty(double[] o) {
         return !isNotEmpty(o);
+    }
+
+    public static <T> boolean isNotEmpty(String o) {
+        return o != null && !o.isEmpty();
     }
 
     public static <T> boolean isNotEmpty(Collection<T> o) {

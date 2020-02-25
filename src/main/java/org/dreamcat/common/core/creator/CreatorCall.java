@@ -77,7 +77,7 @@ public class CreatorCall<T> implements Creator.Call<T> {
         realCall.enqueue(new Interceptor.Callback<Object, T>() {
             @Override
             public void onComptele(RealCall<Object, T> call, T t) {
-                callback.onComptele(CreatorCall.this, t);
+                callback.onComplete(CreatorCall.this, t);
 
             }
 

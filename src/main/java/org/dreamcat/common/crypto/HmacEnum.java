@@ -1,8 +1,8 @@
 package org.dreamcat.common.crypto;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.util.Base64Util;
 import org.dreamcat.common.util.ByteUtil;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;

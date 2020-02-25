@@ -2,15 +2,12 @@ package org.dreamcat.common.crypto;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.dreamcat.common.crypto.MessageDigestEnum;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 @Slf4j
 public class MessageDigestEnumTest {
-
-    private String msg = "0123456789abcdef";
 
     @Test
     public void base() throws Exception {
@@ -19,6 +16,7 @@ public class MessageDigestEnumTest {
         MessageDigestEnum sha256 = MessageDigestEnum.SHA_256;
 
 
+        String msg = "0123456789abcdef";
         log.info("utf-8:\t{}", Arrays.toString(msg.getBytes()));
         log.info("ios-8859-1:\t{}", Arrays.toString(msg.getBytes(StandardCharsets.ISO_8859_1)));
 

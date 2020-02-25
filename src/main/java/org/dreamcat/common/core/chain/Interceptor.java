@@ -1,25 +1,25 @@
 package org.dreamcat.common.core.chain;
 
-public interface Interceptor<Req, Resp> {
+public interface Interceptor<Req, Res> {
 
-    Resp intercept(Chain<Req, Resp> chain) throws Exception;
+    Res intercept(Chain<Req, Res> chain) throws Exception;
 
-    interface Chain<Req, Resp> {
+    interface Chain<Req, Res> {
 
         Req original();
 
-        Resp proceed(Req req) throws Exception;
+        Res proceed(Req req) throws Exception;
 
-        Call<Req, Resp> call();
+        Call<Req, Res> call();
     }
 
-    interface Call<Req, Resp> extends Cloneable {
+    interface Call<Req, Res> extends Cloneable {
 
         Req original();
 
-        Resp execute() throws Exception;
+        Res execute() throws Exception;
 
-        void enqueue(Interceptor.Callback<Req, Resp> respCallback);
+        void enqueue(Interceptor.Callback<Req, Res> respCallback);
 
         void cancel();
 
@@ -28,44 +28,44 @@ public interface Interceptor<Req, Resp> {
         boolean isCanceled();
     }
 
-    interface AsyncCall<Req, Resp> extends Runnable {
+    interface AsyncCall<Req, Res> extends Runnable {
 
         Req original();
 
         void execute();
 
-        Call<Req, Resp> get();
+        Call<Req, Res> get();
     }
 
-    interface Callback<Req, Resp> {
+    interface Callback<Req, Res> {
 
-        void onComptele(RealCall<Req, Resp> call, Resp resp);
+        void onComptele(RealCall<Req, Res> call, Res resp);
 
-        void onError(RealCall<Req, Resp> call, Exception e);
+        void onError(RealCall<Req, Res> call, Exception e);
     }
 
     // only works on synchronous call
-    interface Listener<Req, Resp> {
+    interface Listener<Req, Res> {
 
-        default void onBefore(Call<Req, Resp> call) {
+        default void onBefore(Call<Req, Res> call) {
         }
 
-        default void onReturn(Call<Req, Resp> call, Resp result) {
+        default void onReturn(Call<Req, Res> call, Res result) {
         }
 
-        default void onThrow(Call<Req, Resp> call, Exception e) {
+        default void onThrow(Call<Req, Res> call, Exception e) {
         }
     }
 
-    interface Dispatcher<Req, Resp> {
+    interface Dispatcher<Req, Res> {
 
-        void enqueue(AsyncCall<Req, Resp> call);
+        void enqueue(AsyncCall<Req, Res> call);
 
-        void executed(Call<Req, Resp> call);
+        void executed(Call<Req, Res> call);
 
-        void finished(AsyncCall<Req, Resp> call);
+        void finished(AsyncCall<Req, Res> call);
 
-        void finished(Call<Req, Resp> call);
+        void finished(Call<Req, Res> call);
 
     }
 }

@@ -2,24 +2,24 @@ package org.dreamcat.common.core.chain;
 
 import java.util.List;
 
-public class RealChain<Req, Resp>
-        implements Interceptor.Chain<Req, Resp> {
+public class RealChain<Req, Res>
+        implements Interceptor.Chain<Req, Res> {
 
     private final Req original;
 
-    private final List<Interceptor<Req, Resp>> interceptors;
+    private final List<Interceptor<Req, Res>> interceptors;
 
-    private final Interceptor.Call<Req, Resp> call;
+    private final Interceptor.Call<Req, Res> call;
 
     private final int index;
 
     private int calls;
 
     public RealChain(
-            List<Interceptor<Req, Resp>> interceptors,
+            List<Interceptor<Req, Res>> interceptors,
             int index,
             Req original,
-            Interceptor.Call<Req, Resp> call) {
+            Interceptor.Call<Req, Res> call) {
         this.interceptors = interceptors;
         this.index = index;
         this.original = original;
@@ -33,11 +33,11 @@ public class RealChain<Req, Resp>
     }
 
     @Override
-    public Interceptor.Call<Req, Resp> call() {
+    public Interceptor.Call<Req, Res> call() {
         return call;
     }
 
-    public Resp proceed(Req req) throws Exception {
+    public Res proceed(Req req) throws Exception {
         if (index >= interceptors.size()) throw new AssertionError();
 
         calls++;
@@ -48,9 +48,9 @@ public class RealChain<Req, Resp>
         }
 
         // Call the next interceptor in the chain.
-        RealChain<Req, Resp> next = new RealChain<>(interceptors, index + 1, req, call);
-        Interceptor<Req, Resp> interceptor = interceptors.get(index);
-        Resp resp = interceptor.intercept(next);
+        RealChain<Req, Res> next = new RealChain<>(interceptors, index + 1, req, call);
+        Interceptor<Req, Res> interceptor = interceptors.get(index);
+        Res res = interceptor.intercept(next);
 
         // Confirm that the next interceptor made its required call to chain.proceed().
         if (index + 1 < interceptors.size() && next.calls != 1) {
@@ -59,11 +59,11 @@ public class RealChain<Req, Resp>
         }
 
         // Confirm that the intercepted response isn't null.
-        if (resp == null) {
+        if (res == null) {
             throw new NullPointerException("interceptor " + interceptor + " returned null");
         }
 
-        return resp;
+        return res;
     }
 
 }

@@ -2,14 +2,14 @@ package org.dreamcat.common.core.chain;
 
 import java.util.List;
 
-public interface InterceptTarget<Req, Resp> {
+public interface InterceptTarget<Req, Res> {
 
-    List<Interceptor<Req, Resp>> interceptors();
+    List<Interceptor<Req, Res>> interceptors();
 
-    Interceptor.Dispatcher<Req, Resp> dispatcher();
+    Interceptor.Dispatcher<Req, Res> dispatcher();
 
-    default Interceptor.Listener<Req, Resp> listener() {
-        return new Interceptor.Listener<Req, Resp>() {
+    default Interceptor.Listener<Req, Res> listener() {
+        return new Interceptor.Listener<Req, Res>() {
         };
     }
 
@@ -17,7 +17,7 @@ public interface InterceptTarget<Req, Resp> {
         return req.toString();
     }
 
-    default Interceptor.Call<Req, Resp> newCall(Req req) {
+    default Interceptor.Call<Req, Res> newCall(Req req) {
         return RealCall.newCall(this, req);
     }
 

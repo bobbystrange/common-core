@@ -1,7 +1,7 @@
 package org.dreamcat.common.util;
 
-import org.dreamcat.common.test.BeanBase;
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.test.BeanBase;
 import org.junit.Test;
 
 import java.lang.reflect.Field;

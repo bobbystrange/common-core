@@ -13,14 +13,14 @@ import java.util.regex.Pattern;
 public class RegexpTest {
 
     @Test
-    public void test(){
+    public void test() {
         char ch = 0;
 
         Pattern pattern = Pattern.compile("\\w");
-        for (;ch<1<<16-1; ch++){
-            Matcher matcher = pattern.matcher(ch +"");
+        for (; ch < 1 << 16 - 1; ch++) {
+            Matcher matcher = pattern.matcher(ch + "");
             log.info("{} `{}` match {}\t{}",
-                    (int)ch,
+                    (int) ch,
                     Character.valueOf(ch).toString(),
                     pattern,
                     matcher.matches());

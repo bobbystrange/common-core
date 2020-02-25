@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.Map;
 
-public interface Wget<Req, Resp> {
+public interface Wget<Req, Res> {
 
     @Nullable
     Req prepare(String url, String method,
@@ -17,15 +17,15 @@ public interface Wget<Req, Resp> {
     Req prepare(String url, String method,
                 @Nullable Map<String, String> headers, @Nullable byte[] body);
 
-    Resp request(Req req) throws IOException;
+    Res request(Req req) throws IOException;
 
-    void save(Resp resp, String path) throws IOException;
+    void save(Res res, String path) throws IOException;
 
-    String string(Resp resp) throws IOException;
+    String string(Res res) throws IOException;
 
-    byte[] bytes(Resp resp) throws IOException;
+    byte[] bytes(Res res) throws IOException;
 
-    Reader reader(Resp resp) throws IOException;
+    Reader reader(Res res) throws IOException;
 
-    InputStream inputStream(Resp resp) throws IOException;
+    InputStream inputStream(Res res) throws IOException;
 }

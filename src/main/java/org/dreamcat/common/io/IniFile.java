@@ -41,8 +41,8 @@ public class IniFile {
             String line;
             while ((line = ins.readLine()) != null) {
                 line = line.trim();
-                if (line.matches("\\[(.*)\\]")) {
-                    String section = line.replaceFirst("\\[(.*)\\]", "$1");
+                if (line.matches("\\[(.*)]")) {
+                    String section = line.replaceFirst("\\[(.*)]", "$1");
                     current = new HashMap<>();
                     sections.put(section, current);
                 } else if (line.matches(".*?=.*")) {

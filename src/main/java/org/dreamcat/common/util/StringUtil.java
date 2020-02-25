@@ -1,12 +1,39 @@
 package org.dreamcat.common.util;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Create by tuke on 2019-02-16
  */
+@Slf4j
 public class StringUtil {
+
+    public static String unbackslash(String string) {
+        return unbackslash(string, '\\');
+    }
+
+    public static String unbackslash(String string, char backslash) {
+        if (ObjectUtil.isEmpty(string)) return "";
+        int len = string.length();
+        StringBuilder sb = new StringBuilder(string.length());
+        for (int i=0; i<len; i++){
+            if (string.charAt(i) == backslash){
+                if (i == len -1) {
+                    log.warn("Found the unmatched backslash in the end of your string");
+                    sb.append(string.charAt(i));
+                    break;
+                }
+                else {
+                    sb.append(string.charAt(++i));
+                    continue;
+                }
+            }
+            sb.append(string.charAt(i));
+        }
+        return sb.toString();
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static String repeat(char c, int length) {
         if (length <= 0) return "";

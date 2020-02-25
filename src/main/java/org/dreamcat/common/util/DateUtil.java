@@ -13,6 +13,8 @@ import java.util.TimeZone;
  */
 public class DateUtil {
 
+    private static final String gmt_pattern = "E, dd MMM yyyy HH:mm:ss 'GMT'";
+
     public static Date from(
             int year, int month, int date,
             int hourOfDay, int minute, int second) {
@@ -28,20 +30,10 @@ public class DateUtil {
         return calendar.getTime();
     }
 
-    private static final String gmt_pattern = "E, dd MMM yyyy HH:mm:ss 'GMT'";
-
     public static String toGMTString(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat(gmt_pattern, Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         return sdf.format(new Date());
-    }
-
-    private String format(LocalDate localDate, String pattern) {
-        return localDate.format(DateTimeFormatter.ofPattern(pattern));
-    }
-
-    private String formatLocalNow(String pattern) {
-        return format(LocalDate.now(), pattern);
     }
 
     public static String yyMMddHHmmssSSS() {
@@ -78,6 +70,14 @@ public class DateUtil {
     public static String yyMMdd(Date date) {
         return new SimpleDateFormat("yyMMdd")
                 .format(date);
+    }
+
+    private String format(LocalDate localDate, String pattern) {
+        return localDate.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    private String formatLocalNow(String pattern) {
+        return format(LocalDate.now(), pattern);
     }
 
 }

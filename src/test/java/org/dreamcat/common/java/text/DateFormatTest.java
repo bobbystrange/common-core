@@ -24,10 +24,10 @@ public class DateFormatTest {
         ExecutorService executor = Executors.newFixedThreadPool(128);
         int i = 0;
         int mod;
-        while (i++ < 2 << 16){
+        while (i++ < 2 << 16) {
             final int seq = i;
 
-            Date date = new Date((long)(System.currentTimeMillis() * seq / 1024.0));
+            Date date = new Date((long) (System.currentTimeMillis() * seq / 1024.0));
             String dateString = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US)
                     .format(date);
 
@@ -53,7 +53,7 @@ public class DateFormatTest {
         ExecutorService executor = Executors.newFixedThreadPool(128);
         int i = 1;
         int mod;
-        while (i++ <= 2 << 16){
+        while (i++ <= 2 << 16) {
             final int seq = i;
 
             LocalDateTime dateTime = LocalDateTime.now().minusDays(i);

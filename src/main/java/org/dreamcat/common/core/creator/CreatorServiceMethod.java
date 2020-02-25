@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 /**
  * Create by tuke on 2018-09-09
  */
-public class CreatorServiceMethod implements Creator.ServiceMethod {
+public class CreatorServiceMethod implements ServiceMethod {
 
     private final Creator creator;
     private final Method method;
@@ -30,7 +30,6 @@ public class CreatorServiceMethod implements Creator.ServiceMethod {
     @Override
     public Creator.Call<?> adapt(Object[] args) throws Exception {
         Object result = methodAdapter.apply(method, args);
-
         return CreatorCall.newCall(result, it -> it);
     }
 }

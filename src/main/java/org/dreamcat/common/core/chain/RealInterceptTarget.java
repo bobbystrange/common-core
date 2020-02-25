@@ -10,20 +10,20 @@ import java.util.function.Function;
 /**
  * Create by tuke on 2018-09-08
  */
-public class RealInterceptTarget<Req, Resp> implements InterceptTarget<Req, Resp>, Interceptor<Req, Resp> {
+public class RealInterceptTarget<Req, Res> implements InterceptTarget<Req, Res>, Interceptor<Req, Res> {
 
-    private final ThrowableFunction<Req, Resp> entrypoint;
+    private final ThrowableFunction<Req, Res> function;
 
-    private final List<Interceptor<Req, Resp>> interceptors;
+    private final List<Interceptor<Req, Res>> interceptors;
 
-    private final Interceptor.Dispatcher<Req, Resp> dispatcher;
+    private final Interceptor.Dispatcher<Req, Res> dispatcher;
 
-    private final Interceptor.Listener<Req, Resp> listener;
+    private final Interceptor.Listener<Req, Res> listener;
 
     private final Function<Req, String> originalName;
 
-    private RealInterceptTarget(RealInterceptTarget.Builder<Req, Resp> builder) {
-        entrypoint = builder.entrypoint;
+    private RealInterceptTarget(RealInterceptTarget.Builder<Req, Res> builder) {
+        function = builder.function;
         interceptors = builder.interceptors;
         originalName = builder.originalName;
 
@@ -38,22 +38,22 @@ public class RealInterceptTarget<Req, Resp> implements InterceptTarget<Req, Resp
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <Req, Resp> Builder<Req, Resp> builder(
-            @NotNull ThrowableFunction<Req, Resp> entrypoint) {
-        return new Builder<>(entrypoint);
+            @NotNull ThrowableFunction<Req, Resp> function) {
+        return new Builder<>(function);
     }
 
     @Override
-    public Interceptor.Dispatcher<Req, Resp> dispatcher() {
+    public Interceptor.Dispatcher<Req, Res> dispatcher() {
         return dispatcher;
     }
 
     @Override
-    public List<Interceptor<Req, Resp>> interceptors() {
+    public List<Interceptor<Req, Res>> interceptors() {
         return interceptors;
     }
 
     @Override
-    public Interceptor.Listener<Req, Resp> listener() {
+    public Interceptor.Listener<Req, Res> listener() {
         return listener;
     }
 
@@ -65,13 +65,13 @@ public class RealInterceptTarget<Req, Resp> implements InterceptTarget<Req, Resp
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @Override
-    public Resp intercept(Chain<Req, Resp> chain) throws Exception {
-        return entrypoint.apply(chain.original());
+    public Res intercept(Chain<Req, Res> chain) throws Exception {
+        return function.apply(chain.original());
     }
 
     public static class Builder<Req, Resp> {
 
-        private final ThrowableFunction<Req, Resp> entrypoint;
+        private final ThrowableFunction<Req, Resp> function;
 
         private final List<Interceptor<Req, Resp>> interceptors;
 
@@ -81,8 +81,8 @@ public class RealInterceptTarget<Req, Resp> implements InterceptTarget<Req, Resp
 
         private Function<Req, String> originalName;
 
-        public Builder(ThrowableFunction<Req, Resp> entrypoint) {
-            this.entrypoint = entrypoint;
+        public Builder(ThrowableFunction<Req, Resp> function) {
+            this.function = function;
             this.interceptors = new ArrayList<>();
         }
 

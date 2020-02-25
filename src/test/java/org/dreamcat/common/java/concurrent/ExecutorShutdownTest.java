@@ -14,12 +14,12 @@ public class ExecutorShutdownTest {
     private static volatile int lineno = 1;
 
     @Test
-    public void test(){
+    public void test() {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(22, 44, 200, TimeUnit.MILLISECONDS,
                 new ArrayBlockingQueue<Runnable>(22));
 
         long timestamp = System.currentTimeMillis();
-        for (int i=0; i < 16; i++) {
+        for (int i = 0; i < 16; i++) {
             final int k = i;
             executor.execute(() -> {
                 try {
@@ -35,11 +35,11 @@ public class ExecutorShutdownTest {
     }
 
     @Test
-    public void main(){
+    public void main() {
         test();
         try {
             Thread.sleep(1000L);
-            System.out.println(lineno++ + " " +"Done");
+            System.out.println(lineno++ + " " + "Done");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

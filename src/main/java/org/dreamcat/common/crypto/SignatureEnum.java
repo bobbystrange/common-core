@@ -55,7 +55,6 @@ public enum SignatureEnum {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    //
     SignatureEnum(
             String SIGNATURE_ALGORITHM) {
         this.SIGNATURE_ALGORITHM = SIGNATURE_ALGORITHM;
@@ -72,6 +71,10 @@ public enum SignatureEnum {
     }
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
+    public String signBase64(byte[] data, String base64PrivateKey) throws Exception {
+        return Base64Util.encodeToString(sign(data, Base64Util.decode(base64PrivateKey)));
+    }
+
     public byte[] sign(byte[] data, byte[] privateKey) throws Exception {
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(privateKey);
@@ -83,8 +86,11 @@ public enum SignatureEnum {
         return signature.sign();
     }
 
-    public boolean verify(
-            byte[] data, byte[] publicKey, byte[] sign) throws Exception {
+    public boolean verifyBase64(byte[] data, String publicKey, String sign) throws Exception {
+        return verify(data, Base64Util.decode(publicKey), Base64Util.decode(sign));
+    }
+
+    public boolean verify(byte[] data, byte[] publicKey, byte[] sign) throws Exception {
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
 

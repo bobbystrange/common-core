@@ -118,18 +118,8 @@ public interface Creator {
 
     interface Callback<T> {
 
-        void onComptele(Call<T> call, T result);
+        void onComplete(Call<T> call, T result);
 
         void onError(Call<T> call, Throwable t);
-    }
-
-    /**
-     * Create by tuke on 2018-09-09
-     */
-    interface ServiceMethod {
-
-        Method method();
-
-        Object adapt(Object[] args) throws Exception;
     }
 }

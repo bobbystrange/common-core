@@ -14,7 +14,7 @@ public class ProcessTest {
     @Test
     public void proc() throws IOException, InterruptedException {
         int i = 0;
-        while (i++<1000){
+        while (i++ < 1000) {
             Process process = Runtime.getRuntime().exec("ls -alh");
             log.info("exit {}", process.waitFor());
             //Thread.sleep(10_000);

@@ -15,16 +15,17 @@ public class ExecutorUtil {
             FutureTask<Exception> task,
             long timeout,
             TimeUnit unit,
-            Consumer<TimeoutException> timeoutCallback){
+            Consumer<TimeoutException> timeoutCallback) {
         try {
             Executors.newSingleThreadExecutor().submit(task);
             Exception exception = task.get(timeout, unit);
             if (exception != null) throw new RuntimeException(exception);
         } catch (Exception e) {
-            if (e instanceof TimeoutException){
+            if (e instanceof TimeoutException) {
                 timeoutCallback.accept((TimeoutException) e);
+            } else {
+                throw new RuntimeException(e);
             }
-            throw new RuntimeException(e);
         }
     }
 }
