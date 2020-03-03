@@ -1,6 +1,5 @@
 package org.dreamcat.common.util;
 
-import org.dreamcat.common.annotation.Nullable;
 import org.dreamcat.common.io.IOUtil;
 
 import java.io.IOException;
@@ -85,9 +84,9 @@ public class UrlUtil {
     public InputStream request(
             String url,
             String method,
-            @Nullable InputStream source,
-            @Nullable Map<String, String> headers,
-            @Nullable Map<String, String> queryMap) throws IOException {
+            InputStream source,
+            Map<String, String> headers,
+            Map<String, String> queryMap) throws IOException {
         return request(url, method, TIMEOUT, TIMEOUT, source, headers, queryMap);
     }
 
@@ -96,9 +95,9 @@ public class UrlUtil {
             String method,
             int connectTimeout,
             int readTimeout,
-            @Nullable InputStream source,
-            @Nullable Map<String, String> headers,
-            @Nullable Map<String, String> queryMap) throws IOException {
+            InputStream source,
+            Map<String, String> headers,
+            Map<String, String> queryMap) throws IOException {
         if (ObjectUtil.isNotEmpty(queryMap)) url = UrlUtil.concatUrl(url, queryMap);
 
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();

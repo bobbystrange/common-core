@@ -1,7 +1,7 @@
 package org.dreamcat.common.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.test.BeanBase;
+import org.dreamcat.test.BeanData;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -20,10 +20,10 @@ public class ReflectUtilTest {
 
     @Test
     public void hasAnnotation() throws NoSuchFieldException {
-        BeanBase obj = BeanBase.newInstance();
+        BeanData.Pojo obj = BeanData.ofPojo();
         Field nameField = obj.getClass().getDeclaredField("name");
 
-        assert ReflectUtil.hasAnyAnnotation(nameField, BeanBase.Anno.class);
+        assert ReflectUtil.hasAnyAnnotation(nameField, BeanData.Ann.class);
     }
 
     @Test

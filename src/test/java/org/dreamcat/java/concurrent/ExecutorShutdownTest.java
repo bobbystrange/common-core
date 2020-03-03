@@ -1,4 +1,4 @@
-package org.dreamcat.common.java.concurrent;
+package org.dreamcat.java.concurrent;
 
 import org.junit.Test;
 

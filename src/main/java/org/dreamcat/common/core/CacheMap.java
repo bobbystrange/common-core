@@ -2,7 +2,6 @@ package org.dreamcat.common.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.dreamcat.common.annotation.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -40,7 +39,6 @@ public class CacheMap implements Map<Object, Object> {
         return delegate.containsValue(Value.valueOf(value));
     }
 
-    @Nullable
     public Object get(Object key) {
         Value value = this.delegate.get(key);
         if (value == null) return null;

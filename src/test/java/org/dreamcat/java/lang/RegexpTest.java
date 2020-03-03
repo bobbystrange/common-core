@@ -1,4 +1,4 @@
-package org.dreamcat.common.java.lang;
+package org.dreamcat.java.lang;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

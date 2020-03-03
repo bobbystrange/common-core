@@ -16,14 +16,13 @@ public class StringUtil {
         if (ObjectUtil.isEmpty(string)) return "";
         int len = string.length();
         StringBuilder sb = new StringBuilder(string.length());
-        for (int i=0; i<len; i++){
-            if (string.charAt(i) == backslash){
-                if (i == len -1) {
+        for (int i = 0; i < len; i++) {
+            if (string.charAt(i) == backslash) {
+                if (i == len - 1) {
                     log.warn("Found the unmatched backslash in the end of your string");
                     sb.append(string.charAt(i));
                     break;
-                }
-                else {
+                } else {
                     sb.append(string.charAt(++i));
                     continue;
                 }

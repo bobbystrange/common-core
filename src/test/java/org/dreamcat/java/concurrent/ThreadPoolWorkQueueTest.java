@@ -1,11 +1,12 @@
-package org.dreamcat.common.java.concurrent;
+package org.dreamcat.java.concurrent;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -13,36 +14,30 @@ import java.util.concurrent.TimeUnit;
  * Create by tuke on 2019-04-16
  */
 @Slf4j
-public class RejectedExecutionHandlerTest {
+public class ThreadPoolWorkQueueTest {
 
     @Test(expected = RejectedExecutionException.class)
-    public void testAbortPolicy() {
-        testRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
+    public void testArrayBlockingQueue() {
+        testWorkQueue(new ArrayBlockingQueue<Runnable>(5));
     }
 
-    @Test
-    public void testDiscardOldestPolicy() {
-        testRejectedExecutionHandler(new ThreadPoolExecutor.DiscardOldestPolicy());
+    @Test(expected = RejectedExecutionException.class)
+    public void testSynchronousQueue() {
+        testWorkQueue(new SynchronousQueue<Runnable>());
     }
 
-    @Test
-    public void testDiscardPolicy() {
-        testRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+    @Test(expected = RejectedExecutionException.class)
+    public void testMyArrayBlockingQueue() {
+        testWorkQueue(new MyArrayBlockingQueue<Runnable>(10));
     }
 
-    @Test
-    public void testCallerRunsPolicy() {
-        testRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-    }
-
-    private void testRejectedExecutionHandler(RejectedExecutionHandler handler) {
+    private void testWorkQueue(BlockingQueue<Runnable> workQueue) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(
                 5,
                 10,
                 0L,
                 TimeUnit.SECONDS,
-                new ArrayBlockingQueue<Runnable>(5),
-                handler);
+                workQueue);
 
         new Thread(() -> {
             try {
@@ -79,4 +74,21 @@ public class RejectedExecutionHandlerTest {
         }
     }
 
+    static class MyArrayBlockingQueue<E> extends ArrayBlockingQueue<E> {
+
+        MyArrayBlockingQueue(int capacity) {
+            super(capacity);
+        }
+
+        @Override
+        public boolean offer(E e) {
+            try {
+                super.put(e);
+                return true;
+            } catch (InterruptedException ex) {
+                log.error(ex.getMessage());
+                return false;
+            }
+        }
+    }
 }

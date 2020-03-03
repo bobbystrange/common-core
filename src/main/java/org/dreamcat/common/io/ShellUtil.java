@@ -1,7 +1,6 @@
 package org.dreamcat.common.io;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.annotation.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ShellUtil {
 
-    public static List<String> exec(@NotNull String... cmds)
+    public static List<String> exec(String... cmds)
             throws IOException, InterruptedException, RuntimeException {
         return exec(0, TimeUnit.SECONDS, cmds);
     }
@@ -36,7 +35,7 @@ public class ShellUtil {
     public static List<String> exec(
             long timeout,
             TimeUnit unit,
-            @NotNull String... cmds)
+            String... cmds)
             throws IOException, InterruptedException, RuntimeException {
         Process process = Runtime.getRuntime().exec(cmds);
         try {
@@ -71,7 +70,7 @@ public class ShellUtil {
         }
     }
 
-    public static int execQuiet(@NotNull String... cmds) throws IOException, InterruptedException {
+    public static int execQuiet(String... cmds) throws IOException, InterruptedException {
         return execQuiet(0, TimeUnit.SECONDS, cmds);
     }
 
@@ -88,7 +87,7 @@ public class ShellUtil {
     public static int execQuiet(
             long timeout,
             TimeUnit unit,
-            @NotNull String... cmds) throws IOException, InterruptedException {
+            String... cmds) throws IOException, InterruptedException {
         Process process = Runtime.getRuntime().exec(cmds);
         try {
             if (timeout <= 0) {

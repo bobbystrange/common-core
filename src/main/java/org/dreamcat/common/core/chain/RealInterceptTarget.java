@@ -1,6 +1,5 @@
 package org.dreamcat.common.core.chain;
 
-import org.dreamcat.common.annotation.NotNull;
 import org.dreamcat.common.function.ThrowableFunction;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class RealInterceptTarget<Req, Res> implements InterceptTarget<Req, Res>,
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <Req, Resp> Builder<Req, Resp> builder(
-            @NotNull ThrowableFunction<Req, Resp> function) {
+            ThrowableFunction<Req, Resp> function) {
         return new Builder<>(function);
     }
 

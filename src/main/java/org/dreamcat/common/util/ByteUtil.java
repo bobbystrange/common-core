@@ -11,7 +11,7 @@ public class ByteUtil {
     }
 
     public static String hex(byte[] input) {
-        ObjectUtil.checkNotNull(input, "input");
+        ObjectUtil.requireNotNull(input, "input");
 
         StringBuilder sb = new StringBuilder();
         for (byte i : input) {
@@ -35,7 +35,7 @@ public class ByteUtil {
 
     @Deprecated
     public static String hexString(byte[] input) {
-        ObjectUtil.checkNotNull(input, "input");
+        ObjectUtil.requireNotNull(input, "input");
 
         StringBuilder sb = new StringBuilder();
         for (byte i : input) {

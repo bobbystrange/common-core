@@ -32,4 +32,16 @@ public class CryptoUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static String digestHMACSHA256(String data, String key) {
+        return digestHMACSHA256(data.getBytes(), key);
+    }
+
+    public static String digestHMACSHA256(byte[] data, String key) {
+        try {
+            return HmacEnum.HMAC_SHA_256.digestToBase64(data, key.getBytes());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

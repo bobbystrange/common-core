@@ -5,52 +5,32 @@ import java.util.Map;
 
 public final class ObjectUtil {
 
-    public static <T> void checkNotNull(T o, String name) {
-        if (o == null) {
-            throw new RuntimeException(name + " is null");
-        }
-    }
-
-    public static <T extends Collection<?>> void checkNotEmpty(T o, String name) {
-        checkNotNull(o, name);
-        if (o.isEmpty()) {
-            throw new RuntimeException(name + " is empty");
-        }
-    }
-
-    public static <T> void checkNotEmpty(T[] o, String name) {
-        checkNotNull(o, name);
-        if (o.length == 0) {
-            throw new RuntimeException(name + " is empty");
-        }
-    }
-
-    public static void checkNotBlank(String o, String name) {
-        checkNotNull(o, name);
-        if (o.trim().isEmpty()) {
-            throw new RuntimeException(name + " is blank");
-        }
-    }
-
-    public static <T> T requireNotNull(T o, String name) {
-        checkNotNull(o, name);
-        return o;
-    }
-
-    public static <T extends Collection<?>> T requireNotEmpty(T o, String name) {
-        checkNotEmpty(o, name);
-        return o;
-    }
-
-    public static <T> T[] requireNotEmpty(T[] o, String name) {
-        checkNotEmpty(o, name);
-        return o;
-    }
-
-    public static String requireNotBlank(String o, String name) {
-        checkNotBlank(o, name);
-        return o;
-    }
+    //public static <T> void checkNotNull(T o, String name) {
+    //    if (o == null) {
+    //        throw new IllegalArgumentException(name + " is null");
+    //    }
+    //}
+    //
+    //public static <T extends Collection<?>> void checkNotEmpty(T o, String name) {
+    //    checkNotNull(o, name);
+    //    if (o.isEmpty()) {
+    //        throw new IllegalArgumentException(name + " is empty");
+    //    }
+    //}
+    //
+    //public static <T> void checkNotEmpty(T[] o, String name) {
+    //    checkNotNull(o, name);
+    //    if (o.length == 0) {
+    //        throw new IllegalArgumentException(name + " is empty");
+    //    }
+    //}
+    //
+    //public static void checkNotBlank(String o, String name) {
+    //    checkNotNull(o, name);
+    //    if (o.trim().isEmpty()) {
+    //        throw new IllegalArgumentException(name + " is blank");
+    //    }
+    //}
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
@@ -58,7 +38,7 @@ public final class ObjectUtil {
         return !isNotEmpty(o);
     }
 
-    public static <T> boolean isEmpty(Collection<T> o) {
+    public static boolean isEmpty(Collection<?> o) {
         return !isNotEmpty(o);
     }
 
@@ -70,23 +50,25 @@ public final class ObjectUtil {
         return !isNotEmpty(o);
     }
 
-    public static <T> boolean isEmpty(int[] o) {
+    public static boolean isEmpty(int[] o) {
         return !isNotEmpty(o);
     }
 
-    public static <T> boolean isEmpty(long[] o) {
+    public static boolean isEmpty(long[] o) {
         return !isNotEmpty(o);
     }
 
-    public static <T> boolean isEmpty(double[] o) {
+    public static boolean isEmpty(double[] o) {
         return !isNotEmpty(o);
     }
 
-    public static <T> boolean isNotEmpty(String o) {
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static boolean isNotEmpty(String o) {
         return o != null && !o.isEmpty();
     }
 
-    public static <T> boolean isNotEmpty(Collection<T> o) {
+    public static boolean isNotEmpty(Collection<?> o) {
         return o != null && !o.isEmpty();
     }
 
@@ -98,15 +80,15 @@ public final class ObjectUtil {
         return o != null && o.length != 0;
     }
 
-    public static <T> boolean isNotEmpty(int[] o) {
+    public static boolean isNotEmpty(int[] o) {
         return o != null && o.length != 0;
     }
 
-    public static <T> boolean isNotEmpty(long[] o) {
+    public static boolean isNotEmpty(long[] o) {
         return o != null && o.length != 0;
     }
 
-    public static <T> boolean isNotEmpty(double[] o) {
+    public static boolean isNotEmpty(double[] o) {
         return o != null && o.length != 0;
     }
 
@@ -119,6 +101,169 @@ public final class ObjectUtil {
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static <T> T requireNotNull(T o, String name) {
+        if (o == null) {
+            throw new IllegalArgumentException(name + " is null");
+        }
+        return o;
+    }
+
+    public static <T> String requireNotEmpty(String o, String name) {
+        if (isEmpty(o)) {
+            throw new IllegalArgumentException(name + " is empty");
+        }
+        return o;
+    }
+
+    public static <T extends Collection<?>> T requireNotEmpty(T o, String name) {
+        if (isEmpty(o)) {
+            throw new IllegalArgumentException(name + " is empty");
+        }
+        return o;
+    }
+
+    public static <T extends Map<?, ?>> T requireNotEmpty(T o, String name) {
+        if (isEmpty(o)) {
+            throw new IllegalArgumentException(name + " is empty");
+        }
+        return o;
+    }
+
+    public static <T> T[] requireNotEmpty(T[] o, String name) {
+        if (isEmpty(o)) {
+            throw new IllegalArgumentException(name + " is empty");
+        }
+        return o;
+    }
+
+    public static <T> int[] requireNotEmpty(int[] o, String name) {
+        if (isEmpty(o)) {
+            throw new IllegalArgumentException(name + " is empty");
+        }
+        return o;
+    }
+
+    public static <T> long[] requireNotEmpty(long[] o, String name) {
+        if (isEmpty(o)) {
+            throw new IllegalArgumentException(name + " is empty");
+        }
+        return o;
+    }
+
+    public static <T> double[] requireNotEmpty(double[] o, String name) {
+        if (isEmpty(o)) {
+            throw new IllegalArgumentException(name + " is empty");
+        }
+        return o;
+    }
+
+    public static String requireNotBlank(String o, String name) {
+        if (isBlank(o)) {
+            throw new IllegalArgumentException(name + " is blank");
+        }
+        return o;
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static int requirePositive(int o, String name) {
+        if (o <= 0) {
+            throw new IllegalArgumentException(name + " must be a positive number");
+        }
+        return o;
+    }
+
+    public static long requirePositive(long o, String name) {
+        if (o <= 0) {
+            throw new IllegalArgumentException(name + " must be a positive number");
+        }
+        return o;
+    }
+
+    public static double requirePositive(double o, String name) {
+        if (o <= 0) {
+            throw new IllegalArgumentException(name + " must be a positive number");
+        }
+        return o;
+    }
+
+    public static int requireNotNegative(int o, String name) {
+        if (o < 0) {
+            throw new IllegalArgumentException(name + " must be a positive number or zero");
+        }
+        return o;
+    }
+
+    public static long requireNotNegative(long o, String name) {
+        if (o < 0) {
+            throw new IllegalArgumentException(name + " must be a positive number or zero");
+        }
+        return o;
+    }
+
+    public static double requireNotNegative(double o, String name) {
+        if (o < 0) {
+            throw new IllegalArgumentException(name + " must be a positive number or zero");
+        }
+        return o;
+    }
+
+    public static int requireNegative(int o, String name) {
+        if (o >= 0) {
+            throw new IllegalArgumentException(name + " must be a negative number");
+        }
+        return o;
+    }
+
+    public static long requireNegative(long o, String name) {
+        if (o >= 0) {
+            throw new IllegalArgumentException(name + " must be a negative number");
+        }
+        return o;
+    }
+
+    public static double requireNegative(double o, String name) {
+        if (o >= 0) {
+            throw new IllegalArgumentException(name + " must be a negative number");
+        }
+        return o;
+    }
+
+    public static int requireNotPositive(int o, String name) {
+        if (o >= 0) {
+            throw new IllegalArgumentException(name + " must be a negative number or zero");
+        }
+        return o;
+    }
+
+    public static long requireNotPositive(long o, String name) {
+        if (o >= 0) {
+            throw new IllegalArgumentException(name + " must be a negative number or zero");
+        }
+        return o;
+    }
+
+    public static double requireNotPositive(double o, String name) {
+        if (o >= 0) {
+            throw new IllegalArgumentException(name + " must be a negative number or zero");
+        }
+        return o;
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static <T> T requireBelong(T elem, Collection<T> collection) {
+        if (isEmpty(collection)) return elem;
+        if (!collection.contains(elem)) {
+
+            throw new IllegalArgumentException("require , but got "
+                    + elem);
+        }
+        return elem;
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     public static int requireEqualSize(int[] xData, int[] yData) {
         if (xData.length != yData.length) {

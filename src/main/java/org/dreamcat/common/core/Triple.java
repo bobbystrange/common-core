@@ -1,8 +1,10 @@
 package org.dreamcat.common.core;
 
+import java.util.Objects;
+
 public class Triple<T1, T2, T3> extends Pair<T1, T2> {
 
-    private T3 third;
+    private final T3 third;
 
     public Triple(T1 first, T2 second, T3 third) {
         super(first, second);
@@ -27,4 +29,17 @@ public class Triple<T1, T2, T3> extends Pair<T1, T2> {
                 first().toString(), second().toString(), third().toString());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Triple)) return false;
+        if (!super.equals(o)) return false;
+        Triple<?, ?, ?> triple = (Triple<?, ?, ?>) o;
+        return third.equals(triple.third);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), third);
+    }
 }

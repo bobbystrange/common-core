@@ -1,4 +1,4 @@
-package org.dreamcat.common.java.text;
+package org.dreamcat.java.text;
 
 import org.junit.Test;
 

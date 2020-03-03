@@ -1,8 +1,5 @@
 package org.dreamcat.common.collection;
 
-import org.dreamcat.common.annotation.NotNull;
-import org.dreamcat.common.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,11 +15,11 @@ public class CollectionUnionBasicUtil {
 
     @SuppressWarnings("unchecked")
     public static <K, T> List<List<String>> unionVertical(
-            @NotNull Function<T, K> keyRowGetter,
-            @NotNull Function<K, List<String>> keyColumnFormatter,
-            @NotNull Function<T, List<String>> blockColumnFormatter,
+            Function<T, K> keyRowGetter,
+            Function<K, List<String>> keyColumnFormatter,
+            Function<T, List<String>> blockColumnFormatter,
             int blockWidth,
-            @NotNull List<T>[] blocks) {
+            List<T>[] blocks) {
         int size = blocks.length;
         Map<K, ? extends T>[] blockMaps = new Map[size];
         Set<K> keys = new HashSet<>();
@@ -47,11 +44,11 @@ public class CollectionUnionBasicUtil {
 
     @SuppressWarnings("unchecked")
     public static <K> List<List<String>> unionVertical(
-            @NotNull Function<Object, K>[] keyRowGetters,
-            @NotNull Function<K, List<String>> keyColumnFormatter,
-            @NotNull Function<Object, List<String>>[] blockColumnFormatters,
+            Function<Object, K>[] keyRowGetters,
+            Function<K, List<String>> keyColumnFormatter,
+            Function<Object, List<String>>[] blockColumnFormatters,
             int[] blockWidths,
-            @NotNull List<Object>[] blocks) {
+            List<Object>[] blocks) {
         int size = blocks.length;
         Map<K, ?>[] blockMaps = new Map[size];
         Set<K> keys = new HashSet<>();
@@ -92,11 +89,11 @@ public class CollectionUnionBasicUtil {
      * @throws NullPointerException if any param is null
      */
     public static <K, T> List<List<String>> unionVertical(
-            @NotNull Function<K, List<String>> keyColumnFormatter,
-            @NotNull Function<T, List<String>> blockColumnFormatter,
-            @NotNull Set<K> keys,
+            Function<K, List<String>> keyColumnFormatter,
+            Function<T, List<String>> blockColumnFormatter,
+            Set<K> keys,
             int blockWidth,
-            @NotNull Map<K, ? extends T>[] blocks) {
+            Map<K, ? extends T>[] blocks) {
         List<List<String>> matrix = new ArrayList<>();
 
         int len = blocks.length;
@@ -142,11 +139,11 @@ public class CollectionUnionBasicUtil {
      * @throws ArrayIndexOutOfBoundsException if any collection or map param's size is not equal
      */
     public static <K> List<List<String>> unionVertical(
-            @NotNull Function<K, List<String>> keyColumnFormatter,
-            @NotNull Function<Object, List<String>>[] blockColumnFormatters,
-            @NotNull Set<K> keys,
-            @Nullable int[] blockWidths,
-            @NotNull Map<K, ?>[] blocks) {
+            Function<K, List<String>> keyColumnFormatter,
+            Function<Object, List<String>>[] blockColumnFormatters,
+            Set<K> keys,
+            int[] blockWidths,
+            Map<K, ?>[] blocks) {
         List<List<String>> matrix = new ArrayList<>();
 
         int len = blocks.length;

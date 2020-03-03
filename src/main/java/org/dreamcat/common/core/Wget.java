@@ -1,7 +1,5 @@
 package org.dreamcat.common.core;
 
-import org.dreamcat.common.annotation.Nullable;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -9,13 +7,11 @@ import java.util.Map;
 
 public interface Wget<Req, Res> {
 
-    @Nullable
     Req prepare(String url, String method,
-                @Nullable Map<String, String> headers, @Nullable String body);
+                Map<String, String> headers, String body);
 
-    @Nullable
     Req prepare(String url, String method,
-                @Nullable Map<String, String> headers, @Nullable byte[] body);
+                Map<String, String> headers, byte[] body);
 
     Res request(Req req) throws IOException;
 

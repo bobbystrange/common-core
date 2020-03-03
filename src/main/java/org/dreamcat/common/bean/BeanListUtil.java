@@ -1,6 +1,5 @@
 package org.dreamcat.common.bean;
 
-import org.dreamcat.common.annotation.Nullable;
 import org.dreamcat.common.util.ReflectUtil;
 
 import java.lang.annotation.Annotation;
@@ -36,7 +35,7 @@ public class BeanListUtil {
         Class<?> clazz = bean.getClass();
 
         List<Field> fields = new ArrayList<>();
-        ReflectUtil.retrieveFields(fields, clazz);
+        ReflectUtil.retrieveFields(clazz, fields);
 
         return fields.stream()
                 .filter(field -> {
@@ -59,7 +58,7 @@ public class BeanListUtil {
     public static void retrieveExpandedList(
             List<Object> list,
             Object bean,
-            @Nullable Class<? extends Annotation>[] excludeAnnotations,
+            Class<? extends Annotation>[] excludeAnnotations,
             Class... expandClasses) {
         retrieveExpandedList(list, bean, 0, excludeAnnotations, 2, expandClasses);
     }

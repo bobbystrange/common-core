@@ -20,6 +20,15 @@ public class RandomUtil {
     private static final String C62 = C10 + C52;
     private static final String C72 = C10 + C62;
 
+    // (0, 1)
+    public static double rand() {
+        return random.nextDouble();
+    }
+
+    public static double rand(double start, double end) {
+        return start + rand() * (end - start);
+    }
+
     // [0, bound]
     public static int randi(int bound) {
         return random.nextInt(bound);

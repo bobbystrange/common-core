@@ -25,7 +25,7 @@ public class ResultSetUtil {
         }
 
         List<Field> fieldList = new ArrayList<>();
-        ReflectUtil.retrieveFields(fieldList, clazz);
+        ReflectUtil.retrieveFields(clazz, fieldList);
         int size = fieldList.size();
         for (int i = 1; i <= size; i++) {
             Field field = fieldList.get(i);

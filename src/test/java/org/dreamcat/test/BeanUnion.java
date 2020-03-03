@@ -1,4 +1,4 @@
-package org.dreamcat.common.test;
+package org.dreamcat.test;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

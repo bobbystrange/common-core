@@ -58,7 +58,7 @@ public class ImageUtil {
             g.fillRect(0, 0, width, height);
             g.setFont(new Font("DejaVu Sans", Font.ITALIC, 20));
             g.setColor(randomColor(128, 192));
-            for (int i = 0; i < 155; i++) {
+            for (int i = 0; i < 256; i++) {
                 int x = random.nextInt(width);
                 int y = random.nextInt(height);
                 int xl = random.nextInt(12);
@@ -83,12 +83,6 @@ public class ImageUtil {
 
     private static Color randomColor(int rgbStart, int rgbEnd) {
         Random random = new Random();
-        if (rgbStart > 255) {
-            rgbStart %= 256;
-        }
-        if (rgbEnd > 255) {
-            rgbEnd %= 256;
-        }
         int bound = rgbEnd - rgbStart;
         int r = rgbStart + random.nextInt(bound);
         int g = rgbStart + random.nextInt(bound);

@@ -1,8 +1,6 @@
 package org.dreamcat.common.collection;
 
-import org.dreamcat.common.annotation.NotNull;
-import org.dreamcat.common.annotation.Nullable;
-import org.dreamcat.common.bean.BeanUtil;
+import org.dreamcat.common.bean.BeanArrayUtil;
 import org.dreamcat.common.util.ReflectUtil;
 
 import java.lang.annotation.Annotation;
@@ -24,9 +22,9 @@ public class CollectionUnionUtil {
     // blockColumnFormatter
     // (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations)
     public static <K, T> List<List<String>> unionVertical(
-            @Nullable Class<? extends Annotation>[] excludeAnnotations,
+            Class<? extends Annotation>[] excludeAnnotations,
             int blockWidth,
-            @NotNull List<T>[] blocks) {
+            List<T>[] blocks) {
         return unionVertical(
                 ReflectUtil::getFirstFieldValue,
                 excludeAnnotations,
@@ -39,10 +37,10 @@ public class CollectionUnionUtil {
     // blockColumnFormatter
     // (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations)
     public static <K, T> List<List<String>> unionVertical(
-            @NotNull Function<T, K> keyRowGetter,
-            @Nullable Class<? extends Annotation>[] excludeAnnotations,
+            Function<T, K> keyRowGetter,
+            Class<? extends Annotation>[] excludeAnnotations,
             int blockWidth,
-            @NotNull List<T>[] blocks) {
+            List<T>[] blocks) {
         return unionVertical(
                 keyRowGetter,
                 (K key) -> Collections.singletonList(key.toString()),
@@ -56,15 +54,15 @@ public class CollectionUnionUtil {
     // blockColumnFormatter
     // (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations)
     public static <K, T> List<List<String>> unionVertical(
-            @NotNull Function<T, K> keyRowGetter,
-            @NotNull Function<K, List<String>> keyColumnFormatter,
-            @Nullable Class<? extends Annotation>[] excludeAnnotations,
+            Function<T, K> keyRowGetter,
+            Function<K, List<String>> keyColumnFormatter,
+            Class<? extends Annotation>[] excludeAnnotations,
             int blockWidth,
-            @NotNull List<T>[] blocks) {
+            List<T>[] blocks) {
         return CollectionUnionBasicUtil.unionVertical(
                 keyRowGetter,
                 keyColumnFormatter,
-                (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations),
+                (T bean) -> BeanArrayUtil.toStringList(bean, excludeAnnotations),
                 blockWidth,
                 blocks);
     }
@@ -72,10 +70,10 @@ public class CollectionUnionUtil {
     // keyColumnFormatter
     // (K key) -> Collections.singletonList(key.toString())
     public static <K, T> List<List<String>> unionVertical(
-            @NotNull Function<T, K> keyRowGetter,
-            @NotNull Function<T, List<String>> blockColumnFormatter,
+            Function<T, K> keyRowGetter,
+            Function<T, List<String>> blockColumnFormatter,
             int blockWidth,
-            @NotNull List<T>[] blocks) {
+            List<T>[] blocks) {
         return CollectionUnionBasicUtil.unionVertical(
                 keyRowGetter,
                 (K key) -> Collections.singletonList(key.toString()),
@@ -89,11 +87,11 @@ public class CollectionUnionUtil {
     // keyColumnFormatter
     // (K key) -> Collections.singletonList(key.toString())
     public static <K> List<List<String>> unionVertical(
-            @NotNull Function<Object, K>[] keyRowGetters,
-            @NotNull Function<K, List<String>> keyColumnFormatter,
-            @NotNull Function<Object, List<String>>[] blockColumnFormatters,
+            Function<Object, K>[] keyRowGetters,
+            Function<K, List<String>> keyColumnFormatter,
+            Function<Object, List<String>>[] blockColumnFormatters,
             int[] blockWidths,
-            @NotNull List<Object>[] blocks) {
+            List<Object>[] blocks) {
         return CollectionUnionBasicUtil.unionVertical(
                 keyRowGetters,
                 (K key) -> Collections.singletonList(key.toString()),
@@ -109,10 +107,10 @@ public class CollectionUnionUtil {
     // blockColumnFormatter
     // (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations)
     public static <K, T> List<List<String>> unionVertical(
-            @Nullable Class<? extends Annotation>[] excludeAnnotations,
-            @NotNull Set<K> keys,
-            @Nullable int blockWidth,
-            @NotNull Map<K, ? extends T>[] blocks) {
+            Class<? extends Annotation>[] excludeAnnotations,
+            Set<K> keys,
+            int blockWidth,
+            Map<K, ? extends T>[] blocks) {
         return unionVertical(
                 (K key) -> Collections.singletonList(key.toString()),
                 excludeAnnotations,
@@ -126,14 +124,14 @@ public class CollectionUnionUtil {
     // blockColumnFormatter
     // (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations)
     public static <K, T> List<List<String>> unionVertical(
-            @NotNull Function<K, List<String>> keyColumnFormatter,
-            @Nullable Class<? extends Annotation>[] excludeAnnotations,
-            @NotNull Set<K> keys,
-            @Nullable int blockWidth,
-            @NotNull Map<K, ? extends T>[] blocks) {
+            Function<K, List<String>> keyColumnFormatter,
+            Class<? extends Annotation>[] excludeAnnotations,
+            Set<K> keys,
+            int blockWidth,
+            Map<K, ? extends T>[] blocks) {
         return CollectionUnionBasicUtil.unionVertical(
                 keyColumnFormatter,
-                (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations),
+                (T bean) -> BeanArrayUtil.toStringList(bean, excludeAnnotations),
                 keys,
                 blockWidth,
                 blocks);
@@ -142,10 +140,10 @@ public class CollectionUnionUtil {
     // keyColumnFormatter
     // (K key) -> Collections.singletonList(key.toString())
     public static <K, T> List<List<String>> unionVertical(
-            @NotNull Function<T, List<String>> blockColumnsFormatter,
-            @NotNull Set<K> keys,
-            @Nullable int blockWidth,
-            @NotNull Map<K, ? extends T>[] blocks) {
+            Function<T, List<String>> blockColumnsFormatter,
+            Set<K> keys,
+            int blockWidth,
+            Map<K, ? extends T>[] blocks) {
         return CollectionUnionBasicUtil.unionVertical(
                 (K key) -> Collections.singletonList(key.toString()),
                 blockColumnsFormatter,
@@ -159,10 +157,10 @@ public class CollectionUnionUtil {
     // keyColumnFormatter
     // (K key) -> Collections.singletonList(key.toString())
     public static <K> List<List<String>> unionVertical(
-            @NotNull Function<Object, List<String>>[] blockColumnsFormatters,
-            @NotNull Set<K> keys,
-            @Nullable int[] blockWidths,
-            @NotNull Map<K, ?>[] blocks) {
+            Function<Object, List<String>>[] blockColumnsFormatters,
+            Set<K> keys,
+            int[] blockWidths,
+            Map<K, ?>[] blocks) {
         return CollectionUnionBasicUtil.unionVertical(
                 (K key) -> Collections.singletonList(key.toString()),
                 blockColumnsFormatters,

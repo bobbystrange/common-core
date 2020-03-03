@@ -1,9 +1,10 @@
 package org.dreamcat.common.collection;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.bean.BeanUtil;
-import org.dreamcat.common.test.BeanKey;
-import org.dreamcat.common.test.BeanUnion;
+import org.dreamcat.common.bean.BeanArrayUtil;
+import org.dreamcat.common.bean.BeanFormatUtil;
+import org.dreamcat.test.BeanKey;
+import org.dreamcat.test.BeanUnion;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -24,8 +25,8 @@ public class CollectionUnionBasicUtilTest {
     @SuppressWarnings("unchecked")
     @Test
     public void unionVerticalBlocks() {
-        List<String> stringList = BeanUtil.toStringList(list1.get(0));
-        log.info("\n{}", BeanUtil.toPrettyString(stringList));
+        List<String> stringList = BeanArrayUtil.toStringList(list1.get(0));
+        log.info("\n{}", BeanFormatUtil.pretty(stringList));
 
 
         List<List<String>> data = CollectionUnionUtil.unionVertical(
@@ -48,7 +49,7 @@ public class CollectionUnionBasicUtilTest {
 
         log.info("{}", data.size());
         for (List<String> list : data) {
-            log.info("\n{}", BeanUtil.toPrettyString(list));
+            log.info("\n{}", BeanFormatUtil.pretty(list));
         }
     }
 

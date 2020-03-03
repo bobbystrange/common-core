@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Create by tuke on 2018-12-27
  */
 @Slf4j
-public class BExpressionUtil {
+public class BeanExpressionUtil {
 
     /**
      * set the value of some fields to null
@@ -145,7 +145,7 @@ public class BExpressionUtil {
     private static void keepOneField(Object bean, String fieldname) throws Exception {
         Class<?> clazz = bean.getClass();
         List<Field> fields = new ArrayList<>();
-        ReflectUtil.retrieveFields(fields, clazz);
+        ReflectUtil.retrieveFields(clazz, fields);
         for (Field field : fields) {
             if (field.getName().equals(fieldname)) continue;
 

@@ -19,32 +19,32 @@ public class BeanMapUtil {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
     // bean to map
     public static List<String> toList(Object bean) {
-        return new ArrayList<>(toProp(bean).values());
+        return new ArrayList<>(toProps(bean).values());
     }
 
-    public static Map<String, String> toProp(Object bean) {
+    public static Map<String, String> toProps(Object bean) {
         Map<String, Object> map = toMap(bean);
-        return map2prop(map);
+        return map2props(map);
     }
 
-    public static Map<String, String> toProp(
+    public static Map<String, String> toProps(
             Object bean, Class<? extends Annotation> aliasAnnotation) {
         Map<String, Object> map = toMap(bean, aliasAnnotation);
-        return map2prop(map);
+        return map2props(map);
     }
 
-    public static Map<String, String> toProp(
+    public static Map<String, String> toProps(
             Object bean, Class<? extends Annotation> aliasAnnotation,
             Class<? extends Annotation> excludeAnnotation) {
         Map<String, Object> map = toMap(bean, aliasAnnotation, excludeAnnotation);
-        return map2prop(map);
+        return map2props(map);
     }
 
-    public static Map<String, String> toProp(
+    public static Map<String, String> toProps(
             Object bean, Class<? extends Annotation> aliasAnnotation,
             Class<? extends Annotation> excludeAnnotation, int extraExcludeModifiers) {
         Map<String, Object> map = toMap(bean, aliasAnnotation, excludeAnnotation, extraExcludeModifiers);
-        return map2prop(map);
+        return map2props(map);
     }
 
     public static Map<String, Object> toMap(
@@ -103,7 +103,7 @@ public class BeanMapUtil {
 
         Map<String, Object> map = new HashMap<>();
         List<Method> methodList = new ArrayList<>();
-        ReflectUtil.retrieveMethods(methodList, clazz);
+        ReflectUtil.retrieveMethods(clazz, methodList);
         List<String> fieldNames = new ArrayList<>();
         ReflectUtil.retrieveFieldNames(clazz, fieldNames, aliasAnnotation);
 
@@ -142,7 +142,7 @@ public class BeanMapUtil {
 
     }
 
-    private static Map<String, String> map2prop(Map<String, Object> map) {
+    private static Map<String, String> map2props(Map<String, Object> map) {
         Map<String, String> prop = new HashMap<>();
         for (String key : map.keySet()) {
             Object value = map.get(key);
