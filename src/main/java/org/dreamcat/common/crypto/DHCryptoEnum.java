@@ -72,11 +72,11 @@ public enum DHCryptoEnum {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public String getBase64PrivateKey(Map<String, Key> keyPair) {
-        return Base64Util.encodeToString(getPrivateKey(keyPair));
+        return Base64Util.encodeAsString(getPrivateKey(keyPair));
     }
 
     public String getBase64PublicKey(Map<String, Key> keyPair) {
-        return Base64Util.encodeToString(getPublicKey(keyPair));
+        return Base64Util.encodeAsString(getPublicKey(keyPair));
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----

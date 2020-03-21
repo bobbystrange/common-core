@@ -275,7 +275,7 @@ public enum CipherEnum {
         final int size = bufferSize;
         byte[] buffer = new byte[size];
         int readSize;
-        while ((readSize = data.read(buffer)) != -1) {
+        while ((readSize = data.read(buffer)) > 0) {
             cipher.update(buffer, 0, readSize);
         }
         return cipher.doFinal();

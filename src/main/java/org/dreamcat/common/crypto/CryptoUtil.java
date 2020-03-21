@@ -14,7 +14,7 @@ public class CryptoUtil {
     public static String encryptDES(byte[] input, String key) {
         try {
             byte[] output = CipherEnum.DES.encryptCbc(input, key.getBytes());
-            return Base64Util.encodeToString(output);
+            return Base64Util.encodeAsString(output);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -27,7 +27,7 @@ public class CryptoUtil {
     public static String decryptDES(byte[] input, String key) {
         try {
             byte[] output = CipherEnum.DES.encryptCbc(input, key.getBytes());
-            return Base64Util.encodeToString(output);
+            return Base64Util.encodeAsString(output);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -39,7 +39,7 @@ public class CryptoUtil {
 
     public static String digestHMACMD5(byte[] data, String key) {
         try {
-            return HmacEnum.HMAC_MD5.digestToBase64(data, key.getBytes());
+            return HmacEnum.HMAC_MD5.digestAsBase64(data, key.getBytes());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +51,7 @@ public class CryptoUtil {
 
     public static String digestHMACSHA256(byte[] data, String key) {
         try {
-            return HmacEnum.HMAC_SHA_256.digestToBase64(data, key.getBytes());
+            return HmacEnum.HMAC_SHA_256.digestAsBase64(data, key.getBytes());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +63,7 @@ public class CryptoUtil {
 
     public static String digestHMACSHA512(byte[] data, String key) {
         try {
-            return HmacEnum.HMAC_SHA_512.digestToBase64(data, key.getBytes());
+            return HmacEnum.HMAC_SHA_512.digestAsBase64(data, key.getBytes());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

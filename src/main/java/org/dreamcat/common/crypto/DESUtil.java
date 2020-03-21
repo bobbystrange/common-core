@@ -9,7 +9,7 @@ public class DESUtil {
 
     public static String encryptToBase64(String input, String key) throws Exception {
         byte[] output = CipherEnum.DES.encryptCbc(input.getBytes(), key.getBytes());
-        return Base64Util.encodeToString(output);
+        return Base64Util.encodeAsString(output);
     }
 
     public static String decryptFromBase64(String input, String key) throws Exception {

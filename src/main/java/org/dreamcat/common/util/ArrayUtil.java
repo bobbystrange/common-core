@@ -2,6 +2,7 @@ package org.dreamcat.common.util;
 
 import org.dreamcat.common.function.IntToByteFunction;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.function.IntFunction;
 import java.util.function.IntToDoubleFunction;
@@ -61,6 +62,51 @@ public class ArrayUtil {
             a[i] = mapper.applyAsByte(i);
         }
         return a;
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    @SuppressWarnings("unchecked")
+    public static <T, T1 extends T, T2 extends T> T[] concat(T1[] a1, T2[] a2, Class<T> newType) {
+        if (a1 == null && a2 == null) return null;
+        if (a1 == null) {
+            return Arrays.copyOf(a2, a2.length);
+        }
+        if (a2 == null) {
+            return Arrays.copyOf(a1, a1.length);
+        }
+
+        T[] a = (T[]) Array.newInstance(newType, a1.length + a2.length);
+        System.arraycopy(a1, 0, a, 0, a1.length);
+        System.arraycopy(a2, 0, a, a1.length, a2.length);
+        return a;
+    }
+
+    public static <T> T[] concat(T[] a1, T[] a2) {
+        if (a1 == null && a2 == null) return null;
+        if (a1 == null) {
+            return Arrays.copyOf(a2, a2.length);
+        }
+        if (a2 == null) {
+            return Arrays.copyOf(a1, a1.length);
+        }
+
+        T[] a = Arrays.copyOf(a1, a1.length + a2.length);
+        System.arraycopy(a2, 0, a, a1.length, a2.length);
+        return a;
+    }
+
+    public static <T> T[] concat(T[] a1, T[] a2, T[] a3) {
+        return concat(concat(a1, a2), a3);
+    }
+
+    public static <T> T[] concat(T[] a1, T[] a2, T[] a3, T[] a4) {
+        return concat(concat(a1, a2, a3), a4);
+
+    }
+
+    public static <T> T[] concat(T[] a1, T[] a2, T[] a3, T[] a4, T[] a5) {
+        return concat(concat(a1, a2, a3, a4), a5);
     }
 
 }

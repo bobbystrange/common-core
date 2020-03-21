@@ -27,10 +27,10 @@ public class HmacEnumTest {
             byte[] sign = he.digest(data, key);
             log.info("sign:\t{}  {}", sign.length, ByteUtil.hex(sign));
 
-            String hex = he.digestToHex(data, key);
+            String hex = he.digestAsHex(data, key);
             log.info("hex:\t{}  {}", hex.length(), hex);
 
-            String base64 = he.digestToBase64(data, key);
+            String base64 = he.digestAsBase64(data, key);
             log.info("base64:\t{}  {}", base64.length(), base64);
 
             System.out.println("\n");

@@ -21,12 +21,12 @@ public class MessageDigestEnumTest {
         log.info("ios-8859-1:\t{}", Arrays.toString(msg.getBytes(StandardCharsets.ISO_8859_1)));
 
         log.info("\t{}:\t{}", "md5", md5.digest(msg.getBytes()));
-        log.info("\t{}:\t{}", "md5", md5.digestToBase64(msg.getBytes()));
-        log.info("\t{}:\t{}", "md5", md5.digestToHex(msg.getBytes()));
+        log.info("\t{}:\t{}", "md5", md5.digestAsBase64(msg.getBytes()));
+        log.info("\t{}:\t{}", "md5", md5.digestAsHex(msg.getBytes()));
 
         log.info("\t{}:\t{}", "sha265", sha256.digest(msg.getBytes()));
-        log.info("\t{}:\t{}", "sha265", sha256.digestToBase64(msg.getBytes()));
-        log.info("\t{}:\t{}", "sha265", sha256.digestToHex(msg.getBytes()));
+        log.info("\t{}:\t{}", "sha265", sha256.digestAsBase64(msg.getBytes()));
+        log.info("\t{}:\t{}", "sha265", sha256.digestAsHex(msg.getBytes()));
 
     }
 }

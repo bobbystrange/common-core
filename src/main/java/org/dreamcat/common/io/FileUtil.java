@@ -1,6 +1,6 @@
 package org.dreamcat.common.io;
 
-import org.dreamcat.common.function.ThrowableTriConsumer;
+import org.dreamcat.common.function.TriConsumer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,6 +23,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -59,8 +60,6 @@ public final class FileUtil {
         return filename.substring(0, dotPosition);
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
     /**
      * no verification, almost like dirname in unix
      *
@@ -89,85 +88,69 @@ public final class FileUtil {
         return filename.substring(0, slashPosition);
     }
 
-    // recurse to mkdir parent diretory
-    public static void mkdir(String file) {
-        mkdir(new File(file));
-    }
-
-    public static void mkdir(File file) {
-        File parent = file.getParentFile();
-        if (!parent.getParentFile().exists()) {
-            mkdir(parent);
-        }
-
-        parent.mkdir();
-    }
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    public static String mimeName(String filename) {
+    public static String getMimeType(String filename) {
         return URLConnection.getFileNameMap().getContentTypeFor(filename);
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static byte[] toByteArray(String filename) throws IOException {
-        return toByteArray(new File(filename));
+    public static byte[] readAsByteArray(String filename) throws IOException {
+        return readAsByteArray(new File(filename));
     }
 
-    public static byte[] toByteArray(String filename, int len) throws IOException {
-        return toByteArray(new File(filename), len);
+    public static byte[] readAsByteArray(String filename, int size) throws IOException {
+        return readAsByteArray(new File(filename), size);
     }
 
-    public static byte[] toByteArray(File file) throws IOException {
+    public static byte[] readAsByteArray(File file) throws IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
             return IOUtil.readFully(fis);
         }
     }
 
-    public static byte[] toByteArray(File file, int len) throws IOException {
+    public static byte[] readAsByteArray(File file, int size) throws IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
-            byte[] bytes = new byte[len];
+            byte[] bytes = new byte[size];
             IOUtil.readFully(fis, bytes);
             return bytes;
         }
     }
 
-    public static char[] toCharArray(String filename) throws IOException {
-        return toCharArray(new File(filename));
+    public static char[] readAsCharArray(String filename) throws IOException {
+        return readAsCharArray(new File(filename));
     }
 
-    public static char[] toCharArray(String filename, int len) throws IOException {
-        return toCharArray(new File(filename), len);
+    public static char[] readAsCharArray(String filename, int size) throws IOException {
+        return readAsCharArray(new File(filename), size);
     }
 
-    public static char[] toCharArray(File file) throws IOException {
+    public static char[] readAsCharArray(File file) throws IOException {
         try (FileReader f = new FileReader(file)) {
             return IOUtil.readFully(f);
         }
     }
 
-    public static char[] toCharArray(File file, int len) throws IOException {
+    public static char[] readAsCharArray(File file, int size) throws IOException {
         try (FileReader f = new FileReader(file)) {
-            char[] chars = new char[len];
+            char[] chars = new char[size];
             IOUtil.readFully(f, chars);
             return chars;
         }
     }
 
-    public static String toString(String filename) throws IOException {
-        return toString(new File(filename));
+    public static String readAsString(String filename) throws IOException {
+        return readAsString(new File(filename));
     }
 
-    public static String toString(File file) throws IOException {
-        return new String(toCharArray(file));
+    public static String readAsString(File file) throws IOException {
+        return new String(readAsCharArray(file));
     }
 
-    public static List<String> toList(String filename) throws IOException {
-        return toList(new File(filename));
+    public static List<String> readAsList(String filename) throws IOException {
+        return readAsList(new File(filename));
     }
 
-    public static List<String> toList(File file) throws IOException {
+    public static List<String> readAsList(File file) throws IOException {
         try (BufferedReader f = new BufferedReader(new FileReader(file))) {
             List<String> list = new ArrayList<>();
             String line;
@@ -262,6 +245,20 @@ public final class FileUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    // recurse to mkdir parent diretory
+    public static void mkdir(String file) {
+        mkdir(new File(file));
+    }
+
+    public static void mkdir(File file) {
+        File parent = file.getParentFile();
+        if (!parent.getParentFile().exists()) {
+            mkdir(parent);
+        }
+
+        parent.mkdir();
+    }
+
     public static void convert(File srcFile, Charset srcCS, File destFile, Charset destCS)
             throws IOException {
         if (srcFile.isFile()) {
@@ -275,12 +272,6 @@ public final class FileUtil {
             }
         }
     }
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     private static void convertFile(File file, File srcFile, Charset srcCS, File destFile, Charset destCS) throws IOException {
         try (BufferedReader reader = new BufferedReader(
@@ -300,16 +291,28 @@ public final class FileUtil {
         }
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     @SuppressWarnings("unchecked")
-    public void watchPath(Path path, ThrowableTriConsumer<WatchEvent.Kind<Path>, Integer, Path> consumer)
+    public void watchPath(Path path, long interval, TimeUnit intervalUnit,
+                          TriConsumer<WatchEvent.Kind<Path>, Integer, Path> consumer)
             throws Exception {
+
         WatchService watcher = FileSystems.getDefault().newWatchService();
         path.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 
-        while (true) {
+        interval = intervalUnit.toMillis(interval);
+        boolean loop = true;
+        while (loop) {
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                loop = false;
+            }
+
             WatchKey key = watcher.take();
             for (WatchEvent<?> event : key.pollEvents()) {
-                WatchEvent.Kind kind = event.kind();
+                WatchEvent.Kind<?> kind = event.kind();
                 // events may have been lost or discarded.
                 if (kind == OVERFLOW) continue;
 

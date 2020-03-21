@@ -55,15 +55,15 @@ public class IOUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static String readToString(Reader input) throws IOException {
+    public static String readAsString(Reader input) throws IOException {
         return new String(readFully(input));
     }
 
-    public static String readToString(InputStream input) throws IOException {
+    public static String readAsString(InputStream input) throws IOException {
         return new String(readFully(new InputStreamReader(input)));
     }
 
-    public static String readToString(InputStream input, Charset charset) throws IOException {
+    public static String readAsString(InputStream input, Charset charset) throws IOException {
         return new String(readFully(new InputStreamReader(input, charset)));
     }
 
@@ -107,5 +107,8 @@ public class IOUtil {
             return output.toCharArray();
         }
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
 
 }

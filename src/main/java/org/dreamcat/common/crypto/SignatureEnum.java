@@ -72,7 +72,7 @@ public enum SignatureEnum {
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     public String signBase64(byte[] data, String base64PrivateKey) throws Exception {
-        return Base64Util.encodeToString(sign(data, Base64Util.decode(base64PrivateKey)));
+        return Base64Util.encodeAsString(sign(data, Base64Util.decode(base64PrivateKey)));
     }
 
     public byte[] sign(byte[] data, byte[] privateKey) throws Exception {
@@ -103,11 +103,11 @@ public enum SignatureEnum {
     }
 
     public String getBase64PrivateKey(Map<String, Key> keyPair) {
-        return Base64Util.encodeToString(getPrivateKey(keyPair));
+        return Base64Util.encodeAsString(getPrivateKey(keyPair));
     }
 
     public String getBase64PublicKey(Map<String, Key> keyPair) {
-        return Base64Util.encodeToString(getPublicKey(keyPair));
+        return Base64Util.encodeAsString(getPublicKey(keyPair));
     }
 
     public byte[] getPrivateKey(Map<String, Key> keyPair) {

@@ -1,15 +1,21 @@
 package org.dreamcat.common.core;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Pair<T1, T2> {
 
-    private final T1 first;
+    private T1 first;
 
-    private final T2 second;
+    private T2 second;
 
     public T1 first() {
         return first;

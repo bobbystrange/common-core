@@ -1,38 +1,10 @@
 package org.dreamcat.common.util;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public final class ObjectUtil {
-
-    //public static <T> void checkNotNull(T o, String name) {
-    //    if (o == null) {
-    //        throw new IllegalArgumentException(name + " is null");
-    //    }
-    //}
-    //
-    //public static <T extends Collection<?>> void checkNotEmpty(T o, String name) {
-    //    checkNotNull(o, name);
-    //    if (o.isEmpty()) {
-    //        throw new IllegalArgumentException(name + " is empty");
-    //    }
-    //}
-    //
-    //public static <T> void checkNotEmpty(T[] o, String name) {
-    //    checkNotNull(o, name);
-    //    if (o.length == 0) {
-    //        throw new IllegalArgumentException(name + " is empty");
-    //    }
-    //}
-    //
-    //public static void checkNotBlank(String o, String name) {
-    //    checkNotNull(o, name);
-    //    if (o.trim().isEmpty()) {
-    //        throw new IllegalArgumentException(name + " is blank");
-    //    }
-    //}
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <T> boolean isEmpty(String o) {
         return !isNotEmpty(o);
@@ -337,4 +309,35 @@ public final class ObjectUtil {
         return xData.size();
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static <T> T firstElement(List<T> o) {
+        return elementAt(o, 0);
+    }
+
+    public static <T> T firstElement(T[] o) {
+        return elementAt(o, 0);
+    }
+
+    public static <T> T lastElement(List<T> o) {
+        if (isEmpty(o)) return null;
+        return o.get(o.size() - 1);
+    }
+
+    public static <T> T lastElement(T[] o) {
+        if (isEmpty(o)) return null;
+        return o[o.length - 1];
+    }
+
+    public static <T> T elementAt(List<T> o, int index) {
+        if (isEmpty(o)) return null;
+        if (index < 0 || index >= o.size()) return null;
+        return o.get(index);
+    }
+
+    public static <T> T elementAt(T[] o, int index) {
+        if (isEmpty(o)) return null;
+        if (index < 0 || index >= o.length) return null;
+        return o[index];
+    }
 }

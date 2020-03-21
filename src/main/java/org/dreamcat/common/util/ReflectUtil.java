@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -215,6 +216,110 @@ public class ReflectUtil {
                 clazz.equals(Float.class) ||
                 clazz.equals(Byte.class) ||
                 clazz.equals(Short.class);
+    }
+
+    public static Object getZeroValue(Class<?> clazz) {
+        if (clazz == null || !clazz.isPrimitive()) return null;
+        if (clazz.equals(byte.class)) {
+            return 0b0;
+        } else if (clazz.equals(short.class)) {
+            return (short) 0;
+        } else if (clazz.equals(char.class)) {
+            return (char) 0;
+        } else if (clazz.equals(int.class)) {
+            return 0;
+        } else if (clazz.equals(long.class)) {
+            return 0L;
+        } else if (clazz.equals(float.class)) {
+            return (float) 0;
+        } else if (clazz.equals(double.class)) {
+            return 0.;
+        } else if (clazz.equals(boolean.class)) {
+            return false;
+        } else {
+            throw new RuntimeException("Primitive types are not enumerated completely");
+        }
+    }
+
+    /**
+     * @param source      source object
+     * @param targetClass require not null
+     * @return null if cannot cast and targetClass is not a primitive class
+     */
+    public static Object cast(Object source, Class<?> targetClass) {
+        Objects.requireNonNull(targetClass);
+        if (source == null) {
+            return getZeroValue(targetClass);
+        }
+
+        Class<?> sourceClass = source.getClass();
+        // target is same or a super class of source
+        if (targetClass.isAssignableFrom(sourceClass)) {
+            return targetClass.cast(source);
+        }
+        if (targetClass.isPrimitive()) {
+            if (targetClass.equals(byte.class)) {
+                if (Number.class.isAssignableFrom(sourceClass)) {
+                    return ((Number) source).byteValue();
+                } else if (sourceClass.equals(Boolean.class)) {
+                    return (Boolean) source ? 0b1 : 0b0;
+                } else {
+                    return 0b0;
+                }
+            } else if (targetClass.equals(short.class)) {
+                if (Number.class.isAssignableFrom(sourceClass)) {
+                    return ((Number) source).shortValue();
+                } else if (sourceClass.equals(Boolean.class)) {
+                    return (Boolean) source ? (short) 1 : (short) 0;
+                } else {
+                    return (short) 0;
+                }
+            } else if (targetClass.equals(char.class)) {
+                // note avoid unexpected actions
+                return (char) 0;
+            } else if (targetClass.equals(int.class)) {
+                if (Number.class.isAssignableFrom(sourceClass)) {
+                    return ((Number) source).intValue();
+                } else if (sourceClass.equals(Boolean.class)) {
+                    return (Boolean) source ? 1 : 0;
+                } else {
+                    return 0;
+                }
+            } else if (targetClass.equals(long.class)) {
+                if (Number.class.isAssignableFrom(sourceClass)) {
+                    return ((Number) source).longValue();
+                } else if (sourceClass.equals(Boolean.class)) {
+                    return (Boolean) source ? 1L : 0L;
+                } else {
+                    return 0L;
+                }
+            } else if (targetClass.equals(float.class)) {
+                if (Number.class.isAssignableFrom(sourceClass)) {
+                    return ((Number) source).floatValue();
+                } else if (sourceClass.equals(Boolean.class)) {
+                    return (Boolean) source ? (float) 1 : (float) 0;
+                } else {
+                    return (float) 0;
+                }
+            } else if (targetClass.equals(double.class)) {
+                if (Number.class.isAssignableFrom(sourceClass)) {
+                    return ((Number) source).doubleValue();
+                } else if (sourceClass.equals(Boolean.class)) {
+                    return (Boolean) source ? (double) 1 : (double) 0;
+                } else {
+                    return (double) 0;
+                }
+            } else if (targetClass.equals(boolean.class)) {
+                if (Number.class.isAssignableFrom(sourceClass)) {
+                    return ((Number) source).longValue() != 0;
+                } else {
+                    return source.toString().equalsIgnoreCase("true");
+                }
+            } else {
+                throw new RuntimeException("Primitive types are not enumerated completely");
+            }
+        }
+        return null;
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====

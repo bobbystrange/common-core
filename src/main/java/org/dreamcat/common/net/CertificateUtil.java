@@ -71,7 +71,7 @@ public class CertificateUtil {
                 .getSigAlgName());
         signature.initSign(privateKey);
         signature.update(sign);
-        return Base64Util.encodeToString(signature.sign());
+        return Base64Util.encodeAsString(signature.sign());
     }
 
     public static boolean verify(

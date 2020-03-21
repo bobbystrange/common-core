@@ -9,6 +9,7 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -35,70 +36,154 @@ public enum HmacEnum {
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
-    public byte[] digest(byte[] data, byte[] key) throws Exception {
+    public byte[] digest(byte[] input, String key) throws Exception {
+        return digest(input, key.getBytes());
+    }
+
+    public byte[] digest(byte[] input, byte[] key) throws Exception {
         Mac mac = generateMac(key);
-        mac.update(data);
+        mac.update(input);
         return mac.doFinal();
     }
 
-    public byte[] digest(InputStream data, byte[] key) throws Exception {
+    public byte[] digest(InputStream input, String key) throws Exception {
+        return digest(input, key.getBytes());
+    }
+
+    public byte[] digest(InputStream input, byte[] key) throws Exception {
         Mac mac = generateMac(key);
 
         final int size = bufferSize;
         final byte[] buffer = new byte[size];
-        int read = data.read(buffer, 0, size);
+        int read = input.read(buffer, 0, size);
 
-        while (read > -1) {
+        while (read > 0) {
             mac.update(buffer, 0, read);
-            read = data.read(buffer, 0, bufferSize);
+            read = input.read(buffer, 0, bufferSize);
         }
         return mac.doFinal();
     }
 
-    public byte[] digest(ByteBuffer data, byte[] key) throws Exception {
+    public byte[] digest(ByteBuffer input, String key) throws Exception {
+        return digest(input, key.getBytes());
+    }
+
+    public byte[] digest(ByteBuffer input, byte[] key) throws Exception {
         Mac mac = generateMac(key);
-        mac.update(data);
+        mac.update(input);
         return mac.doFinal();
     }
 
-    public byte[] digest(String data, String key) throws Exception {
-        return digest(data.getBytes(), key.getBytes());
+    public byte[] digest(String input, String key) throws Exception {
+        return digest(input, key.getBytes());
+    }
+
+    public byte[] digest(String input, byte[] key) throws Exception {
+        return digest(input.getBytes(), key);
+    }
+
+    public byte[] digest(InputStream input, OutputStream output, String key) throws Exception {
+        return digest(input, output, key.getBytes());
+    }
+
+    public byte[] digest(InputStream input, OutputStream output, byte[] key) throws Exception {
+        Mac mac = generateMac(key);
+
+        final int size = bufferSize;
+        final byte[] buffer = new byte[size];
+        int read = input.read(buffer, 0, size);
+
+        while (read > 0) {
+            mac.update(buffer, 0, read);
+            output.write(buffer, 0, read);
+            read = input.read(buffer, 0, bufferSize);
+        }
+        return mac.doFinal();
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
-    public String digestToHex(byte[] data, byte[] key) throws Exception {
-        return ByteUtil.hex(digest(data, key));
+    public String digestAsHex(byte[] input, String key) throws Exception {
+        return digestAsHex(input, key.getBytes());
     }
 
-    public String digestToHex(InputStream data, byte[] key) throws Exception {
-        return ByteUtil.hex(digest(data, key));
+    public String digestAsHex(byte[] input, byte[] key) throws Exception {
+        return ByteUtil.hex(digest(input, key));
     }
 
-    public String digestToHex(ByteBuffer data, byte[] key) throws Exception {
-        return ByteUtil.hex(digest(data, key));
+    public String digestAsHex(InputStream input, String key) throws Exception {
+        return digestAsHex(input, key.getBytes());
     }
 
-    public String digestToHex(String data, String key) throws Exception {
-        return digestToHex(data.getBytes(), key.getBytes());
+    public String digestAsHex(InputStream input, byte[] key) throws Exception {
+        return ByteUtil.hex(digest(input, key));
+    }
+
+    public String digestAsHex(ByteBuffer input, String key) throws Exception {
+        return digestAsHex(input, key.getBytes());
+    }
+
+    public String digestAsHex(ByteBuffer input, byte[] key) throws Exception {
+        return ByteUtil.hex(digest(input, key));
+    }
+
+    public String digestAsHex(String input, String key) throws Exception {
+        return digestAsHex(input, key.getBytes());
+    }
+
+    public String digestAsHex(String input, byte[] key) throws Exception {
+        return digestAsHex(input.getBytes(), key);
+    }
+
+    public String digestAsHex(InputStream input, OutputStream output, String key) throws Exception {
+        return digestAsHex(input, output, key.getBytes());
+    }
+
+    public String digestAsHex(InputStream input, OutputStream output, byte[] key) throws Exception {
+        return ByteUtil.hex(digest(input, output, key));
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
-    public String digestToBase64(byte[] data, byte[] key) throws Exception {
-        return Base64Util.encodeToString(digest(data, key));
+    public String digestAsBase64(byte[] input, String key) throws Exception {
+        return digestAsBase64(input, key.getBytes());
     }
 
-    public String digestToBase64(InputStream data, byte[] key) throws Exception {
-        return Base64Util.encodeToString(digest(data, key));
+    public String digestAsBase64(byte[] input, byte[] key) throws Exception {
+        return Base64Util.encodeAsString(digest(input, key));
     }
 
-    public String digestToBase64(ByteBuffer data, byte[] key) throws Exception {
-        return Base64Util.encodeToString(digest(data, key));
+    public String digestAsBase64(InputStream input, String key) throws Exception {
+        return digestAsBase64(input, key.getBytes());
     }
 
-    public String digestToBase64(String data, String key) throws Exception {
-        return digestToBase64(data.getBytes(), key.getBytes());
+    public String digestAsBase64(InputStream input, byte[] key) throws Exception {
+        return Base64Util.encodeAsString(digest(input, key));
+    }
+
+    public String digestAsBase64(ByteBuffer input, String key) throws Exception {
+        return digestAsBase64(input, key.getBytes());
+    }
+
+    public String digestAsBase64(ByteBuffer input, byte[] key) throws Exception {
+        return Base64Util.encodeAsString(digest(input, key));
+    }
+
+    public String digestAsBase64(String input, String key) throws Exception {
+        return digestAsBase64(input, key.getBytes());
+    }
+
+    public String digestAsBase64(String input, byte[] key) throws Exception {
+        return digestAsBase64(input.getBytes(), key);
+    }
+
+    public String digestAsBase64(InputStream input, OutputStream output, String key) throws Exception {
+        return digestAsBase64(input, output, key.getBytes());
+
+    }
+
+    public String digestAsBase64(InputStream input, OutputStream output, byte[] key) throws Exception {
+        return Base64Util.encodeAsString(digest(input, output, key));
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
@@ -114,8 +199,12 @@ public enum HmacEnum {
         return secretKey.getEncoded();
     }
 
-    public String generateBase64Key() {
-        return Base64Util.encodeToString(generateKey());
+    public String generateKeyAsHex() {
+        return ByteUtil.hex(generateKey());
+    }
+
+    public String generateKeyAsBase64() {
+        return Base64Util.encodeAsString(generateKey());
     }
 
     public HmacEnum withBufferSize(int bufferSize) {

@@ -5,6 +5,7 @@ import org.dreamcat.common.util.ByteUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,6 +33,8 @@ public enum MessageDigestEnum {
 
     MessageDigestEnum(String algorithm) {
         this.algorithm = algorithm;
+        // 4K Buffer Area
+        this.bufferSize = 4096;
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
@@ -45,11 +48,11 @@ public enum MessageDigestEnum {
         MessageDigest md = MessageDigest.getInstance(algorithm);
         final int size = bufferSize;
         final byte[] buffer = new byte[size];
-        int read = input.read(buffer, 0, size);
+        int readSize = input.read(buffer, 0, size);
 
-        while (read > -1) {
-            md.update(buffer, 0, read);
-            read = input.read(buffer, 0, size);
+        while (readSize > 0) {
+            md.update(buffer, 0, readSize);
+            readSize = input.read(buffer, 0, size);
         }
         return md.digest();
     }
@@ -60,32 +63,53 @@ public enum MessageDigestEnum {
         return md.digest();
     }
 
+    public byte[] digest(InputStream input, OutputStream output) throws NoSuchAlgorithmException, IOException {
+        MessageDigest md = MessageDigest.getInstance(algorithm);
+        final int size = bufferSize;
+        final byte[] buffer = new byte[size];
+        int readSize = input.read(buffer, 0, size);
+
+        while (readSize > 0) {
+            md.update(buffer, 0, readSize);
+            output.write(buffer, 0, readSize);
+            readSize = input.read(buffer, 0, size);
+        }
+        return md.digest();
+    }
+
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
-    public String digestToHex(byte[] input) throws NoSuchAlgorithmException {
+    public String digestAsHex(byte[] input) throws NoSuchAlgorithmException {
         return ByteUtil.hex(digest(input));
     }
 
-    public String digestToHex(InputStream input) throws NoSuchAlgorithmException, IOException {
+    public String digestAsHex(InputStream input) throws NoSuchAlgorithmException, IOException {
         return ByteUtil.hex(digest(input));
     }
 
-    public String digestToHex(ByteBuffer input) throws NoSuchAlgorithmException {
+    public String digestAsHex(ByteBuffer input) throws NoSuchAlgorithmException {
         return ByteUtil.hex(digest(input));
     }
 
+    public String digestAsHex(InputStream input, OutputStream output) throws NoSuchAlgorithmException, IOException {
+        return ByteUtil.hex(digest(input, output));
+    }
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
-    public String digestToBase64(byte[] input) throws NoSuchAlgorithmException {
-        return Base64Util.encodeToString(digest(input));
+    public String digestAsBase64(byte[] input) throws NoSuchAlgorithmException {
+        return Base64Util.encodeAsString(digest(input));
     }
 
-    public String digestToBase64(InputStream input) throws NoSuchAlgorithmException, IOException {
-        return Base64Util.encodeToString(digest(input));
+    public String digestAsBase64(InputStream input) throws NoSuchAlgorithmException, IOException {
+        return Base64Util.encodeAsString(digest(input));
     }
 
-    public String digestToBase64(ByteBuffer input) throws NoSuchAlgorithmException {
-        return Base64Util.encodeToString(digest(input));
+    public String digestAsBase64(ByteBuffer input) throws NoSuchAlgorithmException {
+        return Base64Util.encodeAsString(digest(input));
+    }
+
+    public String digestAsBase64(InputStream input, OutputStream output) throws NoSuchAlgorithmException, IOException {
+        return Base64Util.encodeAsString(digest(input, output));
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====

@@ -18,11 +18,11 @@ public class Base64Util {
         return encode(input.getBytes(StandardCharsets.ISO_8859_1));
     }
 
-    public static String encodeToString(byte[] input) {
+    public static String encodeAsString(byte[] input) {
         return new String(encode(input), StandardCharsets.ISO_8859_1);
     }
 
-    public static String encodeToString(String input) {
+    public static String encodeAsString(String input) {
         return new String(encode(input), StandardCharsets.ISO_8859_1);
     }
 
@@ -41,11 +41,11 @@ public class Base64Util {
         return decode(input.getBytes(StandardCharsets.ISO_8859_1));
     }
 
-    public static String decodeToString(byte[] input) {
+    public static String decodeAsString(byte[] input) {
         return new String(decode(input), StandardCharsets.ISO_8859_1);
     }
 
-    public static String decodeToString(String input) {
+    public static String decodeAsString(String input) {
         return new String(decode(input), StandardCharsets.ISO_8859_1);
     }
 
