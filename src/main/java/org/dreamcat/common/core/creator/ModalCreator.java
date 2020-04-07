@@ -11,7 +11,7 @@ import java.lang.reflect.Proxy;
 /**
  * Create by tuke on 2018-09-09
  */
-public interface Creator {
+public interface ModalCreator {
 
     /**
      * if in cache strategy, then never reuse this method in many services,
@@ -81,7 +81,7 @@ public interface Creator {
      * it assumes there will be a cache strategy
      *
      * @return eagerly load ServiceMethod for each method;
-     * @see Creator#loadServiceMethod
+     * @see ModalCreator#loadServiceMethod
      */
     default boolean isEagerly() {
         return true;

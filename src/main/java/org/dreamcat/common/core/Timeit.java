@@ -1,8 +1,9 @@
 package org.dreamcat.common.core;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import org.dreamcat.common.function.ThrowableConsumer;
 import org.dreamcat.common.function.ThrowableObjectArrayConsumer;
+import org.dreamcat.common.function.ThrowableVoidConsumer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,44 +13,55 @@ import java.util.function.Supplier;
 /**
  * Create by tuke on 2019-06-06
  */
-@Data
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Timeit {
+    // assert skip < count
+    // such as count=100, skip=10, then discard head 10 & tail 10 before merge
     private int skip = 0;
+    // repeat times, one action avg time is <the result or run()> / repeat
+    // such as one action cost 1ms, if repea=12 then total cost almost equal 12ms
     private int repeat = 1;
+    // multi metering
     private int count = 1;
-    private List<InnerAction> actions = new ArrayList<>();
+    private List actions = new ArrayList();
 
     /**
      * run actions and stat its elapsed time
      *
      * @return nanoTime array for actions
+     * @throws RuntimeException if any action throw a exception
      */
-    public long[] runForActions() {
-        long t;
+    public long[] run() {
         int size = actions.size();
         long[][] tss = new long[size][count];
         for (int seq = 0; seq < size; seq++) {
-            InnerAction innerAction = actions.get(seq);
-            for (int k = 0; k < count; k++) {
-                t = 0;
-                for (int i = 0; i < repeat; i++) {
-                    Object[] args = innerAction.supplier.get();
-                    long ts = System.nanoTime();
-                    try {
-                        innerAction.action.accept(args);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    t += System.nanoTime() - ts;
-                }
-                tss[seq][k] = t;
+            Object o = actions.get(seq);
+            if (o instanceof Action) {
+                Action action = (Action) o;
+                doAction(tss[seq], action);
+            } else if (o instanceof UnaryAction) {
+                UnaryAction action = (UnaryAction) o;
+                doUnaryAction(tss[seq], action);
+            } else {
+                VoidAction action = (VoidAction) o;
+                doVoidAction(tss[seq], action);
             }
         }
         return stat(tss, skip);
     }
 
     public Timeit addAction(Supplier<Object[]> supplier, ThrowableObjectArrayConsumer action) {
-        this.actions.add(new InnerAction(supplier, action));
+        this.actions.add(new Action(supplier, action));
+        return this;
+    }
+
+    public <T> Timeit addUnaryAction(Supplier<T> supplier, ThrowableConsumer<T> action) {
+        this.actions.add(new UnaryAction(supplier, action));
+        return this;
+    }
+
+    public <T> Timeit addVoidAction(ThrowableVoidConsumer action) {
+        this.actions.add(new VoidAction(action));
         return this;
     }
 
@@ -68,7 +80,64 @@ public class Timeit {
         return this;
     }
 
+    public static Timeit ofActions() {
+        return new Timeit();
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    private void doAction(long[] ts, Action action) {
+        long t;
+        for (int k = 0; k < count; k++) {
+            t = 0;
+            for (int i = 0; i < repeat; i++) {
+                Object[] args = action.supplier.get();
+                try {
+                    long nanoTime = System.nanoTime();
+                    action.action.accept(args);
+                    t += System.nanoTime() - nanoTime;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            ts[k] = t;
+        }
+    }
+
+    private void doUnaryAction(long[] ts, UnaryAction action) {
+        long t;
+        for (int k = 0; k < count; k++) {
+            t = 0;
+            for (int i = 0; i < repeat; i++) {
+                Object arg = action.supplier.get();
+                try {
+                    long nanoTime = System.nanoTime();
+                    action.action.accept(arg);
+                    t += System.nanoTime() - nanoTime;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            ts[k] = t;
+        }
+    }
+
+    private void doVoidAction(long[] ts, VoidAction action) {
+        long t;
+        for (int k = 0; k < count; k++) {
+            t = 0;
+            for (int i = 0; i < repeat; i++) {
+                try {
+                    long nanoTime = System.nanoTime();
+                    action.action.accept();
+                    t += System.nanoTime() - nanoTime;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            ts[k] = t;
+        }
+    }
 
     private long[] stat(long[][] tss, int skip) {
         int len = tss.length;
@@ -77,24 +146,35 @@ public class Timeit {
             long[] ts = tss[k];
             Arrays.sort(ts);
             int s = ts.length;
-            int count = 0;
+            int c = 0;
             long avg = 0;
             for (int i = 0; i < s; i++) {
                 // if skip = 10, then
                 // skip 0, 1, ..., 9 or len-10, ..., len - 1
                 if (i < skip || i >= s - skip) continue;
-                count++;
+                c++;
                 avg += ts[i];
             }
-            avgs[k] = avg / count;
+            avgs[k] = avg / c;
         }
         return avgs;
     }
 
     @AllArgsConstructor
-    private static class InnerAction {
+    private static class Action {
         Supplier<Object[]> supplier;
         ThrowableObjectArrayConsumer action;
+    }
+
+    @AllArgsConstructor
+    private static class UnaryAction<T> {
+        Supplier<T> supplier;
+        ThrowableConsumer<T> action;
+    }
+
+    @AllArgsConstructor
+    private static class VoidAction {
+        ThrowableVoidConsumer action;
     }
 
 }

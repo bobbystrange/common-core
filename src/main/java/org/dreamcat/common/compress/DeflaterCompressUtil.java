@@ -1,6 +1,5 @@
 package org.dreamcat.common.compress;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,89 +8,67 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.Deflater;
-import java.util.zip.DeflaterInputStream;
 import java.util.zip.DeflaterOutputStream;
 
 public class DeflaterCompressUtil {
-
-    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-    public static int buffer_size = 1024;
+    private static final int BUFFER_SIZE = 4096;
 
     // compress
-    public static byte[] compress(byte[] data, int level) throws IOException {
-        try (ByteArrayInputStream ins = new ByteArrayInputStream(data)) {
-            try (ByteArrayOutputStream outs = new ByteArrayOutputStream()) {
-                compress(ins, outs, level);
-                data = outs.toByteArray();
-                return data;
-            }
-        }
-    }
-
     public static byte[] compress(byte[] data) throws IOException {
-        return compress(data, -1);
+        return compress(data, Deflater.DEFAULT_COMPRESSION);
     }
 
-    public static void compress(InputStream ins, OutputStream outs, int level) throws IOException {
+    /**
+     * use deflater to compress  & inflater to uncompress
+     * @param data input data
+     * @param level the compression level (0-9)
+     * @return compresses data
+     * @throws IOException I/O error
+     */
+    public static byte[] compress(byte[] data, int level) throws IOException {
+        Deflater deflater = new Deflater(level);
+        deflater.setInput(data);
+        // no input any more
+        deflater.finish();
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream(data.length)) {
+            byte[] buf = new byte[BUFFER_SIZE];
+            while (!deflater.finished()) {
+                int i = deflater.deflate(buf);
+                bos.write(buf, 0, i);
+            }
+            return bos.toByteArray();
+        } finally {
+            deflater.end();
+        }
+        //try (ByteArrayInputStream ins = new ByteArrayInputStream(data)) {
+        //    try (ByteArrayOutputStream outs = new ByteArrayOutputStream()) {
+        //        compress(ins, outs);
+        //        data = outs.toByteArray();
+        //        return data;
+        //    }
+        //}
+    }
 
-        try (DeflaterOutputStream o = new DeflaterOutputStream(outs, new Deflater(level))) {
+    public static void compress(InputStream ins, OutputStream outs) throws IOException {
+        try (OutputStream o = new DeflaterOutputStream(outs)) {
             int count;
-            byte[] data = new byte[buffer_size];
-            while ((count = ins.read(data)) != -1) {
+            byte[] data = new byte[BUFFER_SIZE];
+            while ((count = ins.read(data)) > 0) {
                 o.write(data, 0, count);
             }
         }
     }
 
-    public static void compress(InputStream ins, OutputStream outs) throws IOException {
-        compress(ins, outs, -1);
-    }
-
-    public static void compress(File srcFile, File destFile, int level) throws IOException {
+    public static void compress(File srcFile, File destFile) throws IOException {
         try (FileInputStream fis = new FileInputStream(srcFile)) {
             try (FileOutputStream fos = new FileOutputStream(destFile)) {
-                compress(fis, fos, level);
+                compress(fis, fos);
             }
         }
     }
 
     public static void compress(File srcFile) throws IOException {
-        compress(srcFile, new File(srcFile + ".deflater"), -1);
+        compress(srcFile, new File(srcFile + ".z"));
     }
 
-    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-    // decompress
-    public static byte[] decompress(byte[] data) throws Exception {
-        try (ByteArrayInputStream ins = new ByteArrayInputStream(data)) {
-            try (ByteArrayOutputStream outs = new ByteArrayOutputStream()) {
-                decompress(ins, outs);
-                data = outs.toByteArray();
-                return data;
-            }
-        }
-    }
-
-    public static void decompress(InputStream ins, OutputStream outs) throws IOException {
-        try (DeflaterInputStream i = new DeflaterInputStream(ins)) {
-            int count;
-            byte[] data = new byte[buffer_size];
-            while ((count = i.read(data)) != -1) {
-                outs.write(data, 0, count);
-            }
-        }
-    }
-
-    public static void decompress(File srcFile, File destFile) throws IOException {
-        try (FileInputStream fis = new FileInputStream(srcFile)) {
-            try (FileOutputStream fos = new FileOutputStream(destFile)) {
-                decompress(fis, fos);
-            }
-        }
-    }
-
-    public static void decompress(File srcFile) throws IOException {
-        String destPath = srcFile.getAbsolutePath();
-        destPath = destPath.substring(0, destPath.length() - 9);
-        decompress(srcFile, new File(destPath));
-    }
 }

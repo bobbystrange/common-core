@@ -1,5 +1,6 @@
 package org.dreamcat.common.compress;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.util.ObjectUtil;
 
 import java.io.BufferedInputStream;
@@ -14,32 +15,24 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import static org.dreamcat.common.io.FileUtil.mkdir;
-
+@Slf4j
 public class ZipCompressUtil {
-
-    public static int buffer_size = 1024;
+    private static final int BUFFER_SIZE = 4096;
 
     // level compression_level = [0-9]
     public static void zip(File srcFile, File destFile, int level) throws IOException {
-        try (ZipOutputStream outs = new ZipOutputStream(
-                new FileOutputStream(destFile))) {
-            outs.setLevel(level);
-            zip(srcFile, outs, "");
-            outs.flush();
+        CheckedOutputStream cos = new CheckedOutputStream(
+                new FileOutputStream(destFile), new CRC32());
+        try(ZipOutputStream zos = new ZipOutputStream(cos)) {
+            zos.setLevel(level);
+            zip(srcFile, zos, "");
         }
-
-        CheckedOutputStream cos = new CheckedOutputStream(new FileOutputStream(
-                destFile), new CRC32());
-
-        ZipOutputStream zos = new ZipOutputStream(cos);
-        zip(srcFile, zos, "");
-        zos.flush();
-        zos.close();
     }
 
     private static void zip(File srcFile, ZipOutputStream outs, String basePath)
             throws IOException {
+        if (!srcFile.exists()) return;
+
         if (srcFile.isDirectory()) {
             zipDir(srcFile, outs, basePath);
         } else {
@@ -54,6 +47,7 @@ public class ZipCompressUtil {
             ZipEntry entry = new ZipEntry(basePath + dir.getName() + "/");
             outs.putNextEntry(entry);
             outs.closeEntry();
+            return;
         }
 
         for (File file : files) {
@@ -61,25 +55,22 @@ public class ZipCompressUtil {
         }
     }
 
-    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-
-    private static void zipFile(File file, ZipOutputStream outs, String basePath)
-            throws IOException {
-
+    private static void zipFile(File file, ZipOutputStream outs, String basePath) throws IOException {
         ZipEntry entry = new ZipEntry(basePath + file.getName());
         entry.setSize(file.length());
         outs.putNextEntry(entry);
 
         try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
             int count;
-            byte[] data = new byte[buffer_size];
-            while ((count = bis.read(data)) != -1) {
+            byte[] data = new byte[BUFFER_SIZE];
+            while ((count = bis.read(data)) > 0) {
                 outs.write(data, 0, count);
             }
         }
-
         outs.closeEntry();
     }
+
+    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
     public static void unzip(File srcFile, File destFile) throws IOException {
         try (ZipInputStream ins = new ZipInputStream(
@@ -91,13 +82,15 @@ public class ZipCompressUtil {
     private static void unzip(File destFile, ZipInputStream ins) throws IOException {
         ZipEntry entry;
         while ((entry = ins.getNextEntry()) != null) {
-            File dirFile = new File(destFile.getPath() + File.separator + entry.getName());
-            mkdir(dirFile);
-
+            File file = new File(destFile.getPath() + File.separator + entry.getName());
             if (entry.isDirectory()) {
-                dirFile.mkdirs();
+                if (!file.mkdirs() && !file.exists()) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Failed to mkdirs {}", file);
+                    }
+                }
             } else {
-                unzipFile(dirFile, ins);
+                unzipFile(file, ins);
             }
         }
     }
@@ -106,8 +99,8 @@ public class ZipCompressUtil {
         try (BufferedOutputStream bos = new BufferedOutputStream(
                 new FileOutputStream(destFile))) {
             int count;
-            byte[] data = new byte[buffer_size];
-            while ((count = ins.read(data)) != -1) {
+            byte[] data = new byte[BUFFER_SIZE];
+            while ((count = ins.read(data)) > 0) {
                 bos.write(data, 0, count);
             }
         }

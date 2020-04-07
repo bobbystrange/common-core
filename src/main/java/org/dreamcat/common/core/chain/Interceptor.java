@@ -1,25 +1,25 @@
 package org.dreamcat.common.core.chain;
 
-public interface Interceptor<Req, Res> {
+public interface Interceptor<I, O> {
 
-    Res intercept(Chain<Req, Res> chain) throws Exception;
+    O intercept(Chain<I, O> chain) throws Exception;
 
-    interface Chain<Req, Res> {
+    interface Chain<I, O> {
 
-        Req original();
+        I original();
 
-        Res proceed(Req req) throws Exception;
+        O proceed(I i) throws Exception;
 
-        Call<Req, Res> call();
+        Call<I, O> call();
     }
 
-    interface Call<Req, Res> extends Cloneable {
+    interface Call<I, O> extends Cloneable {
 
-        Req original();
+        I original();
 
-        Res execute() throws Exception;
+        O execute() throws Exception;
 
-        void enqueue(Interceptor.Callback<Req, Res> respCallback);
+        void enqueue(Interceptor.Callback<I, O> callback);
 
         void cancel();
 
@@ -28,44 +28,44 @@ public interface Interceptor<Req, Res> {
         boolean isCanceled();
     }
 
-    interface AsyncCall<Req, Res> extends Runnable {
+    interface AsyncCall<I, O> extends Runnable {
 
-        Req original();
+        I original();
 
         void execute();
 
-        Call<Req, Res> get();
+        Call<I, O> get();
     }
 
-    interface Callback<Req, Res> {
+    interface Callback<I, O> {
 
-        void onComptele(RealCall<Req, Res> call, Res resp);
+        void onComptele(RealCall<I, O> call, O o);
 
-        void onError(RealCall<Req, Res> call, Exception e);
+        void onError(RealCall<I, O> call, Exception e);
     }
 
     // only works on synchronous call
-    interface Listener<Req, Res> {
+    interface Listener<I, O> {
 
-        default void onBefore(Call<Req, Res> call) {
+        default void onBefore(Call<I, O> call) {
         }
 
-        default void onReturn(Call<Req, Res> call, Res result) {
+        default void onReturn(Call<I, O> call, O result) {
         }
 
-        default void onThrow(Call<Req, Res> call, Exception e) {
+        default void onThrow(Call<I, O> call, Exception e) {
         }
     }
 
-    interface Dispatcher<Req, Res> {
+    interface Dispatcher<I, O> {
 
-        void enqueue(AsyncCall<Req, Res> call);
+        void enqueue(AsyncCall<I, O> call);
 
-        void executed(Call<Req, Res> call);
+        void executed(Call<I, O> call);
 
-        void finished(AsyncCall<Req, Res> call);
+        void finished(AsyncCall<I, O> call);
 
-        void finished(Call<Req, Res> call);
+        void finished(Call<I, O> call);
 
     }
 }

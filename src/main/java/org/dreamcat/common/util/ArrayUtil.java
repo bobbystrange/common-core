@@ -22,8 +22,7 @@ public class ArrayUtil {
         return rangeOf(start, end, 1);
     }
 
-    // example: (1, 9, 2) or (1, 8, 2) thne 1,3,5,7
-    // (9-1)/2 = 4, (8-1)/2 = 3
+    // example: (1, 9, 2) or (1, 8, 2) then 1,3,5,7, (9-1)/2 = 4, (8-1)/2 = 3
     public static int[] rangeOf(int start, int end, int step) {
         int size = (end - start) / step + (end - start) % step;
         int[] a = new int[size];
@@ -109,4 +108,23 @@ public class ArrayUtil {
         return concat(concat(a1, a2, a3, a4), a5);
     }
 
+    public static void reverse(int[] a) {
+        if (a == null) return;
+        int size = a.length;
+        if (size < 2) return;
+        int halfSize = size / 2;
+        for (int i=0; i<halfSize; i++) {
+            SwapUtil.swap(a, i, size - 1 - i);
+        }
+    }
+
+    public static <T> void reverse(T[] a) {
+        if (a == null) return;
+        int size = a.length;
+        if (size < 2) return;
+        int halfSize = size / 2;
+        for (int i=0; i<halfSize; i++) {
+            SwapUtil.swap(a, i, size - 1 - i);
+        }
+    }
 }

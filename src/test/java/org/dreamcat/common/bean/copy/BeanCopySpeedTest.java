@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.PrintUtil.printf;
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.ConsoleUtil.printf;
+import static org.dreamcat.common.util.ConsoleUtil.println;
 
 /**
  * Create by tuke on 2019-06-03
@@ -35,7 +35,7 @@ public class BeanCopySpeedTest {
                 .addAction(supplier, args -> {
                     BeanCopyUtil.copy(args[0], constructor.get());
                 });
-        long[] ts = timeit.runForActions();
+        long[] ts = timeit.run();
         String fmt = Arrays.stream(ts)
                 .mapToObj(it -> String.format("%09.3f", it / 1000.))
                 .collect(Collectors.joining("\t"));

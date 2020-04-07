@@ -15,21 +15,23 @@ import java.util.function.BiPredicate;
 
 @Slf4j
 @NoArgsConstructor
-public class RealDispatcher<Req, Res> implements Interceptor.Dispatcher<Req, Res> {
+public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
 
-    private final Deque<Interceptor.AsyncCall<Req, Res>> readyAsyncCalls = new ArrayDeque<>();
-    private final Deque<Interceptor.AsyncCall<Req, Res>> runningAsyncCalls = new ArrayDeque<>();
-    private final Deque<Interceptor.Call<Req, Res>> runningSyncCalls = new ArrayDeque<>();
+    private final Deque<Interceptor.AsyncCall<I, O>> readyAsyncCalls = new ArrayDeque<>();
+    private final Deque<Interceptor.AsyncCall<I, O>> runningAsyncCalls = new ArrayDeque<>();
+    private final Deque<Interceptor.Call<I, O>> runningSyncCalls = new ArrayDeque<>();
     private int maxRequests = 64;
     private int maxRequestsForSameCase = 4;
-    private BiPredicate<Interceptor.AsyncCall<Req, Res>,
-            Interceptor.AsyncCall<Req, Res>> sameCase = (everyCall, currentCall) -> false;
+    private BiPredicate<Interceptor.AsyncCall<I, O>,
+            Interceptor.AsyncCall<I, O>> sameCase = (everyCall, currentCall) -> false;
     private Runnable idleCallback = () -> {
-        log.debug("dispatcher finished...");
+        if (log.isDebugEnabled()){
+            log.debug("dispatcher finished...");
+        }
     };
     private ExecutorService executorService;
 
-    public synchronized void enqueue(Interceptor.AsyncCall<Req, Res> call) {
+    public synchronized void enqueue(Interceptor.AsyncCall<I, O> call) {
         if (runningAsyncCalls.size() < maxRequests && runningCallsForCase(call) < maxRequestsForSameCase) {
             runningAsyncCalls.add(call);
             executorService().execute(call);
@@ -38,7 +40,7 @@ public class RealDispatcher<Req, Res> implements Interceptor.Dispatcher<Req, Res
         }
     }
 
-    public synchronized void executed(Interceptor.Call<Req, Res> call) {
+    public synchronized void executed(Interceptor.Call<I, O> call) {
         runningSyncCalls.add(call);
     }
 
@@ -49,11 +51,11 @@ public class RealDispatcher<Req, Res> implements Interceptor.Dispatcher<Req, Res
         return executorService;
     }
 
-    public void finished(Interceptor.AsyncCall<Req, Res> call) {
+    public void finished(Interceptor.AsyncCall<I, O> call) {
         finished(runningAsyncCalls, call, true);
     }
 
-    public void finished(Interceptor.Call<Req, Res> call) {
+    public void finished(Interceptor.Call<I, O> call) {
         finished(runningSyncCalls, call, false);
     }
 
@@ -75,9 +77,9 @@ public class RealDispatcher<Req, Res> implements Interceptor.Dispatcher<Req, Res
         }
     }
 
-    private int runningCallsForCase(Interceptor.AsyncCall<Req, Res> call) {
+    private int runningCallsForCase(Interceptor.AsyncCall<I, O> call) {
         int result = 0;
-        for (Interceptor.AsyncCall<Req, Res> c : runningAsyncCalls) {
+        for (Interceptor.AsyncCall<I, O> c : runningAsyncCalls) {
             if (sameCase.test(c, call)) result++;
         }
         return result;
@@ -87,9 +89,9 @@ public class RealDispatcher<Req, Res> implements Interceptor.Dispatcher<Req, Res
         if (runningAsyncCalls.size() >= maxRequests) return; // Already running max capacity.
         if (readyAsyncCalls.isEmpty()) return; // No ready calls to promote.
 
-        for (Iterator<Interceptor.AsyncCall<Req, Res>> i
+        for (Iterator<Interceptor.AsyncCall<I, O>> i
              = readyAsyncCalls.iterator(); i.hasNext(); ) {
-            Interceptor.AsyncCall<Req, Res> call = i.next();
+            Interceptor.AsyncCall<I, O> call = i.next();
 
             if (runningCallsForCase(call) < maxRequestsForSameCase) {
                 i.remove();
@@ -101,17 +103,17 @@ public class RealDispatcher<Req, Res> implements Interceptor.Dispatcher<Req, Res
         }
     }
 
-    public synchronized List<Interceptor.Call<Req, Res>> queuedCalls() {
-        List<Interceptor.Call<Req, Res>> result = new ArrayList<>();
-        for (Interceptor.AsyncCall<Req, Res> asyncCall : readyAsyncCalls) {
+    public synchronized List<Interceptor.Call<I, O>> queuedCalls() {
+        List<Interceptor.Call<I, O>> result = new ArrayList<>();
+        for (Interceptor.AsyncCall<I, O> asyncCall : readyAsyncCalls) {
             result.add(asyncCall.get());
         }
         return Collections.unmodifiableList(result);
     }
 
-    public synchronized List<Interceptor.Call<Req, Res>> runningCalls() {
-        List<Interceptor.Call<Req, Res>> result = new ArrayList<>(runningSyncCalls);
-        for (Interceptor.AsyncCall<Req, Res> asyncCall : runningAsyncCalls) {
+    public synchronized List<Interceptor.Call<I, O>> runningCalls() {
+        List<Interceptor.Call<I, O>> result = new ArrayList<>(runningSyncCalls);
+        for (Interceptor.AsyncCall<I, O> asyncCall : runningAsyncCalls) {
             result.add(asyncCall.get());
         }
         return Collections.unmodifiableList(result);
@@ -132,7 +134,7 @@ public class RealDispatcher<Req, Res> implements Interceptor.Dispatcher<Req, Res
     }
 
     public synchronized void setSameCase(BiPredicate<
-            Interceptor.AsyncCall<Req, Res>, Interceptor.AsyncCall<Req, Res>> sameCase) {
+            Interceptor.AsyncCall<I, O>, Interceptor.AsyncCall<I, O>> sameCase) {
         this.sameCase = sameCase;
     }
 
@@ -162,15 +164,15 @@ public class RealDispatcher<Req, Res> implements Interceptor.Dispatcher<Req, Res
         return executorService;
     }
 
-    public synchronized Deque<Interceptor.AsyncCall<Req, Res>> getReadyAsyncCalls() {
+    public synchronized Deque<Interceptor.AsyncCall<I, O>> getReadyAsyncCalls() {
         return readyAsyncCalls;
     }
 
-    public synchronized Deque<Interceptor.AsyncCall<Req, Res>> getRunningAsyncCalls() {
+    public synchronized Deque<Interceptor.AsyncCall<I, O>> getRunningAsyncCalls() {
         return runningAsyncCalls;
     }
 
-    public synchronized Deque<Interceptor.Call<Req, Res>> getRunningSyncCalls() {
+    public synchronized Deque<Interceptor.Call<I, O>> getRunningSyncCalls() {
         return runningSyncCalls;
     }
 }

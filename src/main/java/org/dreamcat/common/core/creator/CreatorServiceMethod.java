@@ -8,17 +8,17 @@ import java.util.function.BiFunction;
  */
 public class CreatorServiceMethod implements ServiceMethod {
 
-    private final Creator creator;
+    private final ModalCreator creator;
     private final Method method;
     private final BiFunction<Method, Object[], Object> methodAdapter;
 
-    public CreatorServiceMethod(Creator creator, Method method, BiFunction<Method, Object[], Object> methodAdapter) {
+    public CreatorServiceMethod(ModalCreator creator, Method method, BiFunction<Method, Object[], Object> methodAdapter) {
         this.creator = creator;
         this.method = method;
         this.methodAdapter = methodAdapter;
     }
 
-    public Creator creator() {
+    public ModalCreator creator() {
         return creator;
     }
 
@@ -28,7 +28,7 @@ public class CreatorServiceMethod implements ServiceMethod {
     }
 
     @Override
-    public Creator.Call<?> adapt(Object[] args) throws Exception {
+    public ModalCreator.Call<?> adapt(Object[] args) throws Exception {
         Object result = methodAdapter.apply(method, args);
         return CreatorCall.newCall(result, it -> it);
     }

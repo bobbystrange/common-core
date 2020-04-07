@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static org.dreamcat.common.util.PrintUtil.printf;
+import static org.dreamcat.common.util.ConsoleUtil.printf;
 import static org.dreamcat.common.util.RandomUtil.randi;
 
 /**

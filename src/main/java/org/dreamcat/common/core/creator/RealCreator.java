@@ -13,7 +13,7 @@ import java.util.function.BiFunction;
  */
 @RequiredArgsConstructor
 @Setter
-public class RealCreator implements Creator {
+public class RealCreator implements ModalCreator {
     private final Map<Method, ServiceMethod> serviceMethodCache = new ConcurrentHashMap<>();
     private final BiFunction<Method, Object[], Object> methodAdapter;
     private boolean eagerly;

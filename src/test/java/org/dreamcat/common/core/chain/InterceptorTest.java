@@ -7,18 +7,13 @@ public class InterceptorTest {
 
     @Test
     public void sync() throws Exception {
-        InterceptTarget<String, String> client = newClient();
-
-        String res = client.newCall("How are you?").execute();
+        String res = newClient().newCall("How are you?").execute();
         System.out.printf("execute res:\t%s\t\n\n", res);
-
     }
 
     @Test
     public void async() {
-        InterceptTarget<String, String> client = newClient();
-
-        client.newCall("How are you?").enqueue(
+        newClient().newCall("How are you?").enqueue(
                 new Interceptor.Callback<String, String>() {
                     @Override
                     public void onError(RealCall<String, String> call, Exception e) {
@@ -31,8 +26,6 @@ public class InterceptorTest {
                         System.out.printf("enqueue resp:\t%s\t\n\n", resp);
                     }
                 });
-
-
     }
 
     private InterceptTarget<String, String> newClient() {
@@ -46,6 +39,14 @@ public class InterceptorTest {
                     String req = chain.original();
                     req = new StringBuffer(req).reverse().toString();
                     System.out.printf("intercept two:\t%s\t\n\n", req);
+                    // only stop the entrypoint function to perform
+                    chain.call().cancel();
+                    return chain.proceed(req);
+                })
+                .addInterceptor(chain -> {
+                    String req = chain.original();
+                    req = req + req;
+                    System.out.printf("intercept three:\t%s\t\n\n", req);
                     return chain.proceed(req);
                 })
                 .build();

@@ -8,7 +8,7 @@ import org.dreamcat.common.function.ThrowableFunction;
 /**
  * Create by tuke on 2018-09-09
  */
-public class CreatorCall<T> implements Creator.Call<T> {
+public class CreatorCall<T> implements ModalCreator.Call<T> {
 
     private final Object original;
     private final ThrowableFunction<Object, T> converter;
@@ -63,7 +63,7 @@ public class CreatorCall<T> implements Creator.Call<T> {
     }
 
     @Override
-    public void enqueue(Creator.Callback<T> callback) {
+    public void enqueue(ModalCreator.Callback<T> callback) {
         synchronized (this) {
             if (executed) throw new IllegalStateException("Already executed.");
             executed = true;
@@ -89,7 +89,7 @@ public class CreatorCall<T> implements Creator.Call<T> {
     }
 
     @Override
-    public <R> Creator.Call<R> to(ThrowableFunction<T, R> converter) {
+    public <R> ModalCreator.Call<R> to(ThrowableFunction<T, R> converter) {
         ThrowableFunction<Object, R> newConverter = original -> converter.apply(
                 CreatorCall.this.converter.apply(original));
         return newCall(original, newConverter);

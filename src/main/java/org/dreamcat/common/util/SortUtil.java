@@ -1,331 +1,307 @@
 package org.dreamcat.common.util;
 
-public final class SortUtil {
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-    private static void swap(int[] data, int i, int j) {
-        int tmp = data[i];
-        data[i] = data[j];
-        data[j] = tmp;
-    }
+import static org.dreamcat.common.util.ConsoleUtil.println;
 
-    private static void swap(int[][] data, int i1, int j1, int i2, int j2) {
-        int tmp = data[i1][j1];
-        data[i1][j1] = data[i2][j2];
-        data[i2][j2] = tmp;
-    }
+/**
+ * Create by tuke on 2020/4/4
+ */
+public class SortUtil {
 
-    private static void swap(double[] data, int i, int j) {
-        double tmp = data[i];
-        data[i] = data[j];
-        data[j] = tmp;
-    }
-
-    private static void swap(double[][] data, int i1, int j1, int i2, int j2) {
-        double tmp = data[i1][j1];
-        data[i1][j1] = data[i2][j2];
-        data[i2][j2] = tmp;
-    }
-
-    public static void bsort(int[] n) {
-        int temp = 0, size = n.length;
+    // bubble sort
+    public static void bubbleSort(int[] a) {
+        int size = a.length;
         for (int i = 0; i < size - 1; i++) {
+            boolean swapped = false;
             for (int j = 0; j < size - 1 - i; j++) {
-                if (n[j] > n[j + 1]) {
-                    temp = n[j];
-                    n[j] = n[j + 1];
-                    n[j + 1] = temp;
+                if (a[j] > a[j + 1]) {
+                    SwapUtil.swap(a, j, j + 1);
+                    swapped = true;
                 }
             }
+            if (!swapped) return;
         }
     }
 
-    public static void bsort(double[] n) {
-        double temp = 0;
-        int size = n.length;
+    public static void bubbleSort(long[] a) {
+        int size = a.length;
         for (int i = 0; i < size - 1; i++) {
+            boolean swapped = false;
             for (int j = 0; j < size - 1 - i; j++) {
-                if (n[j] > n[j + 1]) {
-                    temp = n[j];
-                    n[j] = n[j + 1];
-                    n[j + 1] = temp;
+                if (a[j] > a[j + 1]) {
+                    SwapUtil.swap(a, j, j + 1);
+                    swapped = true;
                 }
             }
+            if (!swapped) return;
         }
     }
 
-
-    private static int getMiddle(int[] numbers, int low, int high) {
-        int temp = numbers[low];
-        while (low < high) {
-            while (low < high && numbers[high] > temp) {
-                high--;
+    public static void bubbleSort(double[] a) {
+        int size = a.length;
+        for (int i = 0; i < size - 1; i++) {
+            boolean swapped = false;
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (a[j] > a[j + 1]) {
+                    SwapUtil.swap(a, j, j + 1);
+                    swapped = true;
+                }
             }
-            numbers[low] = numbers[high];
-            while (low < high && numbers[low] < temp) {
-                low++;
+            if (!swapped) return;
+        }
+    }
+
+    public static <T extends Comparable<T>> void bubbleSort(T[] a) {
+        int size = a.length;
+        for (int i = 0; i < size - 1; i++) {
+            boolean swapped = false;
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (a[j].compareTo(a[j + 1]) > 0) {
+                    SwapUtil.swap(a, j, j + 1);
+                    swapped = true;
+                }
             }
-            numbers[high] = numbers[low];
-        }
-
-        numbers[low] = temp;
-        return low;
-    }
-
-    private static void quickSort(int[] numbers, int low, int high) {
-        if (low < high) {
-
-            int middle = getMiddle(numbers, low, high);
-            quickSort(numbers, low, middle - 1);
-            quickSort(numbers, middle + 1, high);
+            if (!swapped) return;
         }
     }
 
-    public static void qsort(int[] n) {
-        if (n.length > 0) {
-            quickSort(n, 0, n.length - 1);
-        }
-    }
-
-    private static int getMiddle(double[] numbers, int low, int high) {
-        double temp = numbers[low];
-        while (low < high) {
-            while (low < high && numbers[high] > temp) {
-                high--;
+    public static <T extends Comparable<T>> void bubbleSort(List<T> a) {
+        int size = a.size();
+        for (int i = 0; i < size - 1; i++) {
+            boolean swapped = false;
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (a.get(j).compareTo(a.get(j + 1)) > 0) {
+                    SwapUtil.swap(a, j, j + 1);
+                    swapped = true;
+                }
             }
-            numbers[low] = numbers[high];
-            while (low < high && numbers[low] < temp) {
-                low++;
-            }
-            numbers[high] = numbers[low];
-        }
-
-        numbers[low] = temp;
-        return low;
-    }
-
-    private static void quickSort(double[] numbers, int low, int high) {
-        if (low < high) {
-
-            int middle = getMiddle(numbers, low, high);
-            quickSort(numbers, low, middle - 1);
-            quickSort(numbers, middle + 1, high);
+            if (!swapped) return;
         }
     }
 
-    public static void qsort(double[] n) {
-        if (n.length > 0) {
-            quickSort(n, 0, n.length - 1);
-        }
-    }
-
-
-    public static void ssort(int[] numbers) {
-        int size = numbers.length;
-        int temp = 0;
-
-        for (int i = 0; i < size; i++) {
-            int k = i;
-            for (int j = size - 1; j > i; j--) {
-                if (numbers[j] < numbers[k]) {
+    // select sort, select the max value and insert to the tail
+    public static void selectSort(int[] a) {
+        int size = a.length;
+        for (int i = size - 1; i > 1; i--) {
+            // index of max
+            int k = 0;
+            boolean sorted = true;
+            for (int j = 1; j <= i; j++) {
+                if (a[j] >= a[k]) {
                     k = j;
-                }
-            }
-
-            temp = numbers[i];
-            numbers[i] = numbers[k];
-            numbers[k] = temp;
-        }
-    }
-
-
-    public static void isort(int[] numbers) {
-        int size = numbers.length;
-        int temp = 0;
-        int j = 0;
-
-        for (int i = 0; i < size; i++) {
-            temp = numbers[i];
-
-            for (j = i; j > 0 && temp < numbers[j - 1]; j--) {
-                numbers[j] = numbers[j - 1];
-            }
-            numbers[j] = temp;
-        }
-    }
-
-
-    public static void shellSort(int[] data) {
-        int j = 0;
-        int temp = 0;
-
-        for (int increment = data.length / 2; increment > 0; increment /= 2) {
-            for (int i = increment; i < data.length; i++) {
-                temp = data[i];
-                for (j = i; j >= increment; j -= increment) {
-
-                    if (temp > data[j - increment]) {
-                        data[j] = data[j - increment];
-                    } else {
-                        break;
-                    }
-
-                }
-                data[j] = temp;
-            }
-
-        }
-    }
-
-
-    public static void bhsort(int[] a) {
-
-        int n = a.length;
-
-        for (int i = 0; i < n - 1; i++) {
-
-            buildBigHeap(a, n - 1 - i);
-
-            swap(a, 0, n - 1 - i);
-        }
-
-    }
-
-
-    private static void buildBigHeap(int[] data, int lastIndex) {
-
-        for (int i = (lastIndex - 1) / 2; i >= 0; i--) {
-
-            int k = i;
-
-            while (k * 2 + 1 <= lastIndex) {
-
-                int biggerIndex = 2 * k + 1;
-
-                if (biggerIndex < lastIndex) {
-
-                    if (data[biggerIndex] < data[biggerIndex + 1]) {
-
-                        biggerIndex++;
-                    }
-                }
-
-                if (data[k] < data[biggerIndex]) {
-
-                    swap(data, k, biggerIndex);
-                    k = biggerIndex;
                 } else {
-                    break;
+                    sorted = false;
                 }
             }
+
+            if (sorted) return;
+            SwapUtil.swap(a, i, k);
         }
     }
 
-    public static void lhsort(int[] a) {
-
-        int n = a.length;
-
-        for (int i = 0; i < n - 1; i++) {
-            buildLittleHeap(a, n - 1 - i);
-
-            swap(a, 0, n - 1 - i);
-        }
-    }
-
-    private static void buildLittleHeap(int[] data, int last) {
-        for (int i = (last - 1) / 2; i >= 0; i--) {
-            int parent = i;
-            while (2 * parent + 1 <= last) {
-                int bigger = 2 * parent + 1;
-                if (bigger < last) {
-
-                    if (data[bigger] > data[bigger + 1]) {
-
-                        bigger = bigger + 1;
-                    }
-                }
-                if (data[parent] > data[bigger]) {
-                    swap(data, parent, bigger);
-                    parent = bigger;
+    public static void selectSort(long[] a) {
+        int size = a.length;
+        for (int i = size - 1; i > 1; i--) {
+            // index of max
+            int k = 0;
+            boolean sorted = true;
+            for (int j = 1; j <= i; j++) {
+                if (a[j] >= a[k]) {
+                    k = j;
                 } else {
-                    break;
+                    sorted = false;
                 }
             }
+
+            if (sorted) return;
+            SwapUtil.swap(a, i, k);
         }
     }
 
-    public static void hsort(int[] a) {
-        int k = a.length;
-        for (int i = 0; i < k; i++) {
-            nohsort(a, i, k);
-        }
-    }
-
-    public static void hsort(int[] a, int k) {
-        int n = a.length;
-        if (k >= n) k = n;
-        for (int i = 0; i < k; i++) {
-            nohsort(a, i, n);
-        }
-    }
-
-    private static void nohsort(int[] input, int root, int end) {
-        for (int j = end - 1; j >= root; j--) {
-            int parent = (j + root - 1) / 2;
-            if (input[parent] > input[j]) {
-                int temp = input[j];
-                input[j] = input[parent];
-                input[parent] = temp;
+    public static void selectSort(double[] a) {
+        int size = a.length;
+        for (int i = size - 1; i > 1; i--) {
+            // index of max
+            int k = 0;
+            boolean sorted = true;
+            for (int j = 1; j <= i; j++) {
+                if (a[j] >= a[k]) {
+                    k = j;
+                } else {
+                    sorted = false;
+                }
             }
+
+            if (sorted) return;
+            SwapUtil.swap(a, i, k);
         }
     }
 
-
-    public static int[] msort(int[] nums) {
-        int low = 0, high = nums.length;
-        int mid = (low + high) / 2;
-        if (low < high) {
-            msort(nums, low, mid);
-            msort(nums, mid + 1, high);
-            merge(nums, low, mid, high);
-        }
-        return nums;
-    }
-
-    private static int[] msort(int[] nums, int low, int high) {
-        int mid = (low + high) / 2;
-        if (low < high) {
-            msort(nums, low, mid);
-            msort(nums, mid + 1, high);
-            merge(nums, low, mid, high);
-        }
-        return nums;
-    }
-
-    private static void merge(int[] nums, int low, int mid, int high) {
-        int[] temp = new int[high - low + 1];
-        int i = low;
-        int j = mid + 1;
-        int k = 0;
-
-        while (i <= mid && j <= high) {
-            if (nums[i] < nums[j]) {
-                temp[k++] = nums[i++];
-            } else {
-                temp[k++] = nums[j++];
+    public static <T extends Comparable<T>> void selectSort(T[] a) {
+        int size = a.length;
+        for (int i = size - 1; i > 1; i--) {
+            // index of max
+            int k = 0;
+            boolean sorted = true;
+            for (int j = 1; j <= i; j++) {
+                if (a[j].compareTo(a[k]) >= 0) {
+                    k = j;
+                } else {
+                    sorted = false;
+                }
             }
-        }
 
-        while (i <= mid) {
-            temp[k++] = nums[i++];
-        }
-
-        while (j <= high) {
-            temp[k++] = nums[j++];
-        }
-
-        for (int k2 = 0; k2 < temp.length; k2++) {
-            nums[k2 + low] = temp[k2];
+            if (sorted) return;
+            SwapUtil.swap(a, i, k);
         }
     }
 
+    public static <T extends Comparable<T>> void selectSort(List<T> a) {
+        int size = a.size();
+        for (int i = size - 1; i > 1; i--) {
+            // index of max
+            int k = 0;
+            boolean sorted = true;
+            for (int j = 1; j <= i; j++) {
+                if (a.get(j).compareTo(a.get(k)) >= 0) {
+                    k = j;
+                } else {
+                    sorted = false;
+                }
+            }
+
+            if (sorted) return;
+            SwapUtil.swap(a, i, k);
+        }
+    }
+
+    // insert sort
+    public static void insertSort(int[] a) {
+        int size = a.length;
+        // sorted slice [0, k-1], unsorted slice [k, size-1]
+        // insert k to [0,k-1]
+        for (int k = 1; k < size; k++) {
+            int t = a[k];
+            // insert k to j+1
+            // 0,1,,...,j-1,j,k,j+1,...,k-1
+            int j;
+            for (j = k - 1; j >= 0; j--) {
+                // keep 0,1,...,j, only move j+1,...,k
+                if (t >= a[j]) break;
+                a[j + 1] = a[j];
+            }
+            a[j + 1] = t;
+
+            System.out.printf("k=%s, a=%s\n", k, Arrays.toString(a));
+
+        }
+    }
+
+    public static void insertSort(long[] a) {
+        int size = a.length;
+        // sorted slice [0, k-1], unsorted slice [k, size-1]
+        // insert k to [0,k-1]
+        for (int k = 1; k < size; k++) {
+            long t = a[k];
+            // insert k to j+1
+            // 0,1,,...,j-1,j,k,j+1,...,k-1
+            int j;
+            for (j = k - 1; j >= 0; j--) {
+                // keep 0,1,...,j, only move j+1,...,k
+                if (t >= a[j]) break;
+                a[j + 1] = a[j];
+            }
+            a[j + 1] = t;
+        }
+    }
+
+    public static void insertSort(double[] a) {
+        int size = a.length;
+        // sorted slice [0, k-1], unsorted slice [k, size-1]
+        // insert k to [0,k-1]
+        for (int k = 1; k < size; k++) {
+            double t = a[k];
+            // insert k to j+1
+            // 0,1,,...,j-1,j,k,j+1,...,k-1
+            int j;
+            for (j = k - 1; j >= 0; j--) {
+                // keep 0,1,...,j, only move j+1,...,k
+                if (t >= a[j]) break;
+                a[j + 1] = a[j];
+            }
+            a[j + 1] = t;
+        }
+    }
+
+    public static <T extends Comparable<T>> void insertSort(T[] a) {
+        int size = a.length;
+        // sorted slice [0, k-1], unsorted slice [k, size-1]
+        // insert k to [0,k-1]
+        for (int k = 1; k < size; k++) {
+            T t = a[k];
+            // insert k to j+1
+            // 0,1,,...,j-1,j,k,j+1,...,k-1
+            int j;
+            for (j = k - 1; j >= 0; j--) {
+                // keep 0,1,...,j, only move j+1,...,k
+                if (t.compareTo(a[j]) >= 0) break;
+                a[j + 1] = a[j];
+            }
+            a[j + 1] = t;
+        }
+    }
+
+    public static <T extends Comparable<T>> void insertSort(List<T> a) {
+        int size = a.size();
+        // sorted slice [0, k-1], unsorted slice [k, size-1]
+        // insert k to [0,k-1]
+        for (int k = 1; k < size; k++) {
+            T t = a.get(k);
+            // insert k to j+1
+            // 0,1,,...,j-1,j,k,j+1,...,k-1
+            int j;
+            for (j = k - 1; j >= 0; j--) {
+                // keep 0,1,...,j, only move j+1,...,k
+                if (t.compareTo(a.get(j)) >= 0) break;
+                a.set(j + 1, a.get(j));
+            }
+            a.set(j + 1, t);
+        }
+    }
+
+    // bin sort, box
+    @SuppressWarnings("unchecked")
+    public static <E> void binSort(LinkedList<E> list, Function<E, Integer> scorer, int bound) {
+        int size = list.size();
+        LinkedList<E>[] bin = new LinkedList[bound];
+        for (int j = bound - 1; j >= 0; j--) {
+            bin[j] = new LinkedList<>();
+        }
+
+        while (!list.isEmpty()) {
+            E e = list.removeFirst();
+            bin[scorer.apply(e)].addFirst(e);
+        }
+
+        for (int j = bound - 1; j >= 0; j--) {
+            while (!bin[j].isEmpty()) {
+                list.addFirst(bin[j].removeFirst());
+            }
+            // help Gc
+            bin[j] = null;
+        }
+    }
+
+    // radix sort
+    public static <E> void radixSort(LinkedList<E> list, BiFunction<E, Integer, Integer> scorer, int binBound, int bound) {
+        for (int j = 0; j <= bound - 1; j++) {
+            int finalJ = j;
+            binSort(list, e -> scorer.apply(e, finalJ), binBound);
+        }
+    }
 }

@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
  * Create by tuke on 2018-09-09
  */
 @Slf4j
-public class CreatorTest {
+public class ModalCreatorTest {
 
     static BiFunction<Method, Object[], Object> methodAdaptor = (method, args) -> {
         Annotation[] annotations = method.getAnnotations();
@@ -53,14 +53,14 @@ public class CreatorTest {
 
         Service service = creator.create(Service.class);
 
-        service.say().to(String::toUpperCase).enqueue(new Creator.Callback<String>() {
+        service.say().to(String::toUpperCase).enqueue(new ModalCreator.Callback<String>() {
             @Override
-            public void onComplete(Creator.Call<String> call, String result) {
+            public void onComplete(ModalCreator.Call<String> call, String result) {
                 log.info("What the service say is:\t{}\n", result);
             }
 
             @Override
-            public void onError(Creator.Call<String> call, Throwable t) {
+            public void onError(ModalCreator.Call<String> call, Throwable t) {
                 log.error(t.getMessage(), t);
             }
         });

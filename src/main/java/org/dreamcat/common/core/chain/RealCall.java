@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class RealCall<Req, Res>
-        implements Interceptor.Call<Req, Res> {
+public class RealCall<I, O>
+        implements Interceptor.Call<I, O> {
 
-    private final Req original;
+    private final I original;
 
-    private final InterceptTarget<Req, Res> target;
+    private final InterceptTarget<I, O> target;
 
-    private final Interceptor.Dispatcher<Req, Res> dispatcher;
+    private final Interceptor.Dispatcher<I, O> dispatcher;
 
-    private final Interceptor.Listener<Req, Res> listener;
+    private final Interceptor.Listener<I, O> listener;
 
     private boolean executed;
 
     private volatile boolean canceled;
 
-    private RealCall(InterceptTarget<Req, Res> target, Req original) {
+    private RealCall(InterceptTarget<I, O> target, I original) {
         this.target = target;
         this.dispatcher = target.dispatcher();
         this.listener = target.listener();
@@ -33,7 +33,7 @@ public class RealCall<Req, Res>
     }
 
     @Override
-    public Req original() {
+    public I original() {
         return original;
     }
 
@@ -53,7 +53,7 @@ public class RealCall<Req, Res>
     }
 
     @Override
-    public Res execute() throws Exception {
+    public O execute() throws Exception {
         synchronized (this) {
             if (executed) throw new IllegalStateException("already executed");
             executed = true;
@@ -61,7 +61,7 @@ public class RealCall<Req, Res>
         listener.onBefore(this);
         try {
             dispatcher.executed(this);
-            Res result = getResponseWithChain();
+            O result = getResponseWithChain();
             if (result == null) throw new Exception("canceled");
             listener.onReturn(this, result);
             return result;
@@ -76,7 +76,7 @@ public class RealCall<Req, Res>
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @Override
-    public void enqueue(Interceptor.Callback<Req, Res> respCallback) {
+    public void enqueue(Interceptor.Callback<I, O> respCallback) {
         synchronized (this) {
             if (executed) throw new IllegalStateException("already executed");
             executed = true;
@@ -84,32 +84,32 @@ public class RealCall<Req, Res>
         dispatcher.enqueue(new AsyncCall(respCallback));
     }
 
-    private Res getResponseWithChain() throws Exception {
-        List<Interceptor<Req, Res>> interceptors = new ArrayList<>(target.interceptors());
-        interceptors.add((RealInterceptTarget<Req, Res>) target);
+    private O getResponseWithChain() throws Exception {
+        List<Interceptor<I, O>> interceptors = new ArrayList<>(target.interceptors());
+        interceptors.add((RealInterceptTarget<I, O>) target);
 
-        Interceptor.Chain<Req, Res> chain = new RealChain<>(
+        Interceptor.Chain<I, O> chain = new RealChain<>(
                 interceptors, 0, original, this);
 
         return chain.proceed(original);
     }
 
-    class AsyncCall implements Interceptor.AsyncCall<Req, Res> {
+    class AsyncCall implements Interceptor.AsyncCall<I, O> {
 
-        private final Interceptor.Callback<Req, Res> callback;
+        private final Interceptor.Callback<I, O> callback;
 
         private final String name;
 
-        AsyncCall(Interceptor.Callback<Req, Res> callback) {
+        AsyncCall(Interceptor.Callback<I, O> callback) {
             this.callback = callback;
             this.name = target.originalName(original);
         }
 
-        public Req original() {
+        public I original() {
             return original;
         }
 
-        public Interceptor.Call<Req, Res> get() {
+        public Interceptor.Call<I, O> get() {
             return RealCall.this;
         }
 
@@ -127,14 +127,14 @@ public class RealCall<Req, Res>
         public void execute() {
             boolean signalledCallback = false;
             try {
-                Res res = getResponseWithChain();
+                O o = getResponseWithChain();
                 if (isCanceled()) {
                     signalledCallback = true;
 
                     callback.onError(RealCall.this, new Exception("Canceled"));
                 } else {
                     signalledCallback = true;
-                    callback.onComptele(RealCall.this, res);
+                    callback.onComptele(RealCall.this, o);
                 }
             } catch (Exception e) {
                 if (signalledCallback) {

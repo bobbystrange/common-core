@@ -1,5 +1,10 @@
 package org.dreamcat.common.util;
 
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+
 public class ByteUtil {
 
     public static String hex(byte input) {
@@ -46,6 +51,13 @@ public class ByteUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    public static byte[] convert(byte[] bytes, Charset srcCS, Charset destCS) {
+        CharBuffer charBuffer = srcCS.decode(ByteBuffer.wrap(bytes));
+        return destCS.encode(charBuffer).array();
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     public static int join(byte b1, byte b2) {
         return b1 << 8 + b2;
         //return (b1 << 8) + (b2 > 0 ? b2 : b2 + 256);
@@ -59,25 +71,40 @@ public class ByteUtil {
         return b1 << 24 + b2 << 16 + b3 << 8 + b4;
     }
 
-    //  \u0000 , \u0080 - \u07ff  110*,10*  11Bit
-    public static int toCharAsUtf8(byte x, byte y) {
-        return (((x & 0x1f) << 6) + (y & 0x3f));
+    // Java UTF-16 treat \u0000 as 1100_0000_1000_0000
+    // \u0000 - \u007f   0*        7Bit
+    public static int fromUtf8(byte x) {
+        return x & 0b0111_1111;
+    }
+
+    //  \u0080 - \u07ff  110*,10*  11Bit
+    public static int fromUtf8(byte x, byte y) {
+        return (((x & 0b0001_1111) << 6) + (y & 0b0011_1111));
     }
 
     //  \u0800 - \uffff  1110*,10*,10*  16Bit
-    public static int toCharAsUtf8(byte x, byte y, byte z) {
-        return (((x & 0xf) << 12) + ((y & 0x3f) << 6) + (z & 0x3f));
+    public static int fromUtf8(byte x, byte y, byte z) {
+        return (((x & 0b0000_1111) << 12) + ((y & 0b0011_1111) << 6) + (z & 0b0011_1111));
     }
 
-    //  \u00010000 - \uffffffff  11101101,1010*,10*,11101101,1011*,10*  21Bit
-    public static int toCharAsUtf8(byte u, byte v, byte w, byte x, byte y, byte z) {
-        return (((v & 0x0f) << 16) +
-                ((w & 0x3f) << 10) + ((y & 0x0f) << 6) + (z & 0x3f));
+    //  \u0001_0000 - \u001f_ffff  1111_0*,10*,10*,10*  21Bit
+    public static int fromUtf8(byte w, byte x, byte y, byte z) {
+        return (((w & 0b0000_0111) << 18) +
+                ((x & 0b0011_1111) << 12) + ((y & 0b0011_1111) << 6) + (z & 0b0011_1111));
     }
 
-    public static int toCharAsUtf8(byte v, byte w, byte y, byte z) {
-        return (((v & 0x0f) << 16) +
-                ((w & 0x3f) << 10) + ((y & 0x0f) << 6) + (z & 0x3f));
+    //  \u0020_0000 - \u03ff_ffff  1111_10*,10*,10*,10*,10*  26Bit
+    public static int fromUtf8(byte v, byte w, byte x, byte y, byte z) {
+        return (((v & 0b0000_0011) << 24) + ((w & 0b0011_1111) << 18) +
+                ((x & 0b0011_1111) << 12) + ((y & 0b0011_1111) << 6) + (z & 0b0011_1111));
     }
+
+    //  \u0400_0000 - \u7fff_ffff  1111_110*,10*,10*,10*,10*,10*  31Bit
+    public static int fromUtf8(byte u, byte v, byte w, byte x, byte y, byte z) {
+        return (((u & 0b0000_0001) << 30) + ((v & 0b0011_1111) << 24) +
+                ((w & 0b0011_1111) << 18) +
+                ((x & 0b0011_1111) << 12) + ((y & 0b0011_1111) << 6) + (z & 0b0011_1111));
+    }
+
 
 }

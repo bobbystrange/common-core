@@ -9,109 +9,91 @@ import java.util.function.Function;
 /**
  * Create by tuke on 2018-09-08
  */
-public class RealInterceptTarget<Req, Res> implements InterceptTarget<Req, Res>, Interceptor<Req, Res> {
+public class RealInterceptTarget<I, O> implements InterceptTarget<I, O>, Interceptor<I, O> {
 
-    private final ThrowableFunction<Req, Res> function;
+    protected final ThrowableFunction<I, O> function;
 
-    private final List<Interceptor<Req, Res>> interceptors;
+    protected Interceptor.Dispatcher<I, O> dispatcher;
 
-    private final Interceptor.Dispatcher<Req, Res> dispatcher;
+    protected List<Interceptor<I, O>> interceptors;
 
-    private final Interceptor.Listener<Req, Res> listener;
+    protected Interceptor.Listener<I, O> listener;
 
-    private final Function<Req, String> originalName;
+    protected Function<I, String> originalName;
 
-    private RealInterceptTarget(RealInterceptTarget.Builder<Req, Res> builder) {
-        function = builder.function;
-        interceptors = builder.interceptors;
-        originalName = builder.originalName;
-
-        dispatcher = builder.dispatcher != null ?
-                builder.dispatcher : new RealDispatcher<>();
-
-        listener = builder.listener != null ?
-                builder.listener : InterceptTarget.super.listener();
-
+    // don't call it directly, use Builder instead
+    protected RealInterceptTarget(ThrowableFunction<I, O> function) {
+        this.function = function;
+        this.dispatcher = new RealDispatcher<>();
+        this.interceptors = new ArrayList<>();
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static <Req, Resp> Builder<Req, Resp> builder(
-            ThrowableFunction<Req, Resp> function) {
+    public static <I, O> Builder<I, O> builder(
+            ThrowableFunction<I, O> function) {
         return new Builder<>(function);
     }
 
     @Override
-    public Interceptor.Dispatcher<Req, Res> dispatcher() {
+    public Interceptor.Dispatcher<I, O> dispatcher() {
         return dispatcher;
     }
 
     @Override
-    public List<Interceptor<Req, Res>> interceptors() {
+    public List<Interceptor<I, O>> interceptors() {
         return interceptors;
     }
 
     @Override
-    public Interceptor.Listener<Req, Res> listener() {
+    public Interceptor.Listener<I, O> listener() {
         return listener;
     }
 
     @Override
-    public String originalName(Req req) {
-        return originalName.apply(req);
+    public String originalName(I i) {
+        return originalName.apply(i);
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @Override
-    public Res intercept(Chain<Req, Res> chain) throws Exception {
+    public O intercept(Chain<I, O> chain) throws Exception {
         return function.apply(chain.original());
     }
 
-    public static class Builder<Req, Resp> {
+    public static class Builder<I, O> {
 
-        private final ThrowableFunction<Req, Resp> function;
+        private final RealInterceptTarget<I, O> target;
 
-        private final List<Interceptor<Req, Resp>> interceptors;
-
-        private Interceptor.Dispatcher<Req, Resp> dispatcher;
-
-        private Interceptor.Listener<Req, Resp> listener;
-
-        private Function<Req, String> originalName;
-
-        public Builder(ThrowableFunction<Req, Resp> function) {
-            this.function = function;
-            this.interceptors = new ArrayList<>();
+        public Builder(ThrowableFunction<I, O> function) {
+            this.target = new RealInterceptTarget<>(function);
         }
 
-        public RealInterceptTarget<Req, Resp> build() {
-            if (originalName == null)
-                originalName = Object::toString;
-
-            return new RealInterceptTarget<>(this);
+        public RealInterceptTarget<I, O> build() {
+            if (this.target.listener == null) {
+                this.target.listener = new Interceptor.Listener<I, O>(){
+                };
+            }
+            if (this.target.originalName == null){
+                this.target.originalName = Object::toString;
+            }
+            return target;
         }
 
-        public RealInterceptTarget.Builder<Req, Resp> addInterceptor(Interceptor<Req, Resp> interceptor) {
-            interceptors.add(interceptor);
+        public RealInterceptTarget.Builder<I, O> addInterceptor(Interceptor<I, O> interceptor) {
+            this.target.interceptors.add(interceptor);
             return this;
         }
 
-        public RealInterceptTarget.Builder<Req, Resp> dispatcher(Interceptor.Dispatcher<Req, Resp> dispatcher) {
-            this.dispatcher = dispatcher;
+        public RealInterceptTarget.Builder<I, O> listener(Interceptor.Listener<I, O> listener) {
+            this.target.listener = listener;
             return this;
         }
 
-        public RealInterceptTarget.Builder<Req, Resp> listener(Interceptor.Listener<Req, Resp> listener) {
-            this.listener = listener;
+        public RealInterceptTarget.Builder<I, O> originalName(Function<I, String> originalName) {
+            this.target.originalName = originalName;
             return this;
         }
-
-        public RealInterceptTarget.Builder<Req, Resp> originalName(Function<Req, String> originalName) {
-            this.originalName = originalName;
-            return this;
-        }
-
     }
-
 }

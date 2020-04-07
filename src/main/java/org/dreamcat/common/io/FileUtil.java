@@ -1,6 +1,7 @@
 package org.dreamcat.common.io;
 
 import org.dreamcat.common.function.TriConsumer;
+import org.dreamcat.common.util.ObjectUtil;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,8 +13,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.Writer;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
@@ -29,25 +32,19 @@ import static java.nio.file.StandardWatchEventKinds.*;
 
 public final class FileUtil {
 
-    private static final int BUFFER_SIZE = 1024 * 4;
+    private static final int BUFFER_SIZE = 4096;
 
-    public static String getSuffix(String filename) {
-        int dotPosition = filename.lastIndexOf(".");
-        if (dotPosition == -1 || dotPosition == filename.length() - 1) return "";
-        return filename.substring(dotPosition + 1);
-    }
-
-    public static String getBasename(String filename) {
-        int slashPosition = filename.lastIndexOf("/");
-        // if filename is has diretory type
-        if (slashPosition != -1 && slashPosition == filename.length() - 1) {
-            return "";
-        }
-
-        if (slashPosition != -1) {
-            // get basename
-            filename = filename.substring(slashPosition + 1);
-        }
+    /**
+     * no verification, the prefix of basename, apart by last dot position
+     *
+     * @param filename just string
+     * @return prefix string
+     */
+    public static String prefix(String filename) {
+        filename = basename(filename);
+        if (ObjectUtil.isBlank(filename)) return "";
+        // directory has no prefix name
+        if ("/".equals(filename)) return "";
 
         int dotPosition = filename.lastIndexOf(".");
         if (dotPosition == -1) {
@@ -60,6 +57,36 @@ public final class FileUtil {
         return filename.substring(0, dotPosition);
     }
 
+    public static String suffix(String filename) {
+        filename = basename(filename);
+        if (ObjectUtil.isBlank(filename)) return "";
+        // directory has no suffix name
+        if ("/".equals(filename)) return "";
+
+        int dotPosition = filename.lastIndexOf(".");
+        if (dotPosition == -1 || dotPosition == filename.length() - 1) return "";
+        return filename.substring(dotPosition + 1);
+    }
+
+    /**
+     * no verification, almost like dirname in unix
+     *
+     * @param filename just string
+     * @return basename string
+     */
+    public static String basename(String filename) {
+        filename = normalize(filename);
+        if (ObjectUtil.isBlank(filename)) return "";
+        if ("/".equals(filename)) return filename;
+        int slashPosition = filename.lastIndexOf("/");
+        if (slashPosition != -1) {
+            // get basename
+            return filename.substring(slashPosition + 1);
+        } else {
+            return filename;
+        }
+    }
+
     /**
      * no verification, almost like dirname in unix
      *
@@ -67,7 +94,10 @@ public final class FileUtil {
      * @return dirname string
      * @throws IllegalArgumentException invalid filename
      */
-    public static String getDirname(String filename) {
+    public static String dirname(String filename) {
+        filename = normalize(filename);
+        if (ObjectUtil.isBlank(filename)) return "";
+        if ("/".equals(filename)) return filename;
         int slashPosition = filename.lastIndexOf("/");
         if (slashPosition == -1) {
             return ".";
@@ -85,7 +115,20 @@ public final class FileUtil {
                 throw new IllegalArgumentException(String.format("invalid filename '%s'", filename));
         }
 
+        // if filename like /a
+        if (slashPosition == 0) {
+            return "/";
+        }
         return filename.substring(0, slashPosition);
+    }
+
+    public static String normalize(String filename) {
+        if (ObjectUtil.isBlank(filename)) return "";
+        filename = filename.trim().replaceAll("/{2,}", "/");
+        if ("/".equals(filename)) return filename;
+        // no / in the end
+        if (filename.endsWith("/")) filename = filename.substring(0, filename.length() - 1);
+        return filename;
     }
 
     public static String getMimeType(String filename) {
@@ -158,6 +201,48 @@ public final class FileUtil {
                 list.add(line);
             }
             return list;
+        }
+    }
+
+    public static void readTo(String filename, OutputStream outputStream) throws IOException {
+        readTo(new File(filename), outputStream);
+    }
+
+    public static void readTo(File file, OutputStream outputStream) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file)){
+            byte[] buf = new byte[BUFFER_SIZE];
+            int readSize;
+            while ((readSize = fis.read(buf)) > 0) {
+                outputStream.write(buf, 0, readSize);
+            }
+        }
+    }
+
+    public static void readTo(String filename, Writer writer) throws IOException {
+        readTo(new File(filename), writer);
+    }
+
+    public static void readTo(File file, Writer writer) throws IOException {
+        try (FileReader fr = new FileReader(file)){
+            char[] buf = new char[BUFFER_SIZE];
+            int readSize;
+            while ((readSize = fr.read(buf)) > 0) {
+                writer.write(buf, 0, readSize);
+            }
+        }
+    }
+
+    public static void readTo(String filename, Writer writer, Charset charset) throws IOException {
+        readTo(new File(filename), writer, charset);
+    }
+
+    public static void readTo(File file, Writer writer, Charset charset) throws IOException {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))){
+            char[] buf = new char[BUFFER_SIZE];
+            int readSize;
+            while ((readSize = br.read(buf)) > 0) {
+                writer.write(buf, 0, readSize);
+            }
         }
     }
 
@@ -245,15 +330,19 @@ public final class FileUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    // recurse to mkdir parent diretory
-    public static void mkdir(String file) {
-        mkdir(new File(file));
+    /**
+     * recurse to mkdir parent diretory
+     * @see File#mkdirs()
+     * @param file file path
+     */
+    public static void mkdirsForFile(String file) {
+        mkdirsForFile(new File(file));
     }
 
-    public static void mkdir(File file) {
+    public static void mkdirsForFile(File file) {
         File parent = file.getParentFile();
         if (!parent.getParentFile().exists()) {
-            mkdir(parent);
+            mkdirsForFile(parent);
         }
 
         parent.mkdir();
@@ -273,13 +362,13 @@ public final class FileUtil {
         }
     }
 
-    private static void convertFile(File file, File srcFile, Charset srcCS, File destFile, Charset destCS) throws IOException {
+    private static void convertFile(File subFile, File srcFile, Charset srcCS, File destFile, Charset destCS) throws IOException {
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(file), srcCS))) {
+                new InputStreamReader(new FileInputStream(subFile), srcCS))) {
             String path = destFile.getPath()
-                    + file.getAbsolutePath().substring(srcFile.getPath().length());
+                    + subFile.getAbsolutePath().substring(srcFile.getPath().length());
             File outfile = new File(path);
-            mkdir(outfile);
+            mkdirsForFile(outfile);
             try (BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(new FileOutputStream(outfile), destCS))) {
                 for (String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -294,9 +383,9 @@ public final class FileUtil {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @SuppressWarnings("unchecked")
-    public void watchPath(Path path, long interval, TimeUnit intervalUnit,
-                          TriConsumer<WatchEvent.Kind<Path>, Integer, Path> consumer)
-            throws Exception {
+    public static void watchPath(
+            Path path, long interval, TimeUnit intervalUnit,
+            TriConsumer<WatchEvent.Kind<Path>, Integer, Path> consumer) throws Exception {
 
         WatchService watcher = FileSystems.getDefault().newWatchService();
         path.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
@@ -324,6 +413,4 @@ public final class FileUtil {
             }
         }
     }
-
-
 }

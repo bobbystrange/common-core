@@ -2,8 +2,10 @@ package org.dreamcat.common.util;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.ConsoleUtil.println;
 
 /**
  * Create by tuke on 2020/3/11
@@ -23,6 +25,15 @@ public class ArrayUtilTest {
         Double[] a2 = new Double[]{3.14, 2.72, 0.618, 1.414};
         Double[] a = ArrayUtil.concat(a1, a2, a1, a1, a2);
         println(pretty(a));
+    }
+
+    @Test
+    public void reverTest() {
+        int[] a1 = new int[]{1, 2, 3};
+        Double[] a2 = new Double[]{3.14, 2.72, 0.618, 1.414};
+        ArrayUtil.reverse(a1);
+        ArrayUtil.reverse(a2);
+        println(pretty(a1), Arrays.toString(a2));
     }
 }
 
