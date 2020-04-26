@@ -10,7 +10,9 @@ import javax.net.ssl.X509TrustManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -141,6 +143,17 @@ public class SocketUtil {
             throw new RuntimeException(message);
         }
         return socket;
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static String format(Socket socket) {
+        return socket.getInetAddress().getHostAddress() + ":" + socket.getPort();
+    }
+
+    public static String format(SocketAddress socketAddress) {
+        InetSocketAddress address = (InetSocketAddress) socketAddress;
+        return address.getHostString() + ":" + address.getPort();
     }
 
 }

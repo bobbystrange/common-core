@@ -1,9 +1,14 @@
 package org.dreamcat.common.util;
 
+import org.dreamcat.common.collection.CollectionUtil;
+
+import java.util.Map;
+
 /**
  * @author tuke
  */
 public class MathUtil {
+    private static volatile Map<Integer, Long> fibonacciCache;
 
     //difference quotient
     public static double diffq(double[] a, double[] b) {
@@ -20,6 +25,31 @@ public class MathUtil {
         double[] d = new double[n - 1];
         System.arraycopy(b, 0, d, 0, n - 1);
         return diffq(c, d);
+    }
+
+    public static long fibonacci(int n) {
+        ObjectUtil.requirePositive(n, "n");
+        if (fibonacciCache == null) {
+            synchronized (MathUtil.class) {
+                if (fibonacciCache == null) {
+                    fibonacciCache = CollectionUtil.newConcurrentHashMap(
+                            1, 1L,
+                            2, 1L,
+                            3, 2L,
+                            4, 3L,
+                            5, 5L,
+                            6, 8L,
+                            7, 13L,
+                            8, 21L,
+                            9, 34L,
+                            10, 55L
+                    );
+                }
+            }
+        }
+
+        return fibonacciCache.computeIfAbsent(n,
+                k -> fibonacci(n - 1) + fibonacci(n - 2));
     }
 
 }

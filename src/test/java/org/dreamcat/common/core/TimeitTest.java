@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.ConsoleUtil.printf;
+import static org.dreamcat.common.util.PrintUtil.printf;
 
 /**
  * Create by tuke on 2020/4/4
@@ -23,13 +23,13 @@ public class TimeitTest {
 
     public void speed(int count, int repeat, int skip) {
         long[] ts = Timeit.ofActions()
-                .addVoidAction(() -> {
+                .addAction(() -> {
                     Thread.sleep(1);
                 })
-                .addVoidAction(() -> {
+                .addAction(() -> {
                     Thread.sleep(3);
                 })
-                .addVoidAction(() -> {
+                .addAction(() -> {
                     Thread.sleep(7);
                 })
                 .count(count).repeat(repeat).skip(skip).run();

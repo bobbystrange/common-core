@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -64,7 +63,7 @@ public class NumericUtil {
         }
         int[] digits = new int[32];
         int remainder = n;
-        int i=0;
+        int i = 0;
         while (remainder != 0) {
             digits[i++] = remainder % base;
             remainder = remainder / base;
@@ -78,7 +77,7 @@ public class NumericUtil {
         }
         int[] digits = new int[64];
         long remainder = n;
-        int i=0;
+        int i = 0;
         while (remainder != 0) {
             digits[i++] = (int) (remainder % base);
             remainder = remainder / base;
@@ -100,7 +99,7 @@ public class NumericUtil {
 
         int size = digitList.size();
         int[] digits = new int[size];
-        for (int i=0; i<size; i++) {
+        for (int i = 0; i < size; i++) {
             digits[i] = digitList.get(i);
         }
         return digits;

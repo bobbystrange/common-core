@@ -1,13 +1,13 @@
 package org.dreamcat.common.compress;
 
-import org.dreamcat.common.util.ByteUtil;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.function.IntFunction;
 
-import static org.dreamcat.common.util.ConsoleUtil.*;
+import static org.dreamcat.common.util.PrintUtil.print;
+import static org.dreamcat.common.util.PrintUtil.println;
 
 /**
  * Create by tuke on 2020/4/6
@@ -28,7 +28,7 @@ public class GzipCompressUtilTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testRatio() throws IOException {
-        IntFunction<String>[] fns = new IntFunction[] {
+        IntFunction<String>[] fns = new IntFunction[]{
                 RandomUtil::choose10,
                 RandomUtil::choose16,
                 RandomUtil::choose26,
@@ -38,9 +38,9 @@ public class GzipCompressUtilTest {
                 RandomUtil::choose72,
         };
 
-        for (int i=1; i<1000; i++) {
+        for (int i = 1; i < 1000; i++) {
             print(i + "\t");
-            for (IntFunction<String> fn: fns) {
+            for (IntFunction<String> fn : fns) {
                 byte[] data = fn.apply(i).getBytes();
                 byte[] compressed = GzipCompressUtil.compress(data);
                 byte[] uncompressed = GzipCompressUtil.uncompress(compressed);

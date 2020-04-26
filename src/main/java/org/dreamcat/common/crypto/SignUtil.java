@@ -18,7 +18,7 @@ public class SignUtil {
 
     public static String md5Hex(byte[] input) {
         try {
-            return MessageDigestEnum.MD5.digestAsHex(input);
+            return DigestAlgorithm.MD5.digestAsHex(input);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -26,7 +26,7 @@ public class SignUtil {
 
     public static String md5Hex(InputStream input) {
         try {
-            return MessageDigestEnum.MD5.digestAsHex(input);
+            return DigestAlgorithm.MD5.digestAsHex(input);
         } catch (NoSuchAlgorithmException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -34,7 +34,7 @@ public class SignUtil {
 
     public static String md5Hex(InputStream input, OutputStream output) {
         try {
-            return MessageDigestEnum.MD5.digestAsHex(input, output);
+            return DigestAlgorithm.MD5.digestAsHex(input, output);
         } catch (NoSuchAlgorithmException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +54,7 @@ public class SignUtil {
 
     public static String md5Base64(byte[] input) {
         try {
-            return MessageDigestEnum.MD5.digestAsBase64(input);
+            return DigestAlgorithm.MD5.digestAsBase64(input);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +62,7 @@ public class SignUtil {
 
     public static String md5Base64(InputStream input) {
         try {
-            return MessageDigestEnum.MD5.digestAsBase64(input);
+            return DigestAlgorithm.MD5.digestAsBase64(input);
         } catch (NoSuchAlgorithmException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -70,7 +70,7 @@ public class SignUtil {
 
     public static String md5Base64(InputStream input, OutputStream output) {
         try {
-            return MessageDigestEnum.MD5.digestAsBase64(input, output);
+            return DigestAlgorithm.MD5.digestAsBase64(input, output);
         } catch (NoSuchAlgorithmException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -84,59 +84,29 @@ public class SignUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static String hmacsha1Base64(String input, String key) {
-        return hmacsha1Base64(input.getBytes(), key);
+    public static String hs1Base64(String input, String key) {
+        return hs1Base64(input.getBytes(), key);
     }
 
-    public static String hmacsha1Base64(byte[] input, String key) {
+    public static String hs1Base64(byte[] input, String key) {
         try {
-            return HmacEnum.HMAC_SHA_1.digestAsBase64(input, key.getBytes());
+            return HmacAlgorithm.HMAC_SHA_1.digestAsBase64(input, key.getBytes());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static String hmacsha1Base64(InputStream input, String key) {
+    public static String hs1Base64(InputStream input, String key) {
         try {
-            return HmacEnum.HMAC_SHA_1.digestAsBase64(input, key);
+            return HmacAlgorithm.HMAC_SHA_1.digestAsBase64(input, key);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static String hmacsha1Base64(InputStream input, OutputStream output, String key) {
+    public static String hs1Base64(InputStream input, OutputStream output, String key) {
         try {
-            return HmacEnum.HMAC_SHA_1.digestAsBase64(input, output, key);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
-
-    public static String hmacsha256Base64(String input, String key) {
-        return hmacsha256Base64(input.getBytes(), key);
-    }
-
-    public static String hmacsha256Base64(byte[] input, String key) {
-        try {
-            return HmacEnum.HMAC_SHA_256.digestAsBase64(input, key.getBytes());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String hmacsha256Base64(InputStream input, String key) {
-        try {
-            return HmacEnum.HMAC_SHA_256.digestAsBase64(input, key);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String hmacsha256Base64(InputStream input, OutputStream output, String key) {
-        try {
-            return HmacEnum.HMAC_SHA_256.digestAsBase64(input, output, key);
+            return HmacAlgorithm.HMAC_SHA_1.digestAsBase64(input, output, key);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -144,29 +114,89 @@ public class SignUtil {
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
-    public static String hmacsha512Base64(String input, String key) {
-        return hmacsha512Base64(input.getBytes(), key);
+    public static String hs256Base64(String input, String key) {
+        return hs256Base64(input.getBytes(), key);
     }
 
-    public static String hmacsha512Base64(byte[] input, String key) {
+    public static String hs256Base64(byte[] input, String key) {
         try {
-            return HmacEnum.HMAC_SHA_512.digestAsBase64(input, key.getBytes());
+            return HmacAlgorithm.HMAC_SHA_256.digestAsBase64(input, key.getBytes());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static String hmacsha512Base64(InputStream input, String key) {
+    public static String hs256Base64(InputStream input, String key) {
         try {
-            return HmacEnum.HMAC_SHA_512.digestAsBase64(input, key);
+            return HmacAlgorithm.HMAC_SHA_256.digestAsBase64(input, key);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static String hmacsha512Base64(InputStream input, OutputStream output, String key) {
+    public static String hs256Base64(InputStream input, OutputStream output, String key) {
         try {
-            return HmacEnum.HMAC_SHA_512.digestAsBase64(input, output, key);
+            return HmacAlgorithm.HMAC_SHA_256.digestAsBase64(input, output, key);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static String hs512Base64(String input, String key) {
+        return hs512Base64(input.getBytes(), key);
+    }
+
+    public static String hs512Base64(byte[] input, String key) {
+        try {
+            return HmacAlgorithm.HMAC_SHA_512.digestAsBase64(input, key.getBytes());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String hs512Base64(InputStream input, String key) {
+        try {
+            return HmacAlgorithm.HMAC_SHA_512.digestAsBase64(input, key);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String hs512Base64(InputStream input, OutputStream output, String key) {
+        try {
+            return HmacAlgorithm.HMAC_SHA_512.digestAsBase64(input, output, key);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static String hm5Base64(String input, String key) {
+        return hm5Base64(input.getBytes(), key);
+    }
+
+    public static String hm5Base64(byte[] input, String key) {
+        try {
+            return HmacAlgorithm.HMAC_MD5.digestAsBase64(input, key.getBytes());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String hm5Base64(InputStream input, String key) {
+        try {
+            return HmacAlgorithm.HMAC_SHA_512.digestAsBase64(input, key);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String hm5Base64(InputStream input, OutputStream output, String key) {
+        try {
+            return HmacAlgorithm.HMAC_SHA_512.digestAsBase64(input, output, key);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

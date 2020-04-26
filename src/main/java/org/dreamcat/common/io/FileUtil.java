@@ -1,5 +1,6 @@
 package org.dreamcat.common.io;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.function.TriConsumer;
 import org.dreamcat.common.util.ObjectUtil;
 
@@ -18,9 +19,12 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URLConnection;
+import java.nio.channels.ByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
@@ -30,8 +34,8 @@ import java.util.concurrent.TimeUnit;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
+@Slf4j
 public final class FileUtil {
-
     private static final int BUFFER_SIZE = 4096;
 
     /**
@@ -209,7 +213,7 @@ public final class FileUtil {
     }
 
     public static void readTo(File file, OutputStream outputStream) throws IOException {
-        try (FileInputStream fis = new FileInputStream(file)){
+        try (FileInputStream fis = new FileInputStream(file)) {
             byte[] buf = new byte[BUFFER_SIZE];
             int readSize;
             while ((readSize = fis.read(buf)) > 0) {
@@ -223,7 +227,7 @@ public final class FileUtil {
     }
 
     public static void readTo(File file, Writer writer) throws IOException {
-        try (FileReader fr = new FileReader(file)){
+        try (FileReader fr = new FileReader(file)) {
             char[] buf = new char[BUFFER_SIZE];
             int readSize;
             while ((readSize = fr.read(buf)) > 0) {
@@ -237,13 +241,21 @@ public final class FileUtil {
     }
 
     public static void readTo(File file, Writer writer, Charset charset) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))){
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))) {
             char[] buf = new char[BUFFER_SIZE];
             int readSize;
             while ((readSize = br.read(buf)) > 0) {
                 writer.write(buf, 0, readSize);
             }
         }
+    }
+
+    public static void readTo(String filename, ByteChannel output) throws IOException {
+        readTo(new File(filename), output);
+    }
+
+    public static void readTo(File file, ByteChannel output) throws IOException {
+        NioUtil.copy(Files.newByteChannel(file.toPath()), output);
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -253,7 +265,7 @@ public final class FileUtil {
     }
 
     public static void writeFrom(String filename, String text, boolean append) throws IOException {
-        writeFrom(new File(filename), text, false);
+        writeFrom(new File(filename), text, append);
     }
 
     public static void writeFrom(File file, String text) throws IOException {
@@ -271,7 +283,7 @@ public final class FileUtil {
     }
 
     public static void writeFrom(String filename, byte[] bytes, boolean append) throws IOException {
-        writeFrom(new File(filename), bytes, false);
+        writeFrom(new File(filename), bytes, append);
     }
 
     public static void writeFrom(File file, byte[] bytes) throws IOException {
@@ -289,7 +301,7 @@ public final class FileUtil {
     }
 
     public static void writeFrom(String filename, Reader reader, boolean append) throws IOException {
-        writeFrom(new File(filename), reader, false);
+        writeFrom(new File(filename), reader, append);
     }
 
     public static void writeFrom(File file, Reader reader) throws IOException {
@@ -311,7 +323,7 @@ public final class FileUtil {
     }
 
     public static void writeFrom(String filename, InputStream inputStream, boolean append) throws IOException {
-        writeFrom(new File(filename), inputStream, false);
+        writeFrom(new File(filename), inputStream, append);
     }
 
     public static void writeFrom(File file, InputStream inputStream) throws IOException {
@@ -328,25 +340,30 @@ public final class FileUtil {
         }
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    /**
-     * recurse to mkdir parent diretory
-     * @see File#mkdirs()
-     * @param file file path
-     */
-    public static void mkdirsForFile(String file) {
-        mkdirsForFile(new File(file));
+    public static void writeFrom(String filename, ByteChannel input) throws IOException {
+        writeFrom(filename, input, false);
     }
 
-    public static void mkdirsForFile(File file) {
-        File parent = file.getParentFile();
-        if (!parent.getParentFile().exists()) {
-            mkdirsForFile(parent);
+    public static void writeFrom(String filename, ByteChannel input, boolean append) throws IOException {
+        writeFrom(new File(filename), input, append);
+    }
+
+    public static void writeFrom(File file, ByteChannel input) throws IOException {
+        writeFrom(file, input, false);
+    }
+
+    public static void writeFrom(File file, ByteChannel input, boolean append) throws IOException {
+        ByteChannel output;
+        if (append) {
+            output = Files.newByteChannel(file.toPath(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        } else {
+            output = Files.newByteChannel(file.toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
         }
 
-        parent.mkdir();
+        NioUtil.copy(input, output);
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static void convert(File srcFile, Charset srcCS, File destFile, Charset destCS)
             throws IOException {
@@ -368,7 +385,9 @@ public final class FileUtil {
             String path = destFile.getPath()
                     + subFile.getAbsolutePath().substring(srcFile.getPath().length());
             File outfile = new File(path);
-            mkdirsForFile(outfile);
+            if (!outfile.getParentFile().mkdirs() && !outfile.getParentFile().exists()) {
+                throw new IOException("Cannot create directory " + outfile.getParentFile().getAbsolutePath());
+            }
             try (BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(new FileOutputStream(outfile), destCS))) {
                 for (String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -378,6 +397,24 @@ public final class FileUtil {
                 writer.flush();
             }
         }
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static boolean deleteForcibly(File file) {
+        if (!file.exists()) return true;
+
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (ObjectUtil.isEmpty(files)) {
+                return file.delete() || !file.exists();
+            }
+
+            for (File i : files) {
+                if (!deleteForcibly(i)) break;
+            }
+        }
+        return file.delete() || !file.exists();
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====

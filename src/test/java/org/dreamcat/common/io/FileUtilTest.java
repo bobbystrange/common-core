@@ -3,7 +3,7 @@ package org.dreamcat.common.io;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import static org.dreamcat.common.util.ConsoleUtil.println;
+import static org.dreamcat.common.util.PrintUtil.println;
 
 /**
  * Create by tuke on 2019-04-17
@@ -160,4 +160,11 @@ public class FileUtilTest {
 
     }
 
+    @Test
+    public void testWriteFrom() throws Exception {
+        for (int i = 0; i <= 100; i++) {
+            FileUtil.writeFrom("/Users/tuke/data/tmp/id.log", i * i + "\n", true);
+            Thread.sleep(100);
+        }
+    }
 }

@@ -1,9 +1,11 @@
 package org.dreamcat.common.util;
 
+import org.dreamcat.common.core.WriteResult;
 import org.dreamcat.common.function.IntToByteFunction;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.function.IntFunction;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntToLongFunction;
@@ -14,6 +16,9 @@ import java.util.function.IntUnaryOperator;
  */
 public class ArrayUtil {
 
+    public ArrayUtil() {
+    }
+
     public static int[] rangeOf(int size) {
         return rangeOf(0, size);
     }
@@ -21,6 +26,8 @@ public class ArrayUtil {
     public static int[] rangeOf(int start, int end) {
         return rangeOf(start, end, 1);
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     // example: (1, 9, 2) or (1, 8, 2) then 1,3,5,7, (9-1)/2 = 4, (8-1)/2 = 3
     public static int[] rangeOf(int start, int end, int step) {
@@ -31,8 +38,6 @@ public class ArrayUtil {
         }
         return a;
     }
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <T> T[] fromMapper(int size, IntFunction<T> mapper, IntFunction<T[]> generator) {
         return Arrays.stream(rangeOf(size))
@@ -54,6 +59,8 @@ public class ArrayUtil {
                 .mapToDouble(mapper).toArray();
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     public static byte[] fromMapperAsByte(int size, IntToByteFunction mapper) {
         int[] range = rangeOf(size);
         byte[] a = new byte[size];
@@ -62,8 +69,6 @@ public class ArrayUtil {
         }
         return a;
     }
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @SuppressWarnings("unchecked")
     public static <T, T1 extends T, T2 extends T> T[] concat(T1[] a1, T2[] a2, Class<T> newType) {
@@ -113,18 +118,110 @@ public class ArrayUtil {
         int size = a.length;
         if (size < 2) return;
         int halfSize = size / 2;
-        for (int i=0; i<halfSize; i++) {
+        for (int i = 0; i < halfSize; i++) {
             SwapUtil.swap(a, i, size - 1 - i);
         }
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <T> void reverse(T[] a) {
         if (a == null) return;
         int size = a.length;
         if (size < 2) return;
         int halfSize = size / 2;
-        for (int i=0; i<halfSize; i++) {
+        for (int i = 0; i < halfSize; i++) {
             SwapUtil.swap(a, i, size - 1 - i);
         }
     }
+
+    public static int binarySearch(int[] a, int key, WriteResult<Integer> result) {
+        return binarySearch(a, 0, a.length, key, result);
+    }
+
+    public static int binarySearch(int[] a, int fromIndex, int toIndex, int key, WriteResult<Integer> result) {
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            int midVal = a[mid];
+            int cmp = midVal - key;
+            if (cmp < 0)
+                low = mid + 1;
+            else if (cmp > 0)
+                high = mid - 1;
+            else {
+                if (result != null) result.update(true);
+                return mid; // key found
+            }
+        }
+
+        // [-1, length - 1]
+        if (result != null) {
+            result.update(false, high + 1);
+        }
+        return -1; // key not found
+    }
+
+    public static int binarySearch(long[] a, long key, WriteResult<Integer> result) {
+        return binarySearch(a, 0, a.length, key, result);
+    }
+
+    public static int binarySearch(long[] a, int fromIndex, int toIndex, long key, WriteResult<Integer> result) {
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            long midVal = a[mid];
+            long cmp = midVal - key;
+            if (cmp < 0)
+                low = mid + 1;
+            else if (cmp > 0)
+                high = mid - 1;
+            else {
+                if (result != null) result.update(true);
+                return mid; // key found
+            }
+        }
+
+        // [-1, length - 1]
+        if (result != null) {
+            result.update(false, high + 1);
+        }
+        return -1; // key not found
+    }
+
+    // Note that result.data = [0, a.length], a[i] <= key when i < a.length
+    public static <T> int binarySearch(T[] a, T key, Comparator<? super T> c, WriteResult<Integer> result) {
+        return binarySearch(a, 0, a.length, key, c, result);
+    }
+
+    public static <T> int binarySearch(T[] a, int fromIndex, int toIndex, T key, Comparator<? super T> c, WriteResult<Integer> result) {
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            T midVal = a[mid];
+            int cmp = c.compare(midVal, key);
+            if (cmp < 0)
+                low = mid + 1;
+            else if (cmp > 0)
+                high = mid - 1;
+            else {
+                if (result != null) result.update(true);
+                return mid; // key found
+            }
+
+        }
+
+        // [-1, length - 1]
+        if (result != null) {
+            result.update(false, high + 1);
+        }
+        return -1; // key not found
+    }
+
 }

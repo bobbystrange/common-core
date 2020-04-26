@@ -4,7 +4,6 @@ import org.dreamcat.common.function.VoidConsumer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Create by tuke on 2020/3/29
@@ -40,7 +39,7 @@ public class VoidFilterChain implements VoidFilter.Chain {
     }
 
     public VoidFilterChain addFilter(List<VoidFilter> filters) {
-        for (VoidFilter filter: filters) {
+        for (VoidFilter filter : filters) {
             addFilter(filter);
         }
         return this;
@@ -57,7 +56,7 @@ public class VoidFilterChain implements VoidFilter.Chain {
 
     public VoidFilterChain newChain() {
         VoidFilterChain chain = new VoidFilterChain(service);
-        synchronized (this.filters){
+        synchronized (this.filters) {
             chain.filters.addAll(this.filters);
         }
         return chain;

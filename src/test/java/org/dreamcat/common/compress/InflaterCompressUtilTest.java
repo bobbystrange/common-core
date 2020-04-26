@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import java.util.function.IntFunction;
 
-import static org.dreamcat.common.util.ConsoleUtil.print;
-import static org.dreamcat.common.util.ConsoleUtil.println;
+import static org.dreamcat.common.util.PrintUtil.print;
+import static org.dreamcat.common.util.PrintUtil.println;
 
 /**
  * Create by tuke on 2020/4/6
@@ -27,10 +27,10 @@ public class InflaterCompressUtilTest {
 
     @Test
     public void testLevel() throws Exception {
-        for (int size = 1; size<=1000; size++){
+        for (int size = 1; size <= 1000; size++) {
             byte[] data = RandomUtil.choose72(size).getBytes();
             print(size + "\t");
-            for (int level = -1; level<=9; level ++) {
+            for (int level = -1; level <= 9; level++) {
                 byte[] compressed = DeflaterCompressUtil.compress(data, level);
                 print(compressed.length + " ");
             }
@@ -41,7 +41,7 @@ public class InflaterCompressUtilTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testRatio() throws Exception {
-        IntFunction<String>[] fns = new IntFunction[] {
+        IntFunction<String>[] fns = new IntFunction[]{
                 RandomUtil::choose10,
                 RandomUtil::choose16,
                 RandomUtil::choose26,
@@ -51,9 +51,9 @@ public class InflaterCompressUtilTest {
                 RandomUtil::choose72,
         };
 
-        for (int i=1; i<365; i++) {
+        for (int i = 1; i < 365; i++) {
             print(i + "\t");
-            for (IntFunction<String> fn: fns) {
+            for (IntFunction<String> fn : fns) {
                 byte[] data = fn.apply(i).getBytes();
                 byte[] compressed = DeflaterCompressUtil.compress(data);
                 print(compressed.length + " ");

@@ -4,26 +4,39 @@ import lombok.AllArgsConstructor;
 import org.dreamcat.common.function.ThrowableConsumer;
 import org.dreamcat.common.function.ThrowableObjectArrayConsumer;
 import org.dreamcat.common.function.ThrowableVoidConsumer;
+import org.dreamcat.common.util.ObjectUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Create by tuke on 2019-06-06
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Timeit {
+    private final List actions = new ArrayList();
     // assert skip < count
     // such as count=100, skip=10, then discard head 10 & tail 10 before merge
     private int skip = 0;
-    // repeat times, one action avg time is <the result or run()> / repeat
+    // repeat times, one action avg time is `the result or run()` / repeat
     // such as one action cost 1ms, if repea=12 then total cost almost equal 12ms
     private int repeat = 1;
     // multi metering
     private int count = 1;
-    private List actions = new ArrayList();
+
+    private Timeit() {
+    }
+
+    public static Timeit ofActions() {
+        return new Timeit();
+    }
+
+    public static String formatUs(long[] ts, String delimiter) {
+        return Arrays.stream(ts).mapToObj(it -> String.format("%6.3fus", it / 1000.)).collect(Collectors.joining(delimiter));
+    }
 
     /**
      * run actions and stat its elapsed time
@@ -55,36 +68,35 @@ public class Timeit {
         return this;
     }
 
+    public <T> Timeit addAction(ThrowableVoidConsumer action) {
+        this.actions.add(new VoidAction(action));
+        return this;
+    }
+
     public <T> Timeit addUnaryAction(Supplier<T> supplier, ThrowableConsumer<T> action) {
         this.actions.add(new UnaryAction(supplier, action));
         return this;
     }
 
-    public <T> Timeit addVoidAction(ThrowableVoidConsumer action) {
-        this.actions.add(new VoidAction(action));
-        return this;
-    }
-
     public Timeit skip(int skip) {
+        ObjectUtil.requirePositive(skip, "skip");
         this.skip = skip;
         return this;
     }
 
     public Timeit repeat(int repeat) {
+        ObjectUtil.requirePositive(repeat, "repeat");
         this.repeat = repeat;
         return this;
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     public Timeit count(int count) {
+        ObjectUtil.requirePositive(count, "count");
         this.count = count;
         return this;
     }
-
-    public static Timeit ofActions() {
-        return new Timeit();
-    }
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     private void doAction(long[] ts, Action action) {
         long t;
@@ -172,9 +184,10 @@ public class Timeit {
         ThrowableConsumer<T> action;
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     @AllArgsConstructor
     private static class VoidAction {
         ThrowableVoidConsumer action;
     }
-
 }

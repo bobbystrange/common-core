@@ -23,7 +23,7 @@ public class ZipCompressUtil {
     public static void zip(File srcFile, File destFile, int level) throws IOException {
         CheckedOutputStream cos = new CheckedOutputStream(
                 new FileOutputStream(destFile), new CRC32());
-        try(ZipOutputStream zos = new ZipOutputStream(cos)) {
+        try (ZipOutputStream zos = new ZipOutputStream(cos)) {
             zos.setLevel(level);
             zip(srcFile, zos, "");
         }

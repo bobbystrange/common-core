@@ -38,7 +38,7 @@ public class ExchangeFilterChain<T> implements ExchangeFilter.Chain<T> {
     }
 
     public ExchangeFilterChain<T> addFilter(List<ExchangeFilter<T>> filters) {
-        for (ExchangeFilter<T> filter: filters) {
+        for (ExchangeFilter<T> filter : filters) {
             addFilter(filter);
         }
         return this;
@@ -55,7 +55,7 @@ public class ExchangeFilterChain<T> implements ExchangeFilter.Chain<T> {
 
     public ExchangeFilterChain<T> newChain() {
         ExchangeFilterChain<T> chain = new ExchangeFilterChain<>(service);
-        synchronized (this.filters){
+        synchronized (this.filters) {
             chain.filters.addAll(this.filters);
         }
         return chain;

@@ -72,10 +72,10 @@ public class RealInterceptTarget<I, O> implements InterceptTarget<I, O>, Interce
 
         public RealInterceptTarget<I, O> build() {
             if (this.target.listener == null) {
-                this.target.listener = new Interceptor.Listener<I, O>(){
+                this.target.listener = new Interceptor.Listener<I, O>() {
                 };
             }
-            if (this.target.originalName == null){
+            if (this.target.originalName == null) {
                 this.target.originalName = Object::toString;
             }
             return target;

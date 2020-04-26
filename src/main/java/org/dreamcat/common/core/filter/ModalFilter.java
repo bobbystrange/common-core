@@ -5,9 +5,9 @@ package org.dreamcat.common.core.filter;
  */
 public interface ModalFilter<S, T> {
 
-    void filter(S source , T target, Chain<S, T> chain);
+    void filter(S source, T target, Chain<S, T> chain);
 
     interface Chain<S, T> {
-        void filter(S source , T target);
+        void filter(S source, T target);
     }
 }

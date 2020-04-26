@@ -20,7 +20,7 @@ public class DHTest {
     @Test
     public void cipher() throws Exception {
         byte[] output, input;
-        for (DHCryptoEnum e : DHCryptoEnum.values()) {
+        for (DHCryptoAlgorithm e : DHCryptoAlgorithm.values()) {
             log.info("\tdh:\t{}", e.name());
 
             Map<String, Key> keyMap = e.generateKeyPair();

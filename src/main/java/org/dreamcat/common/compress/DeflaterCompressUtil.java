@@ -20,7 +20,8 @@ public class DeflaterCompressUtil {
 
     /**
      * use deflater to compress  & inflater to uncompress
-     * @param data input data
+     *
+     * @param data  input data
      * @param level the compression level (0-9)
      * @return compresses data
      * @throws IOException I/O error

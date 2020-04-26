@@ -7,13 +7,13 @@ import org.dreamcat.common.util.Base64Util;
  */
 public class DESUtil {
 
-    public static String encryptToBase64(String input, String key) throws Exception {
-        byte[] output = CipherEnum.DES.encryptCbc(input.getBytes(), key.getBytes());
+    public static String encryptAsBase64(String input, String key) throws Exception {
+        byte[] output = CipherAlgorithm.DES.encryptCbc(input.getBytes(), key.getBytes());
         return Base64Util.encodeAsString(output);
     }
 
     public static String decryptFromBase64(String input, String key) throws Exception {
-        byte[] output = CipherEnum.DES.decryptCbc(Base64Util.decode(input), key.getBytes());
+        byte[] output = CipherAlgorithm.DES.decryptCbc(Base64Util.decode(input), key.getBytes());
         return new String(output);
     }
 }

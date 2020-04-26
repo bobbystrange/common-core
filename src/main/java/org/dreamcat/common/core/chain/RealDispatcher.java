@@ -25,7 +25,7 @@ public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
     private BiPredicate<Interceptor.AsyncCall<I, O>,
             Interceptor.AsyncCall<I, O>> sameCase = (everyCall, currentCall) -> false;
     private Runnable idleCallback = () -> {
-        if (log.isDebugEnabled()){
+        if (log.isDebugEnabled()) {
             log.debug("dispatcher finished...");
         }
     };

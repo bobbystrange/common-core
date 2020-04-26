@@ -2,21 +2,22 @@ package org.dreamcat.common.util;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.NumericUtil;
-import org.dreamcat.common.util.RandomUtil;
-import org.dreamcat.common.util.SortUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import static org.dreamcat.common.util.ConsoleUtil.println;
+import static org.dreamcat.common.util.PrintUtil.println;
 
 /**
  * Create by tuke on 2020/4/4
  */
 @Slf4j
 public class SortUtilTest {
+
+    private static ScoreInteger of(int value) {
+        return new ScoreInteger(value);
+    }
 
     @Test
     public void testSelectSort() {
@@ -61,7 +62,7 @@ public class SortUtilTest {
         println(list);
         SortUtil.radixSort(list, (e, i) -> {
             // i = 0,1,2
-            int ind = i*2;
+            int ind = i * 2;
             return NumericUtil.digitAt(e, ind + 1) * 10 + NumericUtil.digitAt(e, ind);
         }, 100, 3);
         println(list);
@@ -84,9 +85,5 @@ public class SortUtilTest {
         public int score() {
             return value % 10;
         }
-    }
-
-    private static ScoreInteger of(int value) {
-        return new ScoreInteger(value);
     }
 }

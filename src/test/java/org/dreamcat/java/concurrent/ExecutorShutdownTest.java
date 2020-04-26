@@ -5,13 +5,14 @@ import org.junit.Test;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Create by tuke on 2019-03-27
  */
 public class ExecutorShutdownTest {
 
-    private static volatile int lineno = 1;
+    private static final AtomicInteger lineno = new AtomicInteger(1);
 
     @Test
     public void test() {
@@ -24,14 +25,14 @@ public class ExecutorShutdownTest {
             executor.execute(() -> {
                 try {
                     Thread.sleep(10L);
-                    System.out.println(lineno++ + " " + k);
+                    System.out.println(lineno.getAndIncrement() + " " + k);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             });
         }
         executor.shutdown();
-        System.out.println(lineno++ + " " + (System.currentTimeMillis() - timestamp) + "ms");
+        System.out.println(lineno.getAndIncrement() + " " + (System.currentTimeMillis() - timestamp) + "ms");
     }
 
     @Test
@@ -39,7 +40,7 @@ public class ExecutorShutdownTest {
         test();
         try {
             Thread.sleep(1000L);
-            System.out.println(lineno++ + " " + "Done");
+            System.out.println(lineno.getAndIncrement() + " " + "Done");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

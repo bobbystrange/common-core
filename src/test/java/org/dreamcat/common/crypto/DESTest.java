@@ -17,7 +17,7 @@ public class DESTest {
         String text = RandomUtil.choose72(36);
         log.info("source {}", text);
         log.info("before {}", MD5Util.md5Hex(text));
-        String result = DESUtil.encryptToBase64(text, key);
+        String result = DESUtil.encryptAsBase64(text, key);
         log.info("after {}", MD5Util.md5Hex(result));
         String decrypted = DESUtil.decryptFromBase64(result, key);
         log.info("decrypted {}", MD5Util.md5Hex(decrypted));

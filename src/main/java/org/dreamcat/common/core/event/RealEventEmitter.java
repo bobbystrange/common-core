@@ -1,7 +1,6 @@
 package org.dreamcat.common.core.event;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,7 +44,7 @@ public class RealEventEmitter implements EventEmitter {
     @Override
     public void emit(ModalEvent event) {
         Collection<ModalEventListener<?>> listeners = this.getListentes();
-        for (ModalEventListener listener: listeners) {
+        for (ModalEventListener listener : listeners) {
             listener.onModalEvent(event);
         }
     }

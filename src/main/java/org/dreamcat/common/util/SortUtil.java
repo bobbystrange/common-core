@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static org.dreamcat.common.util.ConsoleUtil.println;
-
 /**
  * Create by tuke on 2020/4/4
  */

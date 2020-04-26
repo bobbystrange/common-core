@@ -1,7 +1,6 @@
 package org.dreamcat.common.util;
 
 import org.dreamcat.common.core.Timeit;
-import org.dreamcat.common.util.SortUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -9,8 +8,8 @@ import java.util.LinkedList;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.ConsoleUtil.printf;
-import static org.dreamcat.common.util.ConsoleUtil.println;
+import static org.dreamcat.common.util.PrintUtil.printf;
+import static org.dreamcat.common.util.PrintUtil.println;
 
 /**
  * Create by tuke on 2020/4/4

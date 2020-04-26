@@ -12,9 +12,10 @@ public interface InterceptTarget<I, O> {
 
     /**
      * as thread name when executing a
-     * @see RealCall.AsyncCall
+     *
      * @param i input parameter
      * @return name
+     * @see RealCall.AsyncCall
      */
     default String originalName(I i) {
         return i.toString();

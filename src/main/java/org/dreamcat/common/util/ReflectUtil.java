@@ -171,6 +171,7 @@ public class ReflectUtil {
         if (ObjectUtil.isEmpty(annotations)) return false;
 
         for (Class<? extends Annotation> annotationClass : annotationClasses) {
+            if (annotationClass == null) continue;
             Annotation annotation = field.getAnnotation(annotationClass);
             if (annotation != null) return true;
         }

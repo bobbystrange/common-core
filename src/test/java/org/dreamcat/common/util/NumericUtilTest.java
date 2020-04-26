@@ -2,11 +2,10 @@ package org.dreamcat.common.util;
 
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import static org.dreamcat.common.util.ConsoleUtil.println;
+import static org.dreamcat.common.util.PrintUtil.println;
 
 /**
  * Create by tuke on 2020/4/4
@@ -15,8 +14,8 @@ public class NumericUtilTest {
 
     @Test
     public void test() {
-        for (int i = 0; i<100; i++) {
-            long v = i*i;
+        for (int i = 0; i < 100; i++) {
+            long v = i * i;
             BigInteger bi = BigInteger.valueOf(v);
             println(v, Arrays.toString(NumericUtil.digit(v)), Arrays.toString(NumericUtil.digit(bi)));
         }

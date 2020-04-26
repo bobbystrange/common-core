@@ -14,7 +14,7 @@ import java.util.Map;
 @Slf4j
 public class DSATest {
 
-    SignatureEnum dsa = SignatureEnum.NONEwithDSA;
+    SignatureAlgorithm dsa = SignatureAlgorithm.NONEwithDSA;
     private String publicKey;
     private String privateKey;
 

@@ -14,11 +14,10 @@ import java.nio.charset.Charset;
  * Create by tuke on 2018/11/25
  */
 public class IOUtil {
-
-    private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+    private static final int BUFFER_SIZE = 1024 * 4;
 
     public static long copy(InputStream input, OutputStream output) throws IOException {
-        return copy(input, output, DEFAULT_BUFFER_SIZE);
+        return copy(input, output, BUFFER_SIZE);
     }
 
     public static long copy(InputStream input, OutputStream output, int bufferSize) throws IOException {
@@ -36,7 +35,7 @@ public class IOUtil {
     }
 
     public static long copy(Reader input, Writer output) throws IOException {
-        return copy(input, output, DEFAULT_BUFFER_SIZE);
+        return copy(input, output, BUFFER_SIZE);
     }
 
     public static long copy(Reader input, Writer output, int bufferSize) throws IOException {
@@ -80,7 +79,7 @@ public class IOUtil {
     public static byte[] readFully(InputStream input) throws IOException {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             int readSize;
-            byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
+            byte[] buf = new byte[BUFFER_SIZE];
             while ((readSize = input.read(buf)) > 0) {
                 output.write(buf, 0, readSize);
             }
@@ -100,7 +99,7 @@ public class IOUtil {
     public static char[] readFully(Reader input) throws IOException {
         try (CharArrayWriter output = new CharArrayWriter()) {
             int readSize;
-            char[] buf = new char[DEFAULT_BUFFER_SIZE];
+            char[] buf = new char[BUFFER_SIZE];
             while ((readSize = input.read(buf)) > 0) {
                 output.write(buf, 0, readSize);
             }

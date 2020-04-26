@@ -223,16 +223,74 @@ public final class ObjectUtil {
         return o;
     }
 
+    public static int requireOdd(int o, String name) {
+        return requireOdd(o, new IllegalArgumentException(name + " must be odd"));
+    }
+
+    public static int requireOdd(int o, RuntimeException e) {
+        if ((o & 1) == 0) {
+            throw e;
+        }
+        return o;
+    }
+
+    public static long requireOdd(long o, String name) {
+        return requireOdd(o, new IllegalArgumentException(name + " must be odd"));
+    }
+
+    public static long requireOdd(long o, RuntimeException e) {
+        if ((o & 1) == 0) {
+            throw e;
+        }
+        return o;
+    }
+
+    public static int requireEven(int o, String name) {
+        return requireEven(o, new IllegalArgumentException(name + " must be even"));
+    }
+
+    public static int requireEven(int o, RuntimeException e) {
+        if ((o & 1) == 1) {
+            throw e;
+        }
+        return o;
+    }
+
+    public static long requireEven(long o, String name) {
+        return requireEven(o, new IllegalArgumentException(name + " must be even"));
+    }
+
+    public static long requireEven(long o, RuntimeException e) {
+        if ((o & 1) == 1) {
+            throw e;
+        }
+        return o;
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <T> T requireBelong(T elem, Collection<T> collection) {
+        return requireBelong(elem, collection, new IllegalArgumentException());
+    }
+
+    public static <T> T requireBelong(T elem, Collection<T> collection, RuntimeException e) {
         if (isEmpty(collection)) return elem;
         if (!collection.contains(elem)) {
-
-            throw new IllegalArgumentException("require , but got "
-                    + elem);
+            throw e;
         }
         return elem;
+    }
+
+    // [start, end)
+    public static int requireRange(int index, int start, int end) {
+        return requireRange(index, start, end, new IllegalArgumentException(String.format("the first argument must belong [%d, %d)", start, end)));
+    }
+
+    public static int requireRange(int index, int start, int end, RuntimeException e) {
+        if (index < start || index >= end) {
+            throw e;
+        }
+        return index;
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----

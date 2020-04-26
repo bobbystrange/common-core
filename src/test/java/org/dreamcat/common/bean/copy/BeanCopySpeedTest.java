@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.ConsoleUtil.printf;
-import static org.dreamcat.common.util.ConsoleUtil.println;
+import static org.dreamcat.common.util.PrintUtil.printf;
+import static org.dreamcat.common.util.PrintUtil.println;
 
 /**
  * Create by tuke on 2019-06-03
@@ -22,7 +22,7 @@ public class BeanCopySpeedTest {
     private static void speed(
             int count, int skip, int repeat,
             Supplier<Object[]> supplier, Supplier<Object> constructor, BeanCopier copier) {
-        Timeit timeit = new Timeit()
+        Timeit timeit = Timeit.ofActions()
                 .repeat(repeat)
                 .count(count)
                 .skip(skip)

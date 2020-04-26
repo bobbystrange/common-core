@@ -38,7 +38,7 @@ public class RealFilterChain<S, T> implements ModalFilter.Chain<S, T> {
     }
 
     public RealFilterChain<S, T> addFilter(List<ModalFilter<S, T>> filters) {
-        for (ModalFilter<S, T> filter: filters) {
+        for (ModalFilter<S, T> filter : filters) {
             addFilter(filter);
         }
         return this;
@@ -55,7 +55,7 @@ public class RealFilterChain<S, T> implements ModalFilter.Chain<S, T> {
 
     public RealFilterChain<S, T> newChain() {
         RealFilterChain<S, T> chain = new RealFilterChain<>(service);
-        synchronized (this.filters){
+        synchronized (this.filters) {
             chain.filters.addAll(this.filters);
         }
         return chain;
