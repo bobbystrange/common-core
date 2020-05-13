@@ -1,7 +1,6 @@
 package org.dreamcat.common.bean;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.exception.InvalidBeanExpressionException;
 import org.dreamcat.common.util.ReflectUtil;
 
 import java.lang.reflect.Field;
@@ -86,7 +85,7 @@ public class BeanExpressionUtil {
                 }
                 fieldField.set(fieldObject, null);
             } else {
-                if (exclude) throw new InvalidBeanExpressionException();
+                if (exclude) throw new IllegalArgumentException();
 
                 int i = levelOneFiledName.indexOf('.');
                 if (i < 0) {
@@ -162,7 +161,7 @@ public class BeanExpressionUtil {
     // first '.' is last char of str
     private static void checkDotPosition(String str, int i) {
         if (i == str.length() - 1) {
-            throw new InvalidBeanExpressionException();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -207,7 +206,7 @@ public class BeanExpressionUtil {
         // '{' count 1, '}' count -1, matched until count equal 0
         int count = 1, rightPos = 0;
         boolean matched = false;
-        if (leftPos + 1 > len - 1) throw new InvalidBeanExpressionException("not matched '}' for '{'");
+        if (leftPos + 1 > len - 1) throw new IllegalArgumentException("not matched '}' for '{'");
         for (int i = leftPos + 1; i < len; i++) {
             char c = expression.charAt(i);
             if (c == '{') count++;
@@ -226,7 +225,7 @@ public class BeanExpressionUtil {
             if (rightPos < len - 1) {
                 char ch = expression.charAt(rightPos + 1);
                 if (ch != ',') {
-                    throw new InvalidBeanExpressionException(String.format("invalid char `%s` after `}`", ch + ""));
+                    throw new IllegalArgumentException(String.format("invalid char `%s` after `}`", ch + ""));
                 }
                 // still has some chars after matched '},'
                 if (rightPos + 1 < len - 1) {
@@ -235,7 +234,7 @@ public class BeanExpressionUtil {
                 }
             }
         } else {
-            throw new InvalidBeanExpressionException("not matched '}' for '{'");
+            throw new IllegalArgumentException("not matched '}' for '{'");
         }
     }
 

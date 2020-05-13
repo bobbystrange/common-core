@@ -12,6 +12,7 @@ import static org.dreamcat.common.util.PrintUtil.println;
  * Create by tuke on 2020/3/11
  */
 public class ArrayUtilTest {
+
     @Test
     public void concatTest() {
         Integer[] a1 = new Integer[]{1, 2, 3};
@@ -35,6 +36,22 @@ public class ArrayUtilTest {
         ArrayUtil.reverse(a1);
         ArrayUtil.reverse(a2);
         println(pretty(a1), Arrays.toString(a2));
+    }
+
+    @Test
+    public void arrangeTest() {
+        int[] a1 = new int[]{0, 1, 2, 3, 4, 5};
+        a1 = ArrayUtil.arrange(a1, new int[]{3, 2, 0, 4, 1, 5});
+        //[2, 4, 1, 0, 3, 5]
+        println(pretty(a1));
+
+        println();
+        println(Arrays.toString(ArrayUtil.randomRangeOf(6)));
+        println(Arrays.toString(ArrayUtil.randomRangeOf(6)));
+        println(Arrays.toString(ArrayUtil.randomRangeOf(6)));
+        println(Arrays.toString(ArrayUtil.randomRangeOf(6)));
+        println(Arrays.toString(ArrayUtil.randomRangeOf(6)));
+        println(Arrays.toString(ArrayUtil.randomRangeOf(6)));
     }
 
     @Test

@@ -11,8 +11,9 @@ import java.util.stream.Collectors;
 /**
  * Create by tuke on 2019-01-23
  */
+@SuppressWarnings({"rawtypes"})
 public class BeanListUtil {
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     public static List<Object> toList(
             Object bean, Class... excludeAnnotations) {
         return toList(bean,

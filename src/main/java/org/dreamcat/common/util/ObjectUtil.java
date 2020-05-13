@@ -74,6 +74,12 @@ public final class ObjectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    public static void requireNonNull(Object... args) {
+        for (Object arg : args) {
+            if (arg == null) throw new NullPointerException();
+        }
+    }
+
     public static <T> T requireNotNull(T o, String name) {
         if (o == null) {
             throw new IllegalArgumentException(name + " is null");

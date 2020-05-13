@@ -19,11 +19,11 @@ public class Base64Util {
     }
 
     public static String encodeAsString(byte[] input) {
-        return new String(encode(input), StandardCharsets.ISO_8859_1);
+        return Base64_ENCODER.encodeToString(input);
     }
 
     public static String encodeAsString(String input) {
-        return new String(encode(input), StandardCharsets.ISO_8859_1);
+        return encodeAsString(input.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----

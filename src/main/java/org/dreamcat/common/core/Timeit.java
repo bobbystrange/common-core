@@ -3,13 +3,13 @@ package org.dreamcat.common.core;
 import lombok.AllArgsConstructor;
 import org.dreamcat.common.function.ThrowableConsumer;
 import org.dreamcat.common.function.ThrowableObjectArrayConsumer;
+import org.dreamcat.common.function.ThrowableSupplier;
 import org.dreamcat.common.function.ThrowableVoidConsumer;
 import org.dreamcat.common.util.ObjectUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +34,12 @@ public class Timeit {
         return new Timeit();
     }
 
-    public static String formatUs(long[] ts, String delimiter) {
+    public String runAndFormatUs() {
+        return runAndFormatUs("\t");
+    }
+
+    public String runAndFormatUs(String delimiter) {
+        long[] ts = run();
         return Arrays.stream(ts).mapToObj(it -> String.format("%6.3fus", it / 1000.)).collect(Collectors.joining(delimiter));
     }
 
@@ -63,7 +68,7 @@ public class Timeit {
         return stat(tss, skip);
     }
 
-    public Timeit addAction(Supplier<Object[]> supplier, ThrowableObjectArrayConsumer action) {
+    public Timeit addAction(ThrowableSupplier<Object[]> supplier, ThrowableObjectArrayConsumer action) {
         this.actions.add(new Action(supplier, action));
         return this;
     }
@@ -73,7 +78,7 @@ public class Timeit {
         return this;
     }
 
-    public <T> Timeit addUnaryAction(Supplier<T> supplier, ThrowableConsumer<T> action) {
+    public <T> Timeit addUnaryAction(ThrowableSupplier<T> supplier, ThrowableConsumer<T> action) {
         this.actions.add(new UnaryAction(supplier, action));
         return this;
     }
@@ -103,8 +108,8 @@ public class Timeit {
         for (int k = 0; k < count; k++) {
             t = 0;
             for (int i = 0; i < repeat; i++) {
-                Object[] args = action.supplier.get();
                 try {
+                    Object[] args = action.supplier.get();
                     long nanoTime = System.nanoTime();
                     action.action.accept(args);
                     t += System.nanoTime() - nanoTime;
@@ -121,8 +126,8 @@ public class Timeit {
         for (int k = 0; k < count; k++) {
             t = 0;
             for (int i = 0; i < repeat; i++) {
-                Object arg = action.supplier.get();
                 try {
+                    Object arg = action.supplier.get();
                     long nanoTime = System.nanoTime();
                     action.action.accept(arg);
                     t += System.nanoTime() - nanoTime;
@@ -172,19 +177,19 @@ public class Timeit {
         return avgs;
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     @AllArgsConstructor
     private static class Action {
-        Supplier<Object[]> supplier;
+        ThrowableSupplier<Object[]> supplier;
         ThrowableObjectArrayConsumer action;
     }
 
     @AllArgsConstructor
     private static class UnaryAction<T> {
-        Supplier<T> supplier;
+        ThrowableSupplier<T> supplier;
         ThrowableConsumer<T> action;
     }
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @AllArgsConstructor
     private static class VoidAction {

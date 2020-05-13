@@ -43,6 +43,18 @@ public class SwapUtil {
         data[i2][j2] = tmp;
     }
 
+    public static void swap(byte[] data, int i, int j) {
+        byte tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
+    }
+
+    public static void swap(byte[][] data, int i1, int j1, int i2, int j2) {
+        byte tmp = data[i1][j1];
+        data[i1][j1] = data[i2][j2];
+        data[i2][j2] = tmp;
+    }
+
     public static <T> void swap(T[] data, int i, int j) {
         T tmp = data[i];
         data[i] = data[j];

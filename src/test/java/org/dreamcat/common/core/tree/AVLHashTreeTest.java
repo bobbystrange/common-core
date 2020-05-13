@@ -1,6 +1,7 @@
 package org.dreamcat.common.core.tree;
 
 import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.function.ThrowableSupplier;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static org.dreamcat.common.util.PrintUtil.printf;
@@ -70,28 +70,28 @@ public class AVLHashTreeTest {
             int finalI = i;
             long[] ts = Timeit.ofActions()
                     .addUnaryAction(
-                            (Supplier<HashMap<Integer, Integer>>) HashMap::new,
+                            HashMap::new,
                             map -> {
                                 for (int k = 0; k < finalI; k++) {
                                     map.put(k, k);
                                 }
                             })
                     .addUnaryAction(
-                            (Supplier<AVLHashTree<Integer, Integer>>) AVLHashTree::new,
+                            (ThrowableSupplier<AVLHashTree<Integer, Integer>>) AVLHashTree::new,
                             tree -> {
                                 for (int k = 0; k < finalI; k++) {
                                     tree.put(k, k);
                                 }
                             })
                     .addUnaryAction(
-                            (Supplier<AVLHashMap<Integer, Integer>>) AVLHashMap::new,
+                            (ThrowableSupplier<AVLHashMap<Integer, Integer>>) AVLHashMap::new,
                             map -> {
                                 for (int k = 0; k < finalI; k++) {
                                     map.put(k, k);
                                 }
                             })
                     .addUnaryAction(
-                            (Supplier<RBHashTree<Integer, Integer>>) RBHashTree::new,
+                            (ThrowableSupplier<RBHashTree<Integer, Integer>>) RBHashTree::new,
                             tree -> {
                                 for (int k = 0; k < finalI; k++) {
                                     tree.put(k, k);
@@ -113,14 +113,14 @@ public class AVLHashTreeTest {
             int finalI = i;
             long[] ts = Timeit.ofActions()
                     .addUnaryAction(
-                            (Supplier<AVLHashTree<Integer, Integer>>) AVLHashTree::new,
+                            (ThrowableSupplier<AVLHashTree<Integer, Integer>>) AVLHashTree::new,
                             tree -> {
                                 for (int k = 0; k < finalI; k++) {
                                     tree.put(k, k);
                                 }
                             })
                     .addUnaryAction(
-                            (Supplier<RBHashTree<Integer, Integer>>) RBHashTree::new,
+                            (ThrowableSupplier<RBHashTree<Integer, Integer>>) RBHashTree::new,
                             tree -> {
                                 for (int k = 0; k < finalI; k++) {
                                     tree.put(k, k);
@@ -148,14 +148,14 @@ public class AVLHashTreeTest {
             int finalI = i;
             long[] ts = Timeit.ofActions()
                     .addUnaryAction(
-                            (Supplier<AVLHashTree<String, Integer>>) AVLHashTree::new,
+                            (ThrowableSupplier<AVLHashTree<String, Integer>>) AVLHashTree::new,
                             tree -> {
                                 for (int k = 0; k < finalI; k++) {
                                     tree.put(RandomUtil.uuid(), k);
                                 }
                             })
                     .addUnaryAction(
-                            (Supplier<RBHashTree<String, Integer>>) RBHashTree::new,
+                            (ThrowableSupplier<RBHashTree<String, Integer>>) RBHashTree::new,
                             tree -> {
                                 for (int k = 0; k < finalI; k++) {
                                     tree.put(RandomUtil.uuid(), k);

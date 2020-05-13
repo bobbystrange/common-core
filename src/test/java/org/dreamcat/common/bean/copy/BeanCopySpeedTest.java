@@ -3,6 +3,7 @@ package org.dreamcat.common.bean.copy;
 import net.sf.cglib.beans.BeanCopier;
 import org.dreamcat.common.bean.BeanCopyUtil;
 import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.function.ThrowableSupplier;
 import org.dreamcat.test.BeanData;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
@@ -21,7 +22,7 @@ public class BeanCopySpeedTest {
 
     private static void speed(
             int count, int skip, int repeat,
-            Supplier<Object[]> supplier, Supplier<Object> constructor, BeanCopier copier) {
+            ThrowableSupplier<Object[]> supplier, Supplier<Object> constructor, BeanCopier copier) {
         Timeit timeit = Timeit.ofActions()
                 .repeat(repeat)
                 .count(count)
@@ -48,7 +49,7 @@ public class BeanCopySpeedTest {
         BeanCopier copier = BeanCopier.create(
                 BeanData.Pojo.class, BeanData.Pojo.class, false);
         BeanData.Pojo source = BeanData.ofPojo();
-        Supplier<Object[]> supplier = () -> new Object[]{source};
+        ThrowableSupplier<Object[]> supplier = () -> new Object[]{source};
         Supplier<Object> constructor = BeanData::ofPojo;
         println("pojo\t\t\t\t\t\tcglib\t\tspring\t\tcommon");
         for (int i = 1; i < 1 << 13; i *= 2) {
@@ -61,7 +62,7 @@ public class BeanCopySpeedTest {
         BeanCopier copier = BeanCopier.create(
                 BeanData.All.class, BeanData.All.class, false);
         BeanData.All source = BeanData.ofAll();
-        Supplier<Object[]> supplier = () -> new Object[]{source};
+        ThrowableSupplier<Object[]> supplier = () -> new Object[]{source};
         Supplier<Object> constructor = BeanData::ofAll;
         println("all\t\t\t\t\t\tcglib\t\tspring\t\tcommon");
         for (int i = 1; i < 1 << 13; i *= 2) {

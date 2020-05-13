@@ -1,11 +1,11 @@
 package org.dreamcat.common.util;
 
 import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.function.ThrowableSupplier;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static org.dreamcat.common.util.PrintUtil.printf;
@@ -27,7 +27,7 @@ public class BinSortSpeedTest {
     }
 
     private void speed(int size, int repeat) {
-        Supplier<LinkedList<Integer>> supplier = () -> {
+        ThrowableSupplier<LinkedList<Integer>> supplier = () -> {
             LinkedList<Integer> list = new LinkedList<>();
             for (int i = 0; i <= size; i++) {
                 list.add(i);

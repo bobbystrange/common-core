@@ -29,6 +29,18 @@ public class Pair<T1, T2> {
         return new Pair<>(second, first);
     }
 
+    public <T3> Triple<T1, T2, T3> join(T3 thrid) {
+        return new Triple<>(this, thrid);
+    }
+
+    public <T3> Triple<T3, T1, T2> leftJoin(T3 thrid) {
+        return new Triple<>(thrid, this);
+    }
+
+    public <T3> Triple<T1, T3, T2> middleJoin(T3 thrid) {
+        return new Triple<>(first, thrid, second);
+    }
+
     @Override
     public String toString() {
         return String.format("(%s, %s)",

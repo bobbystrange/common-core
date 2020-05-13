@@ -4,23 +4,16 @@ import org.dreamcat.common.util.ReflectUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Create by tuke on 2019-01-23
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BeanMapUtil {
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-    // bean to map
-    public static List<String> toList(Object bean) {
-        return new ArrayList<>(toProps(bean).values());
-    }
 
     public static Map<String, String> toProps(Object bean) {
         Map<String, Object> map = toMap(bean);
@@ -46,6 +39,8 @@ public class BeanMapUtil {
         Map<String, Object> map = toMap(bean, aliasAnnotation, excludeAnnotation, extraExcludeModifiers);
         return map2props(map);
     }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     public static Map<String, Object> toMap(
             Object bean) {
@@ -96,51 +91,60 @@ public class BeanMapUtil {
         return map;
     }
 
-    // reflect method
-    public static Map<String, Object> toMapByGetter(
-            Object bean, Class<? extends Annotation> aliasAnnotation) {
-        Class<?> clazz = bean.getClass();
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-        Map<String, Object> map = new HashMap<>();
-        List<Method> methodList = new ArrayList<>();
-        ReflectUtil.retrieveMethods(clazz, methodList);
-        List<String> fieldNames = new ArrayList<>();
-        ReflectUtil.retrieveFieldNames(clazz, fieldNames, aliasAnnotation);
-
-        for (Method method : methodList) {
-            Class<?> returnType = method.getReturnType();
-            int modifiers = method.getModifiers();
-            boolean isNotPublish = (modifiers & Modifier.PUBLIC) == 0;
-            boolean isStatic = (modifiers & Modifier.STATIC) != 0;
-            if (isNotPublish || isStatic || returnType.equals(Void.class)) continue;
-
-            if (returnType.equals(Boolean.class) || returnType.equals(boolean.class)) {
-                putByPrefix(map, method, bean, fieldNames, "is");
-            } else {
-                putByPrefix(map, method, bean, fieldNames, "get");
-            }
+    public static <T> T fromMap(Map<String, ?> map, Class<T> clazz, Class... aliasAnnotationClasses) {
+        T bean;
+        try {
+            bean = clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
-        return map;
+
+        Map<String, Field> fieldMap = new HashMap<>();
+        ReflectUtil.retrieveFields(clazz, fieldMap, aliasAnnotationClasses);
+
+        Set<Map.Entry<String, Field>> entrySet = fieldMap.entrySet();
+        for (Map.Entry<String, Field> entry : entrySet) {
+            String name = entry.getKey();
+            Field field = entry.getValue();
+            field.setAccessible(true);
+
+            Object value = map.get(name);
+            if (value == null) continue;
+
+            Class<?> valueType = value.getClass();
+            Class<?> type = field.getType();
+
+            if (type.isAssignableFrom(valueType)) {
+                try {
+                    field.set(bean, value);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+
+            } else if (Map.class.isAssignableFrom(valueType)) {
+                Map<String, Object> valueMap = (Map<String, Object>) value;
+                Object valueBean = fromMap(valueMap, type, aliasAnnotationClasses);
+                try {
+                    field.set(bean, valueBean);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                Object castValue = ReflectUtil.cast(value, type);
+                try {
+                    field.set(bean, castValue);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+        }
+        return bean;
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    private static void putByPrefix(
-            Map<String, Object> map, Method method,
-            Object bean, List<String> fieldNames, String prefix) {
-        String methodName = method.getName();
-        if (!methodName.startsWith(prefix)) return;
-
-        String fieldName = methodName.substring(methodName.indexOf(prefix) + prefix.length());
-        fieldName = fieldName.toLowerCase().charAt(0) + fieldName.substring(1);
-        if (!fieldNames.contains(fieldName)) return;
-
-        try {
-            map.put(methodName, method.invoke(bean));
-        } catch (IllegalAccessException | InvocationTargetException ignored) {
-        }
-
-    }
 
     private static Map<String, String> map2props(Map<String, Object> map) {
         Map<String, String> prop = new HashMap<>();

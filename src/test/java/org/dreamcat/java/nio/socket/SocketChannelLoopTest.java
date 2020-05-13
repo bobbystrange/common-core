@@ -1,4 +1,4 @@
-package org.dreamcat.java.net;
+package org.dreamcat.java.nio.socket;
 
 import org.dreamcat.common.net.SocketUtil;
 import org.junit.Test;

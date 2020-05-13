@@ -24,28 +24,37 @@ public class ByteUtil {
         return sb.toString();
     }
 
-    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
-
-    // another way
-    @Deprecated
-    public static String hexString(byte input) {
-
-        StringBuilder hexString = new StringBuilder(Integer.toHexString(input & 0xFF));
-        if (hexString.length() < 2) {
-            hexString.insert(0, '0');
+    // assume input.length() == 2
+    public static byte[] unhex(String input) {
+        if (input == null || input.length() % 2 != 0) {
+            throw new IllegalArgumentException("input.length() must be even");
         }
-        return hexString.toString();
+        int len = input.length();
+        byte[] bytes = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            int i1 = unhex(input.charAt(i));
+            int i2 = unhex(input.charAt(i + 1));
+            bytes[i / 2] = (byte) ((i1 << 4) | i2);
+        }
+        return bytes;
     }
 
-    @Deprecated
-    public static String hexString(byte[] input) {
-        ObjectUtil.requireNotNull(input, "input");
-
-        StringBuilder sb = new StringBuilder();
-        for (byte i : input) {
-            sb.append(hexString(i));
+    public static int unhex(char c) {
+        int i = c - '0';
+        // ['0', '9']
+        if (i >= 0 && i < 10) {
+            return i;
         }
-        return sb.toString();
+        // ['a', 'f']
+        else if (i >= 49 && i <= 54) {
+            return i - 39;
+        }
+        // ['A', 'F']
+        else if (i >= 17 && i <= 22) {
+            return i - 7;
+        } else {
+            throw new IllegalArgumentException("require [0-9a-fA-F], but got " + c);
+        }
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====

@@ -4,4 +4,7 @@ dependencies {
     // extra tests
     testImplementation 'cglib:cglib:3.3.0'
     testImplementation 'org.springframework:spring-beans:5.2.3.RELEASE'
+    testImplementation "com.fasterxml.jackson.core:jackson-annotations:2.10.2"
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:2.10.2"
+    testImplementation "com.google.code.gson:gson:2.8.6"
 }

@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ReflectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -24,7 +25,6 @@ public class ReflectUtil {
             "value", "name", "alias"
     };
 
-    @SuppressWarnings("rawtypes")
     public static void retrieveSuperClasses(Class<?> clazz, List<Class> classList) {
         Class superClazz = clazz.getSuperclass();
         classList.add(superClazz);
@@ -33,7 +33,6 @@ public class ReflectUtil {
         }
     }
 
-    @SuppressWarnings("rawtypes")
     public static void retrieveMethods(Class<?> clazz, List<Method> methodList) {
         Method[] methods = clazz.getDeclaredMethods();
         methodList.addAll(Arrays.asList(methods));
@@ -44,7 +43,6 @@ public class ReflectUtil {
         }
     }
 
-    @SuppressWarnings("rawtypes")
     public static void retrieveFields(Class<?> clazz, List<Field> fieldList) {
         Field[] fields = clazz.getDeclaredFields();
         fieldList.addAll(Arrays.asList(fields));
@@ -75,7 +73,6 @@ public class ReflectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    @SuppressWarnings("rawtypes")
     public static void retrieveFields(Class<?> clazz, Map<String, Field> fieldMap, Class... aliasAnnotationClasses) {
         Field[] fields = clazz.getDeclaredFields();
         Arrays.stream(fields)
@@ -91,7 +88,6 @@ public class ReflectUtil {
     }
 
     // hasModifiersAndAnyAnnotation static, transient, volatile
-    @SuppressWarnings("rawtypes")
     public static void retrieveFieldNames(Class<?> clazz, List<String> fieldNameList, Class... aliasAnnotationClasses) {
         Field[] fields = clazz.getDeclaredFields();
         fieldNameList.addAll(Arrays.stream(fields)
@@ -111,7 +107,6 @@ public class ReflectUtil {
     }
 
     // not excluding strategy
-    @SuppressWarnings("rawtypes")
     public static String retrieveFieldName(Field field, Class... aliasAnnotationClasses) {
         String fieldName = field.getName();
         Annotation[] annotations = field.getAnnotations();
@@ -148,7 +143,6 @@ public class ReflectUtil {
         return null;
     }
 
-    @SuppressWarnings("rawtypes")
     public static boolean hasModifiersAndAnyAnnotation(
             Field field, int modifiers, Class... annotationClasses) {
         boolean exclude = hasAnyAnnotation(field, annotationClasses);
@@ -156,14 +150,12 @@ public class ReflectUtil {
         return exclude || (fieldModifiers & modifiers) > 0;
     }
 
-    @SuppressWarnings("rawtypes")
     public static boolean isStaticAndHasExtraModifiersAndAnyAnnotation(
             Field field, int extraModifiers, Class... annotationClasses) {
         int modifiers = extraModifiers | Modifier.STATIC;
         return hasModifiersAndAnyAnnotation(field, modifiers, annotationClasses);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public static boolean hasAnyAnnotation(Field field, Class... annotationClasses) {
         if (ObjectUtil.isEmpty(annotationClasses)) return false;
 
@@ -179,7 +171,6 @@ public class ReflectUtil {
         return false;
     }
 
-    @SuppressWarnings("rawtypes")
     public static boolean hasAnySuperClass(Class<?> clazz, Class... classes) {
         if (ObjectUtil.isEmpty(classes)) return false;
 
@@ -355,7 +346,6 @@ public class ReflectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    @SuppressWarnings("unchecked")
     private static <T> void findSubClasses(File classFile, String prefix, Class<T> clazz, List<Class<? extends T>> classList) {
         if (classFile.isDirectory()) {
             File[] files = classFile.listFiles();
@@ -386,6 +376,5 @@ public class ReflectUtil {
             }
         }
     }
-
 
 }

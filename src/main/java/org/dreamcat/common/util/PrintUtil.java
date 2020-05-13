@@ -43,6 +43,23 @@ public class PrintUtil {
         println(sb.toString());
     }
 
+    // err
+    public static void eprint(String s) {
+        System.err.print(s);
+    }
+
+    public static void eprint(Object obj) {
+        System.err.print(obj);
+    }
+
+    public static void eprintf(String format, Object... args) {
+        System.err.printf(format, args);
+    }
+
+    public static void eprintln(String x) {
+        System.err.println(x);
+    }
+
     // log-style, {}, {}
     public static void log(String format, Object... args) {
         if (ObjectUtil.isEmpty(args)) {
@@ -64,6 +81,11 @@ public class PrintUtil {
             sb.append(sp[i]);
         }
         println(sb.toString());
+    }
+
+    public static void log(String message, Throwable t) {
+        log(message);
+        t.printStackTrace();
     }
 
 }

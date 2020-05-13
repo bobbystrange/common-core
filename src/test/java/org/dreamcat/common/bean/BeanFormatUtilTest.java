@@ -19,12 +19,12 @@ import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
 @Slf4j
 public class BeanFormatUtilTest {
 
+    private final BeanData.All obj = BeanData.ofAll();
     Object[] oa = new Object[]{1, 3.14, "hello",
             new Date(), LocalDateTime.now(),
             LocalDate.now(),
             LocalTime.now(),
     };
-    private BeanData.All obj = BeanData.ofAll();
 
     @Test
     public void array() {

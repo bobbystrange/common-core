@@ -9,6 +9,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -16,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.function.BiFunction;
 
 @Slf4j
-public enum CipherAlgorithm {
+public enum CipherAlgorithm implements CipherCrackAlgorithm {
     /**
      * <strong>Data Encryption Standard</strong>
      * DES: translate 64 bits input to 64-bits encrypted output
@@ -79,6 +80,11 @@ public enum CipherAlgorithm {
                 (k, m) -> newCipher(ECB_PKCS5_PADDING, k, m));
     }
 
+    public byte[] encryptEcb(byte[] data, int offset, int length, byte[] key) throws Exception {
+        return encrypt(data, offset, length, key,
+                (k, m) -> newCipher(ECB_PKCS5_PADDING, k, m));
+    }
+
     public byte[] encryptEcb(InputStream data, byte[] key) throws Exception {
         return encrypt(data, key,
                 (k, m) -> newCipher(ECB_PKCS5_PADDING, k, m));
@@ -93,8 +99,17 @@ public enum CipherAlgorithm {
         return decrypt(data, key, (k, m) -> newCipher(ECB_PKCS5_PADDING, k, m));
     }
 
+    public byte[] decryptEcb(byte[] data, int offset, int length, byte[] key) throws Exception {
+        return decrypt(data, offset, length, key, (k, m) -> newCipher(ECB_PKCS5_PADDING, k, m));
+    }
+
     public byte[] decryptEcb(InputStream data, byte[] key) throws Exception {
         return decrypt(data, key,
+                (k, m) -> newCipher(ECB_PKCS5_PADDING, k, m));
+    }
+
+    public void decryptEcb(InputStream input, OutputStream output, byte[] key) throws Exception {
+        decrypt(input, output, key,
                 (k, m) -> newCipher(ECB_PKCS5_PADDING, k, m));
     }
 
@@ -107,6 +122,10 @@ public enum CipherAlgorithm {
 
     public byte[] encryptCbc(byte[] data, byte[] key) throws Exception {
         return encrypt(data, key, (k, m) -> newCipherByIv(CBC_PKCS5_PADDING, k, m));
+    }
+
+    public byte[] encryptCbc(byte[] data, int offset, int length, byte[] key) throws Exception {
+        return encrypt(data, offset, length, key, (k, m) -> newCipherByIv(CBC_PKCS5_PADDING, k, m));
     }
 
     public byte[] encryptCbc(InputStream data, byte[] key) throws Exception {
@@ -123,8 +142,17 @@ public enum CipherAlgorithm {
         return decrypt(data, key, (k, m) -> newCipherByIv(CBC_PKCS5_PADDING, k, m));
     }
 
+    public byte[] decryptCbc(byte[] data, int offset, int length, byte[] key) throws Exception {
+        return decrypt(data, offset, length, key, (k, m) -> newCipherByIv(CBC_PKCS5_PADDING, k, m));
+    }
+
     public byte[] decryptCbc(InputStream data, byte[] key) throws Exception {
         return decrypt(data, key,
+                (k, m) -> newCipherByIv(CBC_PKCS5_PADDING, k, m));
+    }
+
+    public void decryptCbc(InputStream input, OutputStream output, byte[] key) throws Exception {
+        decrypt(input, output, key,
                 (k, m) -> newCipherByIv(CBC_PKCS5_PADDING, k, m));
     }
 
@@ -211,7 +239,7 @@ public enum CipherAlgorithm {
             return cipher;
         } catch (InvalidKeyException | NoSuchAlgorithmException |
                 NoSuchPaddingException | InvalidAlgorithmParameterException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -220,9 +248,15 @@ public enum CipherAlgorithm {
                 || equals(BLOWFISH)
                 || equals(RC2)) {
             if (key.length != 8) {
-                byte[] newKey = new byte[8];
-                System.arraycopy(key, 0, newKey, 0, Math.min(key.length, 8));
-                return newKey;
+                byte[] iv = new byte[8];
+                System.arraycopy(key, 0, iv, 0, Math.min(key.length, 8));
+                return iv;
+            }
+        } else if (equals(AES)) {
+            if (key.length != 16) {
+                byte[] iv = new byte[16];
+                System.arraycopy(key, 0, iv, 0, Math.min(key.length, 16));
+                return iv;
             }
         }
         return key;
@@ -230,23 +264,30 @@ public enum CipherAlgorithm {
 
     private byte[] encrypt(
             byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
-
         return crypto(data, key, constructor, Cipher.ENCRYPT_MODE);
     }
 
     private byte[] encrypt(
-            InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            byte[] data, int offset, int length, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+        return crypto(data, offset, length, key, constructor, Cipher.ENCRYPT_MODE);
+    }
 
+    private byte[] encrypt(
+            InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
         return crypto(data, key, constructor, Cipher.ENCRYPT_MODE);
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+    private void encrypt(
+            InputStream input, OutputStream output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+        crypto(input, output, key, constructor, Cipher.ENCRYPT_MODE);
+    }
 
     private int encrypt(
             ByteBuffer input, ByteBuffer output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
-
         return crypto(input, output, key, constructor, Cipher.ENCRYPT_MODE);
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     private byte[] decrypt(
             byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
@@ -254,8 +295,18 @@ public enum CipherAlgorithm {
     }
 
     private byte[] decrypt(
+            byte[] data, int offset, int length, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+        return crypto(data, offset, length, key, constructor, Cipher.DECRYPT_MODE);
+    }
+
+    private byte[] decrypt(
             InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
         return crypto(data, key, constructor, Cipher.DECRYPT_MODE);
+    }
+
+    private void decrypt(
+            InputStream input, OutputStream output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+        crypto(input, output, key, constructor, Cipher.DECRYPT_MODE);
     }
 
     private int decrypt(
@@ -265,10 +316,16 @@ public enum CipherAlgorithm {
 
     private byte[] crypto(
             byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
-        Cipher cipher = constructor.apply(key, mode);
-        return cipher.doFinal(data);
+        return crypto(data, 0, data.length, key, constructor, mode);
     }
 
+    private byte[] crypto(
+            byte[] data, int offset, int length, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
+        Cipher cipher = constructor.apply(key, mode);
+        return cipher.doFinal(data, offset, length);
+    }
+
+    @Deprecated
     private byte[] crypto(
             InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
         Cipher cipher = constructor.apply(key, mode);
@@ -279,6 +336,18 @@ public enum CipherAlgorithm {
             cipher.update(buffer, 0, readSize);
         }
         return cipher.doFinal();
+    }
+
+    private void crypto(
+            InputStream input, OutputStream output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
+        final int size = bufferSize;
+        byte[] buffer = new byte[size];
+        int readSize;
+        while ((readSize = input.read(buffer)) > 0) {
+            Cipher cipher = constructor.apply(key, mode);
+            byte[] data = cipher.doFinal(buffer, 0, readSize);
+            output.write(data);
+        }
     }
 
     private int crypto(

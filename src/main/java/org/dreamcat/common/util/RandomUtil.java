@@ -1,5 +1,6 @@
 package org.dreamcat.common.util;
 
+import java.awt.*;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
@@ -99,10 +100,19 @@ public class RandomUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static byte[] bytes(byte[] seed, int size) {
+    public static byte[] bytes(byte[] randomSeed, int size) {
         byte[] rand = new byte[size];
-        Random random = new SecureRandom(seed);
+        Random random = new SecureRandom(randomSeed);
         random.nextBytes(rand);
         return rand;
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static Color color(int rgbStart, int rgbEnd) {
+        int r = RandomUtil.randi(rgbStart, rgbEnd);
+        int g = RandomUtil.randi(rgbStart, rgbEnd);
+        int b = RandomUtil.randi(rgbStart, rgbEnd);
+        return new Color(r, g, b);
     }
 }
