@@ -1,4 +1,4 @@
-package org.dreamcat.common.io;
+package org.dreamcat.common.io.csv;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,41 +12,42 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Create by tuke on 2018-09-22
+ *
+ * @see CsvReader
  */
-@Getter
-@Setter
-public class CsvReader implements AutoCloseable {
-    private final List<List<String>> table = new ArrayList<>();
+public class CsvFile implements AutoCloseable {
+    private final BufferedReader reader;
+    @Getter
+    @Setter
     private char delimiter = ',';
+    @Getter
+    @Setter
     private boolean trim = true;
-    // treat "-, -, -" as one string
-    private boolean doubleQuotesEscaping = false;
-    private BufferedReader reader;
 
-    public CsvReader(String filename) throws FileNotFoundException {
-        this(new File(filename));
+    public CsvFile(String content) {
+        this.reader = new BufferedReader(new StringReader(content));
     }
 
-    public CsvReader(File file) throws FileNotFoundException {
+    public CsvFile(File file) throws FileNotFoundException {
         this.reader = new BufferedReader(new FileReader(file));
     }
 
-    public CsvReader(Reader reader) {
+    public CsvFile(Reader reader) {
         this.reader = new BufferedReader(reader);
     }
 
-    public CsvReader(InputStream inputStream) {
+    public CsvFile(InputStream inputStream) {
         this.reader = new BufferedReader(new InputStreamReader(inputStream));
     }
 
-    public CsvReader(InputStream inputStream, Charset charset) {
+    public CsvFile(InputStream inputStream, Charset charset) {
         this.reader = new BufferedReader(new InputStreamReader(inputStream, charset));
     }
 
@@ -55,19 +56,15 @@ public class CsvReader implements AutoCloseable {
         reader.close();
     }
 
+    // note that word including \r\n is unsupported
     public String[] readRecord() throws IOException {
         while (true) {
             String line = reader.readLine();
-            if (ObjectUtil.isBlank(line)) return null;
+            if (line == null) return null;
             if (trim) line = line.trim();
 
+            if (ObjectUtil.isBlank(line)) continue;
             if (line.startsWith("#")) continue;
-
-            if (!doubleQuotesEscaping) {
-                return Arrays.stream(line.split(String.valueOf(delimiter)))
-                        .map(String::trim)
-                        .toArray(String[]::new);
-            }
 
             List<String> words = new ArrayList<>();
             retrieveWord(line, words);
@@ -75,7 +72,6 @@ public class CsvReader implements AutoCloseable {
         }
     }
 
-    // FIXME there may be some bug here, check and fix-up in future.
     private void retrieveWord(String string, List<String> words) {
         if (ObjectUtil.isBlank(string)) return;
         string = string.trim();
@@ -91,7 +87,7 @@ public class CsvReader implements AutoCloseable {
             if (string.startsWith("\"") && string.endsWith("\"") && size >= 2) {
                 String word = string.substring(1, size - 1);
                 // match \"
-                word = word.replaceAll("[\\\\]\"", "\"");
+                word = word.replaceAll("\"\"", "\"");
                 words.add(word);
             } else {
                 words.add(string);
@@ -142,7 +138,7 @@ public class CsvReader implements AutoCloseable {
                 if (restString.startsWith(",")) {
                     restString = restString.substring(1);
                 } else {
-                    // invaild string, ignore it
+                    // invalid string, ignore it
                     return;
                 }
                 retrieveWord(restString, words);

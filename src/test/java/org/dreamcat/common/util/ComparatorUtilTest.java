@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2020/4/19

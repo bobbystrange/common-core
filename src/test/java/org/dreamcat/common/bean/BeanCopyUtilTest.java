@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import static org.dreamcat.common.bean.BeanCopyUtil.copy;
 import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
-import static org.dreamcat.common.util.PrintUtil.printf;
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.printf;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2020/3/3

@@ -9,7 +9,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.dreamcat.common.util.PrintUtil.log;
+import static org.dreamcat.common.util.FormatUtil.log;
 
 /**
  * Create by tuke on 2020/4/8

@@ -2,12 +2,12 @@ package org.dreamcat.common.util;
 
 import org.junit.Test;
 
-import static org.dreamcat.common.util.PrintUtil.log;
+import static org.dreamcat.common.util.FormatUtil.log;
 
 /**
  * Create by tuke on 2020/4/8
  */
-public class PrintUtilTest {
+public class FormatUtilTest {
 
     @Test
     public void testLog() {

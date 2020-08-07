@@ -3,6 +3,7 @@ package org.dreamcat.common.image;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -36,6 +37,20 @@ public class ImageUtil {
         return String.format("data:image/%s;base64,%s", imageType, base64);
     }
 
+    public static BufferedImage fromBase64(String base64) {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(base64.getBytes())) {
+            return ImageIO.read(Base64.getDecoder().wrap(is));
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+    }
+
+    public static BufferedImage fromBase64Image(String base64Image) {
+        return fromBase64(base64Image.replaceAll("^data:image/[a-zA-Z0-9]+?;base64,", ""));
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     // [0-255, 0-255, 0-255], black -1 to white -16777216
     public static int[][] getData(BufferedImage image) {
         int width = image.getWidth();
@@ -49,4 +64,5 @@ public class ImageUtil {
         }
         return data;
     }
+
 }

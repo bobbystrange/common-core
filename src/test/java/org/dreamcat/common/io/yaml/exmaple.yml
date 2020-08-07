@@ -1,0 +1,19 @@
+a:
+  b: 1
+  c: true
+d:
+  - e: java
+    f: 14
+  - g:
+      - h: resource-name
+      - i: deployment-name
+    j: 3.14e-2
+k: false
+l:
+  - m:
+      n:
+        o:
+          - 1
+          - 2
+      p:
+  - q:

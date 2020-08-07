@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
 import static org.dreamcat.common.bean.BeanUtil.nullify;
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 @Slf4j
 public class BeanUtilTest {

@@ -54,6 +54,37 @@ public class BeanListUtil {
                 }).collect(Collectors.toList());
     }
 
+    public static List<String> toStringList(
+            Object bean, Class... excludeAnnotations) {
+        return toStringList(bean,
+                0
+                , excludeAnnotations);
+    }
+
+    public static List<String> toStringList(
+            Object bean, int extraExcludeModifiers
+            , Class... excludeAnnotations) {
+        Class<?> clazz = bean.getClass();
+
+        List<Field> fields = new ArrayList<>();
+        ReflectUtil.retrieveFields(clazz, fields);
+
+        return fields.stream()
+                .filter(field -> {
+                    boolean exclude = ReflectUtil.isStaticAndHasExtraModifiersAndAnyAnnotation(field, extraExcludeModifiers, excludeAnnotations);
+                    return !exclude;
+                })
+                .map(field -> {
+                    field.setAccessible(true);
+                    Object value = null;
+                    try {
+                        value = field.get(bean);
+                    } catch (IllegalAccessException ignored) {
+                    }
+                    return String.valueOf(value);
+                }).collect(Collectors.toList());
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static void retrieveExpandedList(

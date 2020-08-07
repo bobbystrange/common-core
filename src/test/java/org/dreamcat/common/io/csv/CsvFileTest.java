@@ -1,23 +1,19 @@
-package org.dreamcat.common.io;
+package org.dreamcat.common.io.csv;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Arrays;
 
 /**
  * Create by tuke on 2019-01-26
  */
 @Slf4j
-public class CsvReaderTest {
+public class CsvFileTest {
 
-    private String str;
-
-    @Before
-    public void init() throws IOException {
+    @Test
+    public void read() throws IOException {
         StringBuilder sb = new StringBuilder(2 << 8);
 
         sb.append("  #!/bin/sh -s \"cal, 9, 1752\"");
@@ -39,22 +35,18 @@ public class CsvReaderTest {
         sb.append("\"cal, 9, 1752\", 65537, 1752-09-14");
         sb.append('\n');
 
-        sb.append("\"echo \\\"cal, 9, 1752\\\"\", 65537, 1752-09-14");
+        sb.append("\"echo \"\"cal, 9, 1752\"\"\", 65537, 1752-09-14");
         sb.append('\n');
 
-        str = sb.toString();
-        log.info("str:\n{}", str);
-    }
+        String str = sb.toString();
+        System.out.println(str);
 
-    @Test
-    public void read() throws IOException {
-        CsvReader csvReader = new CsvReader(new StringReader(str));
-        csvReader.setDoubleQuotesEscaping(true);
+        CsvFile csvFile = new CsvFile(str);
 
         String[] record;
-        while ((record = csvReader.readRecord()) != null) {
-            log.info("size: {}, content: {}", record.length, Arrays.toString(record));
+        while ((record = csvFile.readRecord()) != null) {
+            System.out.printf("%d \t %s\n", record.length, Arrays.toString(record));
         }
-
     }
+
 }

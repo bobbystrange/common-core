@@ -26,71 +26,6 @@ public final class Sorts {
         data[i2][j2] = tmp;
     }
 
-    private static int getMiddle(int[] numbers, int low, int high) {
-        int temp = numbers[low];
-        while (low < high) {
-            while (low < high && numbers[high] > temp) {
-                high--;
-            }
-            numbers[low] = numbers[high];
-            while (low < high && numbers[low] < temp) {
-                low++;
-            }
-            numbers[high] = numbers[low];
-        }
-
-        numbers[low] = temp;
-        return low;
-    }
-
-    private static void quickSort(int[] numbers, int low, int high) {
-        if (low < high) {
-
-            int middle = getMiddle(numbers, low, high);
-            quickSort(numbers, low, middle - 1);
-            quickSort(numbers, middle + 1, high);
-        }
-    }
-
-    public static void qsort(int[] n) {
-        if (n.length > 0) {
-            quickSort(n, 0, n.length - 1);
-        }
-    }
-
-    private static int getMiddle(double[] numbers, int low, int high) {
-        double temp = numbers[low];
-        while (low < high) {
-            while (low < high && numbers[high] > temp) {
-                high--;
-            }
-            numbers[low] = numbers[high];
-            while (low < high && numbers[low] < temp) {
-                low++;
-            }
-            numbers[high] = numbers[low];
-        }
-
-        numbers[low] = temp;
-        return low;
-    }
-
-    private static void quickSort(double[] numbers, int low, int high) {
-        if (low < high) {
-
-            int middle = getMiddle(numbers, low, high);
-            quickSort(numbers, low, middle - 1);
-            quickSort(numbers, middle + 1, high);
-        }
-    }
-
-    public static void qsort(double[] n) {
-        if (n.length > 0) {
-            quickSort(n, 0, n.length - 1);
-        }
-    }
-
-
     public static void shellSort(int[] data) {
         int j = 0;
         int temp = 0;
@@ -113,7 +48,6 @@ public final class Sorts {
         }
     }
 
-
     public static void bhsort(int[] a) {
 
         int n = a.length;
@@ -126,7 +60,6 @@ public final class Sorts {
         }
 
     }
-
 
     private static void buildBigHeap(int[] data, int lastIndex) {
 
@@ -259,8 +192,11 @@ public final class Sorts {
             temp[k++] = nums[j++];
         }
 
-        for (int k2 = 0; k2 < temp.length; k2++) {
-            nums[k2 + low] = temp[k2];
+        //for (int k2 = 0; k2 < temp.length; k2++) {
+        //    nums[k2 + low] = temp[k2];
+        //}
+        if (temp.length >= 0) {
+            System.arraycopy(temp, 0, nums, low, temp.length);
         }
     }
 

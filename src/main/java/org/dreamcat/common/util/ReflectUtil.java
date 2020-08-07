@@ -229,7 +229,7 @@ public class ReflectUtil {
         } else if (clazz.equals(boolean.class)) {
             return false;
         } else {
-            throw new RuntimeException("Primitive types are not enumerated completely");
+            throw new AssertionError("Primitive types are not enumerated completely");
         }
     }
 
@@ -312,6 +312,60 @@ public class ReflectUtil {
             }
         }
         return null;
+    }
+
+    public static Object[] castToArray(Object a) {
+        Class<?> clazz = a.getClass();
+        Class<?> componentType = clazz.getComponentType();
+        if (!componentType.isPrimitive()) {
+            return (Object[]) a;
+        }
+
+        if (clazz == boolean[].class) {
+            return ArrayUtil.boxed((boolean[]) a);
+        } else if (clazz == byte[].class) {
+            return ArrayUtil.boxed((byte[]) a);
+        } else if (clazz == short[].class) {
+            return ArrayUtil.boxed((short[]) a);
+        } else if (clazz == char[].class) {
+            return ArrayUtil.boxed((char[]) a);
+        } else if (clazz == int[].class) {
+            return ArrayUtil.boxed((int[]) a);
+        } else if (clazz == long[].class) {
+            return ArrayUtil.boxed((long[]) a);
+        } else if (clazz == float[].class) {
+            return ArrayUtil.boxed((float[]) a);
+        } else if (clazz == double[].class) {
+            return ArrayUtil.boxed((double[]) a);
+        } else {
+            throw new AssertionError("Primitive types are not enumerated completely");
+        }
+    }
+
+    public static String getLiteralType(Class<?> clazz) {
+        if (!Objects.requireNonNull(clazz).isPrimitive()) {
+            return clazz.getCanonicalName();
+        }
+
+        if (clazz.equals(byte.class)) {
+            return "byte";
+        } else if (clazz.equals(short.class)) {
+            return "short";
+        } else if (clazz.equals(char.class)) {
+            return "char";
+        } else if (clazz.equals(int.class)) {
+            return "int";
+        } else if (clazz.equals(long.class)) {
+            return "long";
+        } else if (clazz.equals(float.class)) {
+            return "float";
+        } else if (clazz.equals(double.class)) {
+            return "double";
+        } else if (clazz.equals(boolean.class)) {
+            return "boolean";
+        } else {
+            throw new AssertionError("Primitive types are not enumerated completely");
+        }
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====

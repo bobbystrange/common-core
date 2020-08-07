@@ -20,9 +20,10 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URLConnection;
 import java.nio.channels.ByteChannel;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.WatchEvent;
@@ -208,17 +209,13 @@ public final class FileUtil {
         }
     }
 
-    public static void readTo(String filename, OutputStream outputStream) throws IOException {
-        readTo(new File(filename), outputStream);
+    public static void readTo(String filename, OutputStream output) throws IOException {
+        readTo(new File(filename), output);
     }
 
-    public static void readTo(File file, OutputStream outputStream) throws IOException {
+    public static void readTo(File file, OutputStream output) throws IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
-            byte[] buf = new byte[BUFFER_SIZE];
-            int readSize;
-            while ((readSize = fis.read(buf)) > 0) {
-                outputStream.write(buf, 0, readSize);
-            }
+            IOUtil.copy(fis, output);
         }
     }
 
@@ -227,12 +224,8 @@ public final class FileUtil {
     }
 
     public static void readTo(File file, Writer writer) throws IOException {
-        try (FileReader fr = new FileReader(file)) {
-            char[] buf = new char[BUFFER_SIZE];
-            int readSize;
-            while ((readSize = fr.read(buf)) > 0) {
-                writer.write(buf, 0, readSize);
-            }
+        try (FileReader reader = new FileReader(file)) {
+            IOUtil.copy(reader, writer);
         }
     }
 
@@ -241,12 +234,8 @@ public final class FileUtil {
     }
 
     public static void readTo(File file, Writer writer, Charset charset) throws IOException {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))) {
-            char[] buf = new char[BUFFER_SIZE];
-            int readSize;
-            while ((readSize = br.read(buf)) > 0) {
-                writer.write(buf, 0, readSize);
-            }
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset)) {
+            IOUtil.copy(reader, writer);
         }
     }
 
@@ -255,7 +244,9 @@ public final class FileUtil {
     }
 
     public static void readTo(File file, ByteChannel output) throws IOException {
-        NioUtil.copy(Files.newByteChannel(file.toPath()), output);
+        try (FileChannel inputChannel = FileChannel.open(file.toPath(), StandardOpenOption.READ)) {
+            inputChannel.transferTo(0, file.length(), output);
+        }
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -310,33 +301,25 @@ public final class FileUtil {
 
     public static void writeFrom(File file, Reader reader, boolean append) throws IOException {
         try (FileWriter fw = new FileWriter(file, append)) {
-            char[] buf = new char[BUFFER_SIZE];
-            int readSize;
-            while ((readSize = reader.read(buf)) > 0) {
-                fw.write(buf, 0, readSize);
-            }
+            IOUtil.copy(reader, fw);
         }
     }
 
-    public static void writeFrom(String filename, InputStream inputStream) throws IOException {
-        writeFrom(filename, inputStream, false);
+    public static void writeFrom(String filename, InputStream input) throws IOException {
+        writeFrom(filename, input, false);
     }
 
-    public static void writeFrom(String filename, InputStream inputStream, boolean append) throws IOException {
-        writeFrom(new File(filename), inputStream, append);
+    public static void writeFrom(String filename, InputStream input, boolean append) throws IOException {
+        writeFrom(new File(filename), input, append);
     }
 
-    public static void writeFrom(File file, InputStream inputStream) throws IOException {
-        writeFrom(file, inputStream, false);
+    public static void writeFrom(File file, InputStream input) throws IOException {
+        writeFrom(file, input, false);
     }
 
-    public static void writeFrom(File file, InputStream inputStream, boolean append) throws IOException {
+    public static void writeFrom(File file, InputStream input, boolean append) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(file, append)) {
-            byte[] buf = new byte[BUFFER_SIZE];
-            int readSize;
-            while ((readSize = inputStream.read(buf)) > 0) {
-                fos.write(buf, 0, readSize);
-            }
+            IOUtil.copy(input, fos);
         }
     }
 
@@ -353,14 +336,40 @@ public final class FileUtil {
     }
 
     public static void writeFrom(File file, ByteChannel input, boolean append) throws IOException {
-        ByteChannel output;
+        OpenOption[] options;
         if (append) {
-            output = Files.newByteChannel(file.toPath(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            options = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.APPEND};
         } else {
-            output = Files.newByteChannel(file.toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            options = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.WRITE};
         }
+        try (FileChannel outputChannel = FileChannel.open(file.toPath(), options)) {
+            outputChannel.transferFrom(input, 0, Long.MAX_VALUE);
+        }
+    }
 
-        NioUtil.copy(input, output);
+    public static void writeFrom(String filename, File input) throws IOException {
+        writeFrom(filename, input, false);
+    }
+
+    public static void writeFrom(String filename, File input, boolean append) throws IOException {
+        writeFrom(new File(filename), input, append);
+    }
+
+    public static void writeFrom(File file, File input) throws IOException {
+        writeFrom(file, input, false);
+    }
+
+    public static void writeFrom(File file, File input, boolean append) throws IOException {
+        OpenOption[] options;
+        if (append) {
+            options = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.APPEND};
+        } else {
+            options = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.WRITE};
+        }
+        try (FileChannel inputChannel = FileChannel.open(input.toPath(), StandardOpenOption.READ);
+             FileChannel outputChannel = FileChannel.open(file.toPath(), options)) {
+            inputChannel.transferTo(0, input.length(), outputChannel);
+        }
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -401,6 +410,12 @@ public final class FileUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    // make parent dir for file
+    public static boolean makeParentDir(File file) {
+        if (file.exists()) return false;
+        return file.getParentFile().mkdirs();
+    }
+
     public static boolean deleteForcibly(File file) {
         if (!file.exists()) return true;
 
@@ -416,8 +431,6 @@ public final class FileUtil {
         }
         return file.delete() || !file.exists();
     }
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @SuppressWarnings("unchecked")
     public static void watchPath(

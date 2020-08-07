@@ -1,6 +1,5 @@
 package org.dreamcat.common.crypto;
 
-import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.util.Base64Util;
 import org.dreamcat.common.util.ByteUtil;
 
@@ -15,7 +14,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 // Message Authentication Code
-@Slf4j
 public enum HmacAlgorithm {
     HMAC_MD5("HmacMD5"),
     HMAC_SHA_1("HmacSHA1"),
@@ -216,8 +214,8 @@ public enum HmacAlgorithm {
 
     private Mac generateMac(byte[] key) throws InvalidKeyException, NoSuchAlgorithmException {
         Mac mac = Mac.getInstance(algorithm);
-        SecretKeySpec secret_key = new SecretKeySpec(key, algorithm);
-        mac.init(secret_key);
+        SecretKeySpec secretKey = new SecretKeySpec(key, algorithm);
+        mac.init(secretKey);
         return mac;
     }
 

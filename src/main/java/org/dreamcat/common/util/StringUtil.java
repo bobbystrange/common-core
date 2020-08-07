@@ -22,18 +22,19 @@ public class StringUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static String unbackslash(String s) {
-        return unbackslash(s, '\\');
+    // \a\b\c  --> abc
+    public static String fromBackslash(String s) {
+        return fromBackslash(s, '\\');
     }
 
-    public static String unbackslash(String s, char backslash) {
+    public static String fromBackslash(String s, char backslash) {
         if (ObjectUtil.isEmpty(s)) return "";
         int len = s.length();
-        StringBuilder sb = new StringBuilder(s.length());
+        StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++) {
             if (s.charAt(i) == backslash) {
                 if (i == len - 1) {
-                    log.warn("Found the unmatched backslash in the end of your string");
+                    log.warn("found the unmatched backslash in the end of your string");
                     sb.append(s.charAt(i));
                     break;
                 } else {
@@ -46,9 +47,24 @@ public class StringUtil {
         return sb.toString();
     }
 
-    public static String capitalize(String s) {
+    public static String toBackslash(String s) {
+        return toBackslash(s, '\\');
+    }
+
+    public static String toBackslash(String s, char backslash) {
+        if (ObjectUtil.isEmpty(s)) return "";
+        int len = s.length();
+        StringBuilder sb = new StringBuilder(len * 2);
+        s.chars().forEach(c -> {
+            sb.append(backslash).append((char) c);
+        });
+        return sb.toString();
+    }
+
+    // only upper case first letter, and keep others
+    public static String toCapitalCase(String s) {
         if (ObjectUtil.isBlank(s)) return s;
-        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
     // never throws ArrayIndexOutOfBoundsException
@@ -74,6 +90,16 @@ public class StringUtil {
         for (int i = 0; i < length; i++) {
             sb.append(s);
         }
+        return sb.toString();
+    }
+
+    // {input}{filler}{input}{filler}{input}
+    public static String interval(String input, String filler, int size) {
+        StringBuilder sb = new StringBuilder(input.length() * size + filler.length() * (size - 1));
+        for (int i = 0; i < size - 1; i++) {
+            sb.append(input).append(filler);
+        }
+        sb.append(input);
         return sb.toString();
     }
 

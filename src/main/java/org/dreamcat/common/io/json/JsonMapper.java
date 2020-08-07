@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Create by tuke on 2020/5/10
@@ -15,10 +16,48 @@ import java.util.Objects;
 public class JsonMapper {
 
     /**
+     * convert object to json string, same as JSON.stringify
+     *
+     * @param raw one of String, Integer/Long/Double, Boolean, List<Object>, Map<String, Object>
+     * @return json string
+     * @deprecated as it is a very slow implement
+     * only use it with {@code @SuppressWarnings("deprecation")} for test purpose
+     */
+    @SuppressWarnings("unchecked")
+    public static String stringify(Object raw) {
+        if (raw == null) {
+            return "null";
+        } else if (raw instanceof String) {
+            String string = (String) raw;
+            // "  ->  \"
+            return String.format("\"%s\"", string.replace("\"", "\\\""));
+        } else if (raw instanceof Double || raw instanceof Boolean) {
+            return raw.toString();
+        } else if (raw instanceof List) {
+            List<Object> array = (List<Object>) raw;
+            if (array.isEmpty()) return "[]";
+
+            return String.format("[%s]", array.stream()
+                    .map(JsonMapper::stringify)
+                    .collect(Collectors.joining(",")));
+        } else if (raw instanceof Map) {
+            Map<String, Object> object = (Map<String, Object>) raw;
+            if (object.isEmpty()) return "{}";
+
+            return String.format("{%s}", object.entrySet().stream()
+                    .map(it -> String.format("%s:%s",
+                            stringify(it.getKey()), stringify(it.getValue())))
+                    .collect(Collectors.joining(",")));
+        }
+
+        throw new UnsupportedOperationException("unsupported input type " + raw.getClass());
+    }
+
+    /**
      * parse json string to object, same as JSON.parse
      *
      * @param expression json string
-     * @return one of String, Double, Boolean, List<Object>, Map<String, Object>
+     * @return one of String, Double/Long/Integer, Boolean, List<Object>, Map<String, Object>
      */
     public static Object parse(String expression) {
         if (expression == null) {
@@ -135,12 +174,23 @@ public class JsonMapper {
     }
 
     // Note that number case, make sure offset char is [0-9]
-    private static Pair<Double, Integer> parseNumber(String expression, int offset, boolean negative) {
+    private static Pair<Number, Integer> parseNumber(String expression, int offset, boolean negative) {
         int len = expression.length();
         StringBuilder s = new StringBuilder();
         if (negative) s.append("-");
-        offset = extractNumber(expression, offset, len, s);
-        return new Pair<>(Double.valueOf(s.toString()), offset);
+        Pair<Integer, Boolean> pair = extractNumber(expression, offset, len, s);
+        offset = pair.first();
+        String num = s.toString();
+        if (pair.second()) {
+            return new Pair<>(Double.valueOf(num), offset);
+        } else {
+            long n = Long.parseLong(num);
+            if (n <= Integer.MAX_VALUE && n >= Integer.MIN_VALUE) {
+                return new Pair<>((int) n, offset);
+            } else {
+                return new Pair<>(n, offset);
+            }
+        }
     }
 
     // Note that false,null,true case
@@ -274,7 +324,7 @@ public class JsonMapper {
                 } else if (c == 'u') {
                     // \u0000
                     if (offset >= len - 4) {
-                        throw new IllegalArgumentException("invalid token /u at pos " + (offset - 1));
+                        throw new IllegalArgumentException("invalid token \\u at pos " + (offset - 1));
                     }
                     String n = expression.substring(offset + 1, offset + 5);
                     char u = (char) Integer.parseInt(n, 16);
@@ -295,7 +345,7 @@ public class JsonMapper {
     }
 
     // Note that parse [0-9]+([.][0-9]+)?([eE][+-]?[0-9]+)?
-    static int extractNumber(String expression, int offset, int len, StringBuilder s) {
+    static Pair<Integer, Boolean> extractNumber(String expression, int offset, int len, StringBuilder s) {
         boolean dot = false;
         boolean edot = false;
         boolean permitDot = false;
@@ -346,7 +396,7 @@ public class JsonMapper {
             }
         }
 
-        return offset;
+        return new Pair<>(offset, dot || hasE);
     }
 
 }

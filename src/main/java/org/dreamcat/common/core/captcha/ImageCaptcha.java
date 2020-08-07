@@ -52,23 +52,27 @@ public class ImageCaptcha {
         float dx = size + padding;
         float dy = (height - y);
 
+        Color color;
+        AlphaComposite ac;
         for (int i = 0; i < n; i++) {
-            float xi = x + i * dx;
-            float yi = y + (float) Math.random() * dy - dy / 2;
+            float xi = x + i * dx + dx * ((float) Math.random() * 2 - 1) * 0.382f;
+            float yi = y + dy * ((float) Math.random() * 2 - 1) * 0.382f;
 
-            Color color = RandomUtil.color(rgbStart, rgbEnd);
+            color = RandomUtil.color(rgbStart, rgbEnd);
             g.setColor(color);
-
-            float alpha = (float) RandomUtil.rand(0.75, 1);
-            AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+            ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
             g.setComposite(ac);
             g.drawString(code.substring(i, i + 1), xi, yi);
-            drawNoise(g, color, (i + 1) << 1);
+
+            float alpha = (float) RandomUtil.rand(0.75, 1);
+            ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+            g.setComposite(ac);
+            drawNoise(g, 1);
         }
         return image;
     }
 
-    private void drawNoise(Graphics2D g, Color color, int n) {
+    private void drawNoise(Graphics2D g, int n) {
         int halfOfW = width >> 1;
         int halfOfH = height >> 1;
         int w = RandomUtil.randi(halfOfW) + halfOfW >> 1;
@@ -79,11 +83,6 @@ public class ImageCaptcha {
             int ry = RandomUtil.randi(0, height - h);
             int startAngle = RandomUtil.randi(360);
             int angle = RandomUtil.randi(180);
-
-            g.setColor(color);
-
-            AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-            g.setComposite(ac);
 
             g.drawArc(rx, ry, w, h, startAngle, angle);
         }

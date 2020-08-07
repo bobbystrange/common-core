@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.dreamcat.common.util.PrintUtil.*;
+import static org.dreamcat.common.util.FormatUtil.*;
 
 /**
  * Create by tuke on 2020/4/13

@@ -1,10 +1,11 @@
 package org.dreamcat.common.io.json;
 
+import org.dreamcat.common.core.Pair;
 import org.junit.Test;
 
 import java.util.Map;
 
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2020/5/10
@@ -17,7 +18,8 @@ public class JsonMapperTest {
         String expression = "6.02e-23";
         int len = expression.length();
         StringBuilder s = new StringBuilder();
-        int offset = JsonMapper.extractNumber(expression, 0, len, s);
+        Pair<Integer, Boolean> pair = JsonMapper.extractNumber(expression, 0, len, s);
+        int offset = pair.first();
         println(s.toString());
     }
 
@@ -32,7 +34,7 @@ public class JsonMapperTest {
         println();
         raw = JsonMapper.parse(json);
         object = (Map<String, Object>) raw;
-        println(JsonMapperV1.stringify(object));
+        println(JsonMapper.stringify(object));
         println();
     }
 
@@ -51,7 +53,7 @@ public class JsonMapperTest {
         println();
         raw = JsonMapper.parse(json);
         object = (Map<String, Object>) raw;
-        println(JsonMapperV1.stringify(object));
+        println(JsonMapper.stringify(object));
         println();
     }
 

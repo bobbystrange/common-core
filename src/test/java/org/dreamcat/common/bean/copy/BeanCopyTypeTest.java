@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 
 import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2019-06-03

@@ -11,6 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -34,8 +35,8 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    private final String ALGORITHM;
-    private final int[] KEY_SIZES;
+    private final String algorithm;
+    private final int[] keySizes;
     /**
      * ECB: same input, same output
      * CBC: same input, different output
@@ -51,8 +52,8 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     /**
      * <h3>Symmetric cryptographic algorithm</h3>
      *
-     * @param ALGORITHM Following algorithm
-     * @param KEY_SIZES depends on a the specific algorithm
+     * @param algorithm Following algorithm
+     * @param keySizes  depends on a the specific algorithm
      * @see CipherAlgorithm#DES
      * key size must be equal to 56
      * @see CipherAlgorithm#TRIPLE_DES
@@ -64,15 +65,23 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
      * @see CipherAlgorithm#RC2
      * key size must be between 40 and 1024 bits
      */
-    CipherAlgorithm(String ALGORITHM, int... KEY_SIZES) {
-        this.ALGORITHM = ALGORITHM;
-        ECB_PKCS5_PADDING = ALGORITHM + "/ECB/PKCS5Padding";
-        CBC_PKCS5_PADDING = ALGORITHM + "/CBC/PKCS5Padding";
-        CBC_NO_PADDING = ALGORITHM + "/CBC/NoPadding";
-        this.KEY_SIZES = KEY_SIZES;
+    CipherAlgorithm(String algorithm, int... keySizes) {
+        this.algorithm = algorithm;
+        ECB_PKCS5_PADDING = algorithm + "/ECB/PKCS5Padding";
+        CBC_PKCS5_PADDING = algorithm + "/CBC/PKCS5Padding";
+        CBC_NO_PADDING = algorithm + "/CBC/NoPadding";
+        this.keySizes = keySizes;
 
         // 4K Buffer Area
         this.bufferSize = 4096;
+    }
+
+    public byte[] encryptEcb(String data, String key) throws Exception {
+        return encryptEcb(data.getBytes(StandardCharsets.ISO_8859_1), key);
+    }
+
+    public byte[] encryptEcb(byte[] data, String key) throws Exception {
+        return encryptEcb(data, key.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     public byte[] encryptEcb(byte[] data, byte[] key) throws Exception {
@@ -93,6 +102,14 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     public int encryptEcb(ByteBuffer input, ByteBuffer output, byte[] key) throws Exception {
         return encrypt(input, output, key,
                 (k, m) -> newCipher(ECB_PKCS5_PADDING, k, m));
+    }
+
+    public byte[] decryptEcb(String data, String key) throws Exception {
+        return decryptEcb(data.getBytes(StandardCharsets.ISO_8859_1), key);
+    }
+
+    public byte[] decryptEcb(byte[] data, String key) throws Exception {
+        return decryptEcb(data, key.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     public byte[] decryptEcb(byte[] data, byte[] key) throws Exception {
@@ -120,6 +137,14 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
+    public byte[] encryptCbc(String data, String key) throws Exception {
+        return encryptCbc(data.getBytes(StandardCharsets.ISO_8859_1), key);
+    }
+
+    public byte[] encryptCbc(byte[] data, String key) throws Exception {
+        return encryptCbc(data, key.getBytes(StandardCharsets.ISO_8859_1));
+    }
+
     public byte[] encryptCbc(byte[] data, byte[] key) throws Exception {
         return encrypt(data, key, (k, m) -> newCipherByIv(CBC_PKCS5_PADDING, k, m));
     }
@@ -136,6 +161,14 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     public int encryptCbc(ByteBuffer input, ByteBuffer output, byte[] key) throws Exception {
         return encrypt(input, output, key,
                 (k, m) -> newCipherByIv(CBC_PKCS5_PADDING, k, m));
+    }
+
+    public byte[] decryptCbc(String data, String key) throws Exception {
+        return decryptCbc(data.getBytes(StandardCharsets.ISO_8859_1), key);
+    }
+
+    public byte[] decryptCbc(byte[] data, String key) throws Exception {
+        return decryptCbc(data, key.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     public byte[] decryptCbc(byte[] data, byte[] key) throws Exception {
@@ -163,6 +196,14 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
+    public byte[] encryptCbcNoPadding(String data, String key) throws Exception {
+        return encryptCbcNoPadding(data.getBytes(StandardCharsets.ISO_8859_1), key);
+    }
+
+    public byte[] encryptCbcNoPadding(byte[] data, String key) throws Exception {
+        return encryptCbcNoPadding(data, key.getBytes(StandardCharsets.ISO_8859_1));
+    }
+
     public byte[] encryptCbcNoPadding(byte[] data, byte[] key) throws Exception {
         return encrypt(data, key, (k, m) -> newCipherByIv(CBC_NO_PADDING, k, m));
     }
@@ -175,6 +216,14 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     public int encryptCbcNoPadding(ByteBuffer input, ByteBuffer output, byte[] key) throws Exception {
         return encrypt(input, output, key,
                 (k, m) -> newCipherByIv(CBC_NO_PADDING, k, m));
+    }
+
+    public byte[] decryptCbcNoPadding(String data, String key) throws Exception {
+        return decryptCbcNoPadding(data.getBytes(StandardCharsets.ISO_8859_1), key);
+    }
+
+    public byte[] decryptCbcNoPadding(byte[] data, String key) throws Exception {
+        return decryptCbcNoPadding(data, key.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     public byte[] decryptCbcNoPadding(byte[] data, byte[] key) throws Exception {
@@ -194,7 +243,7 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public byte[] generateKey() {
-        return generateKey(KEY_SIZES[0]);
+        return generateKey(keySizes[0]);
     }
 
     public byte[] generateKey(int size) {
@@ -204,7 +253,7 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
 
     public SecretKey generateSecretKey(int size) {
         try {
-            KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
+            KeyGenerator keyGen = KeyGenerator.getInstance(algorithm);
             keyGen.init(size);
             return keyGen.generateKey();
         } catch (NoSuchAlgorithmException e) {
@@ -219,7 +268,7 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
         try {
             Cipher cipher = Cipher.getInstance(transformation);
 
-            SecretKeySpec keySpec = new SecretKeySpec(key, ALGORITHM);
+            SecretKeySpec keySpec = new SecretKeySpec(key, algorithm);
             cipher.init(mode, keySpec);
             return cipher;
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e) {
@@ -230,7 +279,7 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     private Cipher newCipherByIv(String transformation, byte[] key, int mode) {
         try {
             Cipher cipher = Cipher.getInstance(transformation);
-            SecretKeySpec keySpec = new SecretKeySpec(key, ALGORITHM);
+            SecretKeySpec keySpec = new SecretKeySpec(key, algorithm);
 
             // inital vector
             key = truncKeyForIv(key);

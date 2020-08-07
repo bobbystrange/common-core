@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.dreamcat.common.util.PrintUtil.log;
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.log;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2019-02-17

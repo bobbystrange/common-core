@@ -115,7 +115,7 @@ public interface HashTree<K, V, Node extends BinaryNode<Node> & HashNode<K, V>> 
     default void levelOrder(TriConsumer<? super K, ? super V, Integer> action) {
         if (isEmpty()) return;
 
-        getRoot().levelOrder((node, level) -> {
+        BinaryNodes.levelOrder(getRoot(), (node, level) -> {
             action.accept(node.getKey(), node.getValue(), level);
         });
     }

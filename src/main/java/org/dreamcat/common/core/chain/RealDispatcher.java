@@ -25,9 +25,7 @@ public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
     private BiPredicate<Interceptor.AsyncCall<I, O>,
             Interceptor.AsyncCall<I, O>> sameCase = (everyCall, currentCall) -> false;
     private Runnable idleCallback = () -> {
-        if (log.isDebugEnabled()) {
-            log.debug("dispatcher finished...");
-        }
+        if (log.isDebugEnabled()) log.debug("Interceptor.Dispatcher finished...");
     };
     private ExecutorService executorService;
 
@@ -46,7 +44,8 @@ public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
 
     public synchronized ExecutorService executorService() {
         if (executorService == null) {
-            executorService = ThreadUtil.newExecutorService("Interceptor.Dispatcher");
+            executorService = ThreadUtil.newCallerRunsThreadPool(
+                    0, Runtime.getRuntime().availableProcessors());
         }
         return executorService;
     }
@@ -162,6 +161,10 @@ public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
 
     public synchronized ExecutorService getExecutorService() {
         return executorService;
+    }
+
+    public synchronized void setExecutorService(ExecutorService executorService) {
+        this.executorService = executorService;
     }
 
     public synchronized Deque<Interceptor.AsyncCall<I, O>> getReadyAsyncCalls() {

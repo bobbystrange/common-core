@@ -5,12 +5,14 @@ import org.dreamcat.common.function.ThrowableConsumer;
 import org.dreamcat.common.function.ThrowableObjectArrayConsumer;
 import org.dreamcat.common.function.ThrowableSupplier;
 import org.dreamcat.common.function.ThrowableVoidConsumer;
+import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.ObjectUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Create by tuke on 2019-06-06
@@ -26,6 +28,8 @@ public class Timeit {
     private int repeat = 1;
     // multi metering
     private int count = 1;
+    // use parallel stream to execute
+    private boolean parallel = false;
 
     private Timeit() {
     }
@@ -39,8 +43,27 @@ public class Timeit {
     }
 
     public String runAndFormatUs(String delimiter) {
-        long[] ts = run();
-        return Arrays.stream(ts).mapToObj(it -> String.format("%6.3fus", it / 1000.)).collect(Collectors.joining(delimiter));
+        return runAndFormat("us", 1000., delimiter);
+    }
+
+    public String runAndFormatMs() {
+        return runAndFormatMs("\t");
+    }
+
+    public String runAndFormatMs(String delimiter) {
+        return runAndFormat("ms", 1000_000., delimiter);
+    }
+
+    public String runAndFormatSec() {
+        return runAndFormatSec("\t");
+    }
+
+    public String runAndFormatSec(String delimiter) {
+        return runAndFormat("s", 1000_000_000., delimiter);
+    }
+
+    public String runAndFormat(String unit, double unitBase, String delimiter) {
+        return Arrays.stream(run()).mapToObj(it -> String.format("%6.3f%s", it / unitBase, unit)).collect(Collectors.joining(delimiter));
     }
 
     /**
@@ -52,20 +75,28 @@ public class Timeit {
     public long[] run() {
         int size = actions.size();
         long[][] tss = new long[size][count];
-        for (int seq = 0; seq < size; seq++) {
-            Object o = actions.get(seq);
-            if (o instanceof Action) {
-                Action action = (Action) o;
-                doAction(tss[seq], action);
-            } else if (o instanceof UnaryAction) {
-                UnaryAction action = (UnaryAction) o;
-                doUnaryAction(tss[seq], action);
-            } else {
-                VoidAction action = (VoidAction) o;
-                doVoidAction(tss[seq], action);
-            }
-        }
+
+        IntStream seqs = Arrays.stream(ArrayUtil.rangeOf(size));
+        if (parallel) seqs = seqs.parallel();
+
+        seqs.forEach(seq -> {
+            run(tss, seq);
+        });
         return stat(tss, skip);
+    }
+
+    private void run(long[][] tss, int seq) {
+        Object o = actions.get(seq);
+        if (o instanceof Action) {
+            Action action = (Action) o;
+            doAction(tss[seq], action);
+        } else if (o instanceof UnaryAction) {
+            UnaryAction action = (UnaryAction) o;
+            doUnaryAction(tss[seq], action);
+        } else {
+            VoidAction action = (VoidAction) o;
+            doVoidAction(tss[seq], action);
+        }
     }
 
     public Timeit addAction(ThrowableSupplier<Object[]> supplier, ThrowableObjectArrayConsumer action) {
@@ -92,6 +123,11 @@ public class Timeit {
     public Timeit repeat(int repeat) {
         ObjectUtil.requirePositive(repeat, "repeat");
         this.repeat = repeat;
+        return this;
+    }
+
+    public Timeit parallel() {
+        this.parallel = true;
         return this;
     }
 

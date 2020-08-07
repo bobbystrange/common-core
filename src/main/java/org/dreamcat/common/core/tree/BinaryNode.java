@@ -1,11 +1,7 @@
 package org.dreamcat.common.core.tree;
 
-import org.dreamcat.common.util.ObjectUtil;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -50,19 +46,7 @@ public abstract class BinaryNode<Node extends BinaryNode<Node>> implements Itera
     }
 
     public void levelOrder(BiConsumer<? super Node, Integer> action) {
-        levelOrder(Collections.singletonList((Node) this), 1, action);
-    }
-
-    private void levelOrder(List<Node> levelNodes, int level, BiConsumer<? super Node, Integer> action) {
-        if (ObjectUtil.isEmpty(levelNodes)) return;
-
-        List<Node> nextLevelNodes = new ArrayList<>();
-        for (Node node : levelNodes) {
-            action.accept(node, level);
-            if (node.left != null) nextLevelNodes.add(node.left);
-            if (node.right != null) nextLevelNodes.add(node.right);
-        }
-        levelOrder(nextLevelNodes, level + 1, action);
+        BinaryNodes.levelOrder((Node) this, action);
     }
 
     // level order iterator
@@ -73,37 +57,25 @@ public abstract class BinaryNode<Node extends BinaryNode<Node>> implements Itera
     }
 
     protected static class Iter<Node extends BinaryNode<Node>> implements Iterator<Node> {
-        private List<Node> levelNodes;
-        private List<Node> nextLevelNodes;
-        private int pos;
+        private final LinkedList<Node> levelNodes;
 
         Iter(Node node) {
+            levelNodes = new LinkedList<>();
             if (node != null) {
-                levelNodes = Collections.singletonList(node);
-            } else {
-                levelNodes = Collections.emptyList();
+                levelNodes.addLast(node);
             }
-            nextLevelNodes = new ArrayList<>();
-            pos = 0;
         }
 
         @Override
         public boolean hasNext() {
-            return !nextLevelNodes.isEmpty() || pos < levelNodes.size();
+            return !levelNodes.isEmpty();
         }
 
         @Override
         public Node next() {
-            Node node = levelNodes.get(pos);
-            if (node.left != null) nextLevelNodes.add(node.left);
-            if (node.right != null) nextLevelNodes.add(node.right);
-            if (pos == levelNodes.size() - 1) {
-                pos = 0;
-                levelNodes = nextLevelNodes;
-                nextLevelNodes = new ArrayList<>();
-            } else {
-                pos++;
-            }
+            Node node = levelNodes.removeFirst();
+            if (node.left != null) levelNodes.addLast(node.left);
+            if (node.right != null) levelNodes.addLast(node.right);
             return node;
         }
     }

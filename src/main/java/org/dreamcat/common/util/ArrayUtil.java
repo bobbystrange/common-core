@@ -345,4 +345,78 @@ public class ArrayUtil {
         return -1; // key not found
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static Boolean[] boxed(boolean[] a) {
+        int len = a.length;
+        Boolean[] b = new Boolean[len];
+        for (int i = 0; i < len; i++) {
+            b[i] = a[i];
+        }
+        return b;
+    }
+
+    public static Byte[] boxed(byte[] a) {
+        int len = a.length;
+        Byte[] b = new Byte[len];
+        for (int i = 0; i < len; i++) {
+            b[i] = a[i];
+        }
+        return b;
+    }
+
+    public static Short[] boxed(short[] a) {
+        int len = a.length;
+        Short[] b = new Short[len];
+        for (int i = 0; i < len; i++) {
+            b[i] = a[i];
+        }
+        return b;
+    }
+
+    public static Character[] boxed(char[] a) {
+        int len = a.length;
+        Character[] b = new Character[len];
+        for (int i = 0; i < len; i++) {
+            b[i] = a[i];
+        }
+        return b;
+    }
+
+    public static Integer[] boxed(int[] a) {
+        int len = a.length;
+        Integer[] b = new Integer[len];
+        for (int i = 0; i < len; i++) {
+            b[i] = a[i];
+        }
+        return b;
+    }
+
+    public static Long[] boxed(long[] a) {
+        int len = a.length;
+        Long[] b = new Long[len];
+        for (int i = 0; i < len; i++) {
+            b[i] = a[i];
+        }
+        return b;
+    }
+
+    public static Float[] boxed(float[] a) {
+        int len = a.length;
+        Float[] b = new Float[len];
+        for (int i = 0; i < len; i++) {
+            b[i] = a[i];
+        }
+        return b;
+    }
+
+    public static Double[] boxed(double[] a) {
+        int len = a.length;
+        Double[] b = new Double[len];
+        for (int i = 0; i < len; i++) {
+            b[i] = a[i];
+        }
+        return b;
+    }
+
 }

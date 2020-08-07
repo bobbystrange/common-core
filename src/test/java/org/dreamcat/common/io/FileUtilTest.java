@@ -3,7 +3,7 @@ package org.dreamcat.common.io;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2019-04-17

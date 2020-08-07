@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.dreamcat.common.util.PrintUtil.*;
+import static org.dreamcat.common.util.FormatUtil.*;
 
 /**
  * Create by tuke on 2020/4/7

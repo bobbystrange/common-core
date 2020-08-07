@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 
 /**
@@ -21,12 +24,9 @@ public class IOUtil {
     }
 
     public static long copy(InputStream input, OutputStream output, int bufferSize) throws IOException {
-        return copy(input, output, new byte[bufferSize]);
-    }
-
-    public static long copy(InputStream input, OutputStream output, byte[] buffer) throws IOException {
         long count = 0;
         int readSize;
+        byte[] buffer = new byte[bufferSize];
         while ((readSize = input.read(buffer)) > 0) {
             output.write(buffer, 0, readSize);
             count += readSize;
@@ -39,17 +39,23 @@ public class IOUtil {
     }
 
     public static long copy(Reader input, Writer output, int bufferSize) throws IOException {
-        return copy(input, output, new char[bufferSize]);
-    }
-
-    public static long copy(Reader input, Writer output, char[] buffer) throws IOException {
         long count = 0;
         int readSize;
+        char[] buffer = new char[bufferSize];
         while ((readSize = input.read(buffer)) > 0) {
             output.write(buffer, 0, readSize);
             count += readSize;
         }
         return count;
+    }
+
+    public static void copy(ReadableByteChannel input, WritableByteChannel output) throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
+        while (input.read(buffer) > 0) {
+            buffer.flip();
+            output.write(buffer);
+            buffer.clear();
+        }
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====

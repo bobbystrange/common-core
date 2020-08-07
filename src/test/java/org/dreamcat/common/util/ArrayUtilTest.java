@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2020/3/11

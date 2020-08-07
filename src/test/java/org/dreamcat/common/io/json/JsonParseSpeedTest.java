@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import java.util.function.IntFunction;
 
-import static org.dreamcat.common.util.PrintUtil.printf;
-import static org.dreamcat.common.util.PrintUtil.println;
+import static org.dreamcat.common.util.FormatUtil.printf;
+import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2020/5/7
@@ -46,7 +46,7 @@ public class JsonParseSpeedTest {
     }
 
     public void parse(IntFunction<String> jsonGen, int bound, int levelStart, int levelEnd) {
-        println("\t\t\t for-each \t jackson\t\t gson\t common v1 \t common v2 ");
+        println("\t\t\t for-each \t jackson\t\t gson\t common");
         for (int i = 1; i < (1 << bound); i *= 2) {
             for (int k = levelStart; k <= levelEnd; k++) {
                 int finalK = k;
@@ -61,9 +61,6 @@ public class JsonParseSpeedTest {
                         })
                         .addUnaryAction(() -> jsonGen.apply(finalK), it -> {
                             JsonElement ignore = gson.fromJson(it, JsonElement.class);
-                        })
-                        .addUnaryAction(() -> jsonGen.apply(finalK), it -> {
-                            Object ignore = JsonMapperV1.parse(it);
                         })
                         .addUnaryAction(() -> jsonGen.apply(finalK), it -> {
                             Object ignore = JsonMapper.parse(it);
@@ -87,8 +84,9 @@ public class JsonParseSpeedTest {
                         .addUnaryAction(() -> gson.fromJson(jsonGen.apply(finalK), JsonElement.class), it -> {
                             String ignore = gson.toJson(it);
                         })
-                        .addUnaryAction(() -> JsonMapperV1.parse(jsonGen.apply(finalK)), it -> {
-                            String ignore = JsonMapperV1.stringify(it);
+                        .addUnaryAction(() -> JsonMapper.parse(jsonGen.apply(finalK)), it -> {
+                            @SuppressWarnings("deprecation")
+                            String ignore = JsonMapper.stringify(it);
                         })
                         .count(10).skip(2).repeat(i)
                         .runAndFormatUs();

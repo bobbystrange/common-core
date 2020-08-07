@@ -51,4 +51,26 @@ public class MD5Util {
     public static String md5Base64(File file) throws IOException {
         return SignUtil.md5Base64(file);
     }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static byte[] md5(String input) {
+        return SignUtil.md5(input);
+    }
+
+    public static byte[] md5(byte[] input) {
+        return SignUtil.md5(input);
+    }
+
+    public static byte[] md5(InputStream input) {
+        return SignUtil.md5(input);
+    }
+
+    public static byte[] md5(InputStream input, OutputStream output) {
+        return SignUtil.md5(input, output);
+    }
+
+    public static byte[] md5(File file) throws IOException {
+        return SignUtil.md5(file);
+    }
 }

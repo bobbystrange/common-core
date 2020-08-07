@@ -11,7 +11,7 @@ import java.nio.file.StandardOpenOption;
 /**
  * Create by tuke on 2020/4/9
  */
-public class NioUtilTest {
+public class IOUtilTest {
 
     @Test
     public void testCopy() throws IOException {
@@ -24,6 +24,6 @@ public class NioUtilTest {
         ByteChannel o = Files.newByteChannel(
                 new File(file2).toPath(),
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
-        NioUtil.copy(i, o);
+        IOUtil.copy(i, o);
     }
 }
