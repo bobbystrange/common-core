@@ -27,9 +27,6 @@ public class CsvFile implements AutoCloseable {
     @Getter
     @Setter
     private char delimiter = ',';
-    @Getter
-    @Setter
-    private boolean trim = true;
 
     public CsvFile(String content) {
         this.reader = new BufferedReader(new StringReader(content));
@@ -61,7 +58,6 @@ public class CsvFile implements AutoCloseable {
         while (true) {
             String line = reader.readLine();
             if (line == null) return null;
-            if (trim) line = line.trim();
 
             if (ObjectUtil.isBlank(line)) continue;
             if (line.startsWith("#")) continue;

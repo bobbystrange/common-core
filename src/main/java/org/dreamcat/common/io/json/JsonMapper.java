@@ -139,7 +139,7 @@ public class JsonMapper {
             map.put(field, value);
         }
 
-        return new Pair<>(map, offset);
+        return Pair.of(map, offset);
     }
 
     // Note that array case, make sure offset char is [
@@ -162,7 +162,7 @@ public class JsonMapper {
             array.add(value);
         }
 
-        return new Pair<>(array, offset);
+        return Pair.of(array, offset);
     }
 
     // Note that string case, make sure offset char is "
@@ -170,7 +170,7 @@ public class JsonMapper {
         int len = expression.length();
         StringBuilder s = new StringBuilder();
         offset = extractString(expression, offset, len, s);
-        return new Pair<>(s.toString(), offset);
+        return Pair.of(s.toString(), offset);
     }
 
     // Note that number case, make sure offset char is [0-9]
@@ -186,9 +186,9 @@ public class JsonMapper {
         } else {
             long n = Long.parseLong(num);
             if (n <= Integer.MAX_VALUE && n >= Integer.MIN_VALUE) {
-                return new Pair<>((int) n, offset);
+                return Pair.of((int) n, offset);
             } else {
-                return new Pair<>(n, offset);
+                return Pair.of(n, offset);
             }
         }
     }
@@ -220,7 +220,7 @@ public class JsonMapper {
         if (offset >= len) {
             throw new IllegalArgumentException("unclosed body at end");
         }
-        return new Pair<>(bool, offset);
+        return Pair.of(bool, offset);
     }
 
     private static Triple<?, Integer, Boolean> parseHead(String expression, int offset, char end, boolean trimComma) {
@@ -295,7 +295,7 @@ public class JsonMapper {
             throw new IllegalArgumentException("unmatched field `" + field + "` at pos " + offset);
         }
 
-        return new Triple<>(field, colon, false);
+        return Triple.of(field, colon, false);
     }
 
     // Note that extract string
@@ -396,7 +396,7 @@ public class JsonMapper {
             }
         }
 
-        return new Pair<>(offset, dot || hasE);
+        return Pair.of(offset, dot || hasE);
     }
 
 }

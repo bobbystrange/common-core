@@ -83,12 +83,12 @@ public class LineTerminatedReader extends Reader {
     }
 
     public Pair<String, Integer> readLine() throws IOException {
-        Pair<StringBuilder, Integer> pair = new Pair<>(new StringBuilder(), null);
+        Pair<StringBuilder, Integer> pair = new Pair<>();
         readLine0(pair);
         StringBuilder sb = pair.first();
         Integer lineTerminated = pair.second();
-        if (lineTerminated == null) return null;
-        return new Pair<>(sb.toString(), lineTerminated);
+        if (sb == null || lineTerminated == null) return null;
+        return Pair.of(sb.toString(), lineTerminated);
     }
 
     /// private methods
@@ -192,14 +192,18 @@ public class LineTerminatedReader extends Reader {
     }
 
     private void append1(Pair<StringBuilder, Integer> pair, StringBuilder sb, int i, int lineTerminated) {
+        if (sb == null) sb = new StringBuilder(i - offset);
         sb.append(cb, offset, i - offset);
         offset = i + 1;
+        pair.setFirst(sb);
         pair.setSecond(lineTerminated);
     }
 
     private void append2(Pair<StringBuilder, Integer> pair, StringBuilder sb, int i) {
+        if (sb == null) sb = new StringBuilder(i - offset);
         sb.append(cb, offset, i - offset);
         offset = i + 2;
+        pair.setFirst(sb);
         pair.setSecond(LineTerminatedReader.CRLF);
     }
 

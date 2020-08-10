@@ -17,8 +17,12 @@ import java.util.function.IntUnaryOperator;
  */
 public class ArrayUtil {
 
-    public ArrayUtil() {
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    private ArrayUtil() {
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static int[] rangeOf(int size) {
         return rangeOf(0, size);

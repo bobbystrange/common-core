@@ -7,4 +7,5 @@ dependencies {
     testImplementation "com.fasterxml.jackson.core:jackson-annotations:2.10.2"
     testImplementation "com.fasterxml.jackson.core:jackson-databind:2.10.2"
     testImplementation "com.google.code.gson:gson:2.8.6"
+    testImplementation "com.opencsv:opencsv:5.1"
 }
