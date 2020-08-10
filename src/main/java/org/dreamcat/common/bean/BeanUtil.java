@@ -15,8 +15,7 @@ public class BeanUtil {
     // bean op
     public static <T> T nullify(T bean) {
         Class<?> clazz = bean.getClass();
-        List<Field> fields = new ArrayList<>();
-        ReflectUtil.retrieveFields(clazz, fields);
+        List<Field> fields = ReflectUtil.retrieveFields(clazz);
         if (fields.isEmpty()) return bean;
         for (Field field : fields) {
             nullifyField(bean, field);

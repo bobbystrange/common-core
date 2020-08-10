@@ -35,8 +35,7 @@ public class BeanListUtil {
             , Class... excludeAnnotations) {
         Class<?> clazz = bean.getClass();
 
-        List<Field> fields = new ArrayList<>();
-        ReflectUtil.retrieveFields(clazz, fields);
+        List<Field> fields = ReflectUtil.retrieveFields(clazz);
 
         return fields.stream()
                 .filter(field -> {
@@ -66,8 +65,7 @@ public class BeanListUtil {
             , Class... excludeAnnotations) {
         Class<?> clazz = bean.getClass();
 
-        List<Field> fields = new ArrayList<>();
-        ReflectUtil.retrieveFields(clazz, fields);
+        List<Field> fields = ReflectUtil.retrieveFields(clazz);
 
         return fields.stream()
                 .filter(field -> {

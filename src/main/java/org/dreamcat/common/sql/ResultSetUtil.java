@@ -32,8 +32,7 @@ public class ResultSetUtil {
 
     public static <T> void mapper(ResultSet rs, T bean) throws SQLException {
         Class<?> clazz = Objects.requireNonNull(bean).getClass();
-        List<Field> fieldList = new ArrayList<>();
-        ReflectUtil.retrieveFields(clazz, fieldList);
+        List<Field> fieldList = ReflectUtil.retrieveFields(clazz);
         int size = fieldList.size();
         for (int i = 1; i <= size; i++) {
             Field field = fieldList.get(i);

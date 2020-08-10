@@ -67,8 +67,7 @@ public class BeanFormatUtil {
         } else {
             sb.append(clazz.getSimpleName());
             sb.append("{");
-            List<Field> fields = new ArrayList<>();
-            ReflectUtil.retrieveFields(clazz, fields);
+            List<Field> fields = ReflectUtil.retrieveFields(clazz);
             sb.append(fields.stream().map(_field2str(o))
                     .collect(Collectors.joining(", ")));
             sb.append("}");
@@ -106,8 +105,7 @@ public class BeanFormatUtil {
         StringBuilder sb = new StringBuilder("Object");
         sb.append("<").append(clazz.getName()).append(">")
                 .append("{\n");
-        List<Field> fields = new ArrayList<>();
-        ReflectUtil.retrieveFields(clazz, fields);
+        List<Field> fields = ReflectUtil.retrieveFields(clazz);
         for (Field field : fields) {
             field.setAccessible(true);
             try {

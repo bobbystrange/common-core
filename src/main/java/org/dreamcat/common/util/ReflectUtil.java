@@ -8,8 +8,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -43,9 +45,18 @@ public class ReflectUtil {
         }
     }
 
+    public static List<Field> retrieveFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        retrieveFields(clazz, fields);
+        Collections.reverse(fields);
+        return fields;
+    }
+
     public static void retrieveFields(Class<?> clazz, List<Field> fieldList) {
         Field[] fields = clazz.getDeclaredFields();
-        fieldList.addAll(Arrays.asList(fields));
+        for (int size = fields.length, i=size -1; i>=0; i--) {
+            fieldList.add(fields[i]);
+        }
 
         Class superClazz = clazz.getSuperclass();
         if (!superClazz.equals(Object.class)) {

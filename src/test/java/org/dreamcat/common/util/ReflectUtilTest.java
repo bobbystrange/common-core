@@ -20,6 +20,7 @@ import static org.dreamcat.common.util.FormatUtil.println;
  * Create by tuke on 2019-02-12
  */
 @Slf4j
+@SuppressWarnings("unchecked")
 public class ReflectUtilTest<T> {
 
     @Test
@@ -47,18 +48,30 @@ public class ReflectUtilTest<T> {
     }
 
     @Test
-    public void t() {
-        A<String> a = new A<>();
-        Type type = ((ParameterizedType) a.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        println(a, type);
+    public void e() {
+        List<Field> fields = ReflectUtil.retrieveFields(C.class);
+        fields.forEach(System.out::println);
 
-        //println(a, a.getTClass());
+        System.out.println("getDeclaredFields");
+        Arrays.stream(C.class.getDeclaredFields()).forEach(System.out::println);
+        System.out.println("getFields");
+        Arrays.stream(C.class.getFields()).forEach(System.out::println);
+
     }
 
-    static class A<T> {
-        public Class<T> getTClass() {
-            Class<T> tClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-            return tClass;
-        }
+    private static class A {
+        int a;
+        String a2;
     }
+
+    private static class B extends A {
+        int b;
+        Date b2;
+    }
+
+    private static class C extends B {
+        int c;
+        Long a2;
+    }
+
 }

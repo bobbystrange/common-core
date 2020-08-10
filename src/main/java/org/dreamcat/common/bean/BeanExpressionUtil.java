@@ -143,8 +143,7 @@ public class BeanExpressionUtil {
     // make all fields' value equal null but the specified one
     private static void keepOneField(Object bean, String fieldname) throws Exception {
         Class<?> clazz = bean.getClass();
-        List<Field> fields = new ArrayList<>();
-        ReflectUtil.retrieveFields(clazz, fields);
+        List<Field> fields = ReflectUtil.retrieveFields(clazz);
         for (Field field : fields) {
             if (field.getName().equals(fieldname)) continue;
 
