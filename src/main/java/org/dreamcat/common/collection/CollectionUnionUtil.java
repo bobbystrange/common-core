@@ -1,6 +1,6 @@
 package org.dreamcat.common.collection;
 
-import org.dreamcat.common.bean.BeanArrayUtil;
+import org.dreamcat.common.bean.BeanUtil;
 import org.dreamcat.common.util.ReflectUtil;
 
 import java.lang.annotation.Annotation;
@@ -62,7 +62,7 @@ public class CollectionUnionUtil {
         return CollectionUnionBasicUtil.unionVertical(
                 keyRowGetter,
                 keyColumnFormatter,
-                (T bean) -> BeanArrayUtil.toStringList(bean, excludeAnnotations),
+                (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations),
                 blockWidth,
                 blocks);
     }
@@ -131,7 +131,7 @@ public class CollectionUnionUtil {
             Map<K, ? extends T>[] blocks) {
         return CollectionUnionBasicUtil.unionVertical(
                 keyColumnFormatter,
-                (T bean) -> BeanArrayUtil.toStringList(bean, excludeAnnotations),
+                (T bean) -> BeanUtil.toStringList(bean, excludeAnnotations),
                 keys,
                 blockWidth,
                 blocks);

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -12,20 +13,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ReflectUtil {
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    private static final String[] ANNOTATION_ALIAS_METHODS = new String[]{
-            "value", "name", "alias"
-    };
 
     public static void retrieveSuperClasses(Class<?> clazz, List<Class> classList) {
         Class superClazz = clazz.getSuperclass();
@@ -33,6 +30,24 @@ public class ReflectUtil {
         if (!superClazz.equals(Object.class)) {
             retrieveSuperClasses(superClazz, classList);
         }
+    }
+
+    public static <T> void retrieveSubClasses(Class<T> clazz, List<Class<? extends T>> classList, Collection<String> classPaths) {
+        if (ObjectUtil.isEmpty(classPaths)) {
+            retrieveSubClasses(clazz, classList, "");
+            return;
+        }
+
+        for (String classPath : classPaths) {
+            String name = "/" + classPath.replace(".", "/");
+            File classFile = new File(Class.class.getResource(name).getFile());
+            String prefix = classFile.getPath() + "/";
+            findSubClasses(classFile, prefix, clazz, classList);
+        }
+    }
+
+    public static <T> void retrieveSubClasses(Class<T> clazz, List<Class<? extends T>> classList, String... classPaths) {
+        retrieveSubClasses(clazz, classList, Arrays.asList(classPaths));
     }
 
     public static void retrieveMethods(Class<?> clazz, List<Method> methodList) {
@@ -64,95 +79,75 @@ public class ReflectUtil {
         }
     }
 
-    public static <T> void retrieveSubClasses(Class<T> clazz, List<Class<? extends T>> classList, Collection<String> classPaths) {
-        if (ObjectUtil.isEmpty(classPaths)) {
-            retrieveSubClasses(clazz, classList, "");
-            return;
-        }
-
-        for (String classPath : classPaths) {
-            String name = "/" + classPath.replace(".", "/");
-            File classFile = new File(Class.class.getResource(name).getFile());
-            String prefix = classFile.getPath() + "/";
-            findSubClasses(classFile, prefix, clazz, classList);
-        }
+    public static <A extends Annotation> Map<String, Field> retrieveFields(Class<?> clazz, Class<A> aliasClass, Function<A, String> aliasFunction) {
+        Map<String, Field> fieldMap = new HashMap<>();
+        retrieveFields(clazz, fieldMap, aliasClass, aliasFunction);
+        return fieldMap;
     }
 
-    public static <T> void retrieveSubClasses(Class<T> clazz, List<Class<? extends T>> classList, String... classPaths) {
-        retrieveSubClasses(clazz, classList, Arrays.asList(classPaths));
+    public static <A extends Annotation> void retrieveFields(Class<?> clazz, Map<String, Field> fieldMap) {
+        retrieveFields(clazz, fieldMap, null, null);
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    public static void retrieveFields(Class<?> clazz, Map<String, Field> fieldMap, Class... aliasAnnotationClasses) {
+    public static <A extends Annotation> void retrieveFields(Class<?> clazz, Map<String, Field> fieldMap, Class<A> aliasClass, Function<A, String> aliasFunction) {
         Field[] fields = clazz.getDeclaredFields();
         Arrays.stream(fields)
                 .forEach((field) -> {
-                    String name = retrieveFieldName(field, aliasAnnotationClasses);
+                    String name = retrieveFieldName(field, aliasClass, aliasFunction);
                     fieldMap.put(name, field);
                 });
 
         Class superClazz = clazz.getSuperclass();
         if (!superClazz.equals(Object.class)) {
-            retrieveFields(superClazz, fieldMap, aliasAnnotationClasses);
+            retrieveFields(superClazz, fieldMap, aliasClass, aliasFunction);
         }
     }
 
-    // hasModifiersAndAnyAnnotation static, transient, volatile
-    public static void retrieveFieldNames(Class<?> clazz, List<String> fieldNameList, Class... aliasAnnotationClasses) {
+    public static List<String> retrieveFieldNames(Class<?> clazz) {
+        return retrieveFieldNames(clazz, null, null);
+    }
+
+    public static <A extends Annotation> List<String> retrieveFieldNames(Class<?> clazz, Class<A> aliasClass, Function<A, String> aliasFunction) {
+        List<String> fieldNameList = new ArrayList<>();
+        retrieveFieldNames(clazz, fieldNameList, aliasClass, aliasFunction);
+        return fieldNameList;
+    }
+
+    public static void retrieveFieldNames(Class<?> clazz, List<String> fieldNameList) {
+        retrieveFieldNames(clazz, fieldNameList, null, null);
+    }
+
+    // only no static field
+    public static <A extends Annotation> void retrieveFieldNames(Class<?> clazz, List<String> fieldNameList, Class<A> aliasClass, Function<A, String> aliasFunction) {
         Field[] fields = clazz.getDeclaredFields();
         fieldNameList.addAll(Arrays.stream(fields)
-                .filter(field -> {
-                    int modifiers = field.getModifiers();
-                    return !Modifier.isStatic(modifiers)
-                            && !Modifier.isTransient(modifiers)
-                            && !Modifier.isVolatile(modifiers);
-                })
-                .map(field -> retrieveFieldName(field, aliasAnnotationClasses))
+                .filter(field -> !Modifier.isStatic(field.getModifiers()))
+                .map(field -> retrieveFieldName(field, aliasClass, aliasFunction))
                 .collect(Collectors.toList()));
 
         Class superClazz = clazz.getSuperclass();
         if (!superClazz.equals(Object.class)) {
-            retrieveFieldNames(superClazz, fieldNameList, aliasAnnotationClasses);
+            retrieveFieldNames(superClazz, fieldNameList, aliasClass, aliasFunction);
         }
     }
 
-    // not excluding strategy
-    public static String retrieveFieldName(Field field, Class... aliasAnnotationClasses) {
+    public static <A extends Annotation> String retrieveFieldName(Field field, Class<A> aliasClass, Function<A, String> aliasFunction) {
         String fieldName = field.getName();
         Annotation[] annotations = field.getAnnotations();
 
         if (annotations == null || annotations.length == 0
-                || aliasAnnotationClasses == null || aliasAnnotationClasses.length == 0) {
+                || aliasClass == null) {
             return fieldName;
         }
 
-        List<Class> aliasAnnotationList = Arrays.asList(aliasAnnotationClasses);
-        List<Annotation> filteredAnnotationList = Arrays.stream(annotations)
-                .filter(it -> aliasAnnotationList.contains(it.getClass()))
-                .collect(Collectors.toList());
-        if (ObjectUtil.isNotEmpty(filteredAnnotationList)) {
-            for (Annotation annotation : filteredAnnotationList) {
-                String alias = retrieveAnnotationAlias(annotation);
-                if (alias != null) {
-                    return alias;
-                }
-            }
+        for (Annotation annotation: annotations) {
+            if (!aliasClass.isInstance(annotation)) continue;
+            return aliasFunction.apply(aliasClass.cast(annotation));
         }
         return fieldName;
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    public static String retrieveAnnotationAlias(Annotation aliasAnnotation) {
-        for (String name : ANNOTATION_ALIAS_METHODS) {
-            try {
-                return aliasAnnotation.getClass().getDeclaredMethod(name).invoke(aliasAnnotation).toString();
-            } catch (Exception ignored) {
-            }
-        }
-        return null;
-    }
 
     public static boolean hasModifiersAndAnyAnnotation(
             Field field, int modifiers, Class... annotationClasses) {
@@ -194,7 +189,11 @@ public class ReflectUtil {
         return false;
     }
 
-    public static boolean hasAnyModifiers(int modifiers, int... modifiersSet) {
+    private static boolean hasAnyModifiers(Field field, int... modifiersSet) {
+        return hasAnyModifiers(field.getModifiers(), modifiersSet);
+    }
+
+    private static boolean hasAnyModifiers(int modifiers, int... modifiersSet) {
         if (ObjectUtil.isEmpty(modifiersSet)) return false;
         for (int m : modifiersSet) {
             boolean hasModifiers = (m & modifiers) != 0;
@@ -208,8 +207,6 @@ public class ReflectUtil {
         return Modifier.isStatic(modifiers) || Modifier.isFinal(modifiers);
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
     public static boolean isBoxedClass(Class<?> clazz) {
         return clazz.equals(Integer.class) ||
                 clazz.equals(Long.class) ||
@@ -219,6 +216,18 @@ public class ReflectUtil {
                 clazz.equals(Float.class) ||
                 clazz.equals(Byte.class) ||
                 clazz.equals(Short.class);
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static <T> T newInstance(Class<T> clazz) {
+        try {
+            Constructor<T> constructor = clazz.getDeclaredConstructor();
+            if (!constructor.isAccessible()) constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Object getZeroValue(Class<?> clazz) {
@@ -353,6 +362,7 @@ public class ReflectUtil {
         }
     }
 
+    // long[][].class  -->  long[][]
     public static String getLiteralType(Class<?> clazz) {
         if (!Objects.requireNonNull(clazz).isPrimitive()) {
             return clazz.getCanonicalName();
@@ -411,6 +421,9 @@ public class ReflectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     private static <T> void findSubClasses(File classFile, String prefix, Class<T> clazz, List<Class<? extends T>> classList) {
         if (classFile.isDirectory()) {
             File[] files = classFile.listFiles();
@@ -441,5 +454,4 @@ public class ReflectUtil {
             }
         }
     }
-
 }

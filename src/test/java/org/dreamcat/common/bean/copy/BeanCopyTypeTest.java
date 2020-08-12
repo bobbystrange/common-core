@@ -1,7 +1,7 @@
 package org.dreamcat.common.bean.copy;
 
 import net.sf.cglib.beans.BeanCopier;
-import org.dreamcat.common.bean.BeanCopyUtil;
+import org.dreamcat.common.bean.BeanUtil;
 import org.dreamcat.test.BeanData;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
@@ -38,7 +38,7 @@ public class BeanCopyTypeTest {
 
         println("current");
         BeanData.Pojo target3 = BeanData.ofPojo();
-        BeanCopyUtil.copy(source, target3);
+        BeanUtil.copy(source, target3);
         println(pretty(target3));
         println();
     }
@@ -68,7 +68,7 @@ public class BeanCopyTypeTest {
 
         println("current");
         BeanData.PrivatePojo target3 = BeanData.ofPrivatePojo();
-        BeanCopyUtil.copy(source, target3);
+        BeanUtil.copy(source, target3);
         println(pretty(target3));
         println();
     }
@@ -97,7 +97,7 @@ public class BeanCopyTypeTest {
 
         println("current");
         BeanData.All target3 = BeanData.ofAll();
-        BeanCopyUtil.copy(source, target3);
+        BeanUtil.copy(source, target3);
         println(pretty(target3));
         println();
     }

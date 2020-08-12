@@ -12,10 +12,10 @@ public class CollectionUtil {
 
     @SuppressWarnings("unchecked")
     public static <K, V> HashMap<K, V> newHashMap(Object... input) {
-        HashMap<K, V> map = new HashMap<>();
-        if (ObjectUtil.isEmpty(input)) return map;
+        if (ObjectUtil.isEmpty(input)) return new HashMap<>();
 
         int size = input.length;
+        HashMap<K, V> map = new HashMap<>(size);
         ObjectUtil.requireOdd(size, "input.length");
         for (int i = 0; i < size; i += 2) {
             map.put((K) input[i], (V) input[i + 1]);
@@ -25,10 +25,10 @@ public class CollectionUtil {
 
     @SuppressWarnings("unchecked")
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(Object... input) {
-        ConcurrentHashMap<K, V> map = new ConcurrentHashMap<>();
-        if (ObjectUtil.isEmpty(input)) return map;
+        if (ObjectUtil.isEmpty(input)) return new ConcurrentHashMap<>();
 
         int size = input.length;
+        ConcurrentHashMap<K, V> map = new ConcurrentHashMap<>(size);
         ObjectUtil.requireEven(size, "input.length");
         for (int i = 0; i < size; i += 2) {
             map.put((K) input[i], (V) input[i + 1]);

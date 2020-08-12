@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Create by tuke on 2018-12-27
  */
 @Slf4j
-public class BeanExpressionUtil {
+public class BeanExpression {
 
     /**
      * set the value of some fields to null
@@ -24,7 +24,7 @@ public class BeanExpressionUtil {
      * @param expression a specified bean expression string
      * @throws Exception uncaught exception
      */
-    public static void lessFiled(Object bean, String expression) throws Exception {
+    public void lessFiled(Object bean, String expression) throws Exception {
         Class<?> clazz = bean.getClass();
         if (clazz.isPrimitive()) {
             log.debug("ignore primitive type class `{}`", clazz);
@@ -141,17 +141,17 @@ public class BeanExpressionUtil {
     }
 
     // make all fields' value equal null but the specified one
-    private static void keepOneField(Object bean, String fieldname) throws Exception {
+    private static void keepOneField(Object bean, String fieldName) throws Exception {
         Class<?> clazz = bean.getClass();
         List<Field> fields = ReflectUtil.retrieveFields(clazz);
         for (Field field : fields) {
-            if (field.getName().equals(fieldname)) continue;
+            if (field.getName().equals(fieldName)) continue;
 
             field.setAccessible(true);
             Object fieldObject = field.get(bean);
             if (fieldObject.getClass().isPrimitive()) {
                 if (log.isDebugEnabled())
-                    log.debug("ignore primitive type field `{}` of class `{}`", fieldname, clazz);
+                    log.debug("ignore primitive type field `{}` of class `{}`", fieldName, clazz);
             }
             field.set(bean, null);
         }

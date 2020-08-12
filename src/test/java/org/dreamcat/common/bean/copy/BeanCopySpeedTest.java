@@ -1,7 +1,7 @@
 package org.dreamcat.common.bean.copy;
 
 import net.sf.cglib.beans.BeanCopier;
-import org.dreamcat.common.bean.BeanCopyUtil;
+import org.dreamcat.common.bean.BeanUtil;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.function.ThrowableSupplier;
 import org.dreamcat.test.BeanData;
@@ -34,7 +34,7 @@ public class BeanCopySpeedTest {
                     BeanUtils.copyProperties(args[0], constructor.get());
                 })
                 .addAction(supplier, args -> {
-                    BeanCopyUtil.copy(args[0], constructor.get());
+                    BeanUtil.copy(args[0], constructor.get());
                 });
         long[] ts = timeit.run();
         String fmt = Arrays.stream(ts)
