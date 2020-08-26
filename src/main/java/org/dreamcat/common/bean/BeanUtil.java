@@ -6,7 +6,6 @@ import org.dreamcat.common.util.ReflectUtil;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,9 +214,9 @@ public class BeanUtil {
         Map<String, Field> fieldMap = ReflectUtil.retrieveFields(clazz, aliasClass, aliasFunction);
 
         Set<Map.Entry<String, Field>> entrySet = fieldMap.entrySet();
-        for (Map.Entry<String, Field> entry: entrySet) {
+        for (Map.Entry<String, Field> entry : entrySet) {
             Field field = entry.getValue();
-            if(ReflectUtil.hasAnyAnnotation(field, excludeAnnotation)) continue;
+            if (ReflectUtil.hasAnyAnnotation(field, excludeAnnotation)) continue;
 
             String name = entry.getKey();
             field.setAccessible(true);

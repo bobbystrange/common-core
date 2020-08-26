@@ -3,9 +3,6 @@ package org.dreamcat.common.core.tree;
 import org.dreamcat.common.core.tree.skip.SkipList;
 import org.junit.Test;
 
-import static org.dreamcat.common.util.FormatUtil.printf;
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/4/4
  */
@@ -15,7 +12,7 @@ public class SkipListTest {
     public void testProb() {
         for (int i = 1; i <= 99; i++) {
             float prob = (float) (i * 0.01);
-            printf("%.2f\t%d\n", prob, SkipList.maxLevel(prob));
+            System.out.printf("%.2f\t%d\n", prob, SkipList.maxLevel(prob));
         }
     }
 
@@ -26,11 +23,11 @@ public class SkipListTest {
             list.put(i, i);
         }
 
-        println(list.prettyToString(2));
+        System.out.println(list.prettyToString(2));
 
-        println("size", list.size());
+        System.out.println("size" + list.size());
         for (int i = 0; i < 100; i++) {
-            println(i, list.get(i));
+            System.out.println(i + " " + list.get(i));
         }
     }
 }

@@ -6,9 +6,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.function.IntFunction;
 
-import static org.dreamcat.common.util.FormatUtil.print;
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/4/6
  */
@@ -20,9 +17,9 @@ public class GzipCompressUtilTest {
         byte[] compressed = GzipCompressUtil.compress(data);
         byte[] uncompressed = GzipCompressUtil.uncompress(compressed);
 
-        println(data.length, new String(data));
-        println(compressed.length);
-        println(uncompressed.length, new String(uncompressed));
+        System.out.println(data.length + ", " + new String(data));
+        System.out.println(compressed.length);
+        System.out.println(uncompressed.length + ", " + new String(uncompressed));
     }
 
     @SuppressWarnings("unchecked")
@@ -39,14 +36,14 @@ public class GzipCompressUtilTest {
         };
 
         for (int i = 1; i < 1000; i++) {
-            print(i + "\t");
+            System.out.print(i + "\t");
             for (IntFunction<String> fn : fns) {
                 byte[] data = fn.apply(i).getBytes();
                 byte[] compressed = GzipCompressUtil.compress(data);
                 byte[] uncompressed = GzipCompressUtil.uncompress(compressed);
-                print(compressed.length + " ");
+                System.out.print(compressed.length + " ");
             }
-            print("\n");
+            System.out.print("\n");
         }
     }
 

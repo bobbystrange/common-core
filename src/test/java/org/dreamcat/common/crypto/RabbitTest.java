@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2020/5/13
@@ -37,11 +36,11 @@ public class RabbitTest {
         byte[] key = RandomUtil.choose72(16).getBytes();
 
         byte[] input = RandomUtil.choose72(64).getBytes();
-        println("source ", ByteUtil.hex(input));
+        System.out.println("source " + ByteUtil.hex(input));
         byte[] result = RabbitUtil.cipher(input, key);
-        println("target ", ByteUtil.hex(result));
+        System.out.println("target " + ByteUtil.hex(result));
         byte[] decrypted = RabbitUtil.cipher(result, key);
-        println("decrypted ", ByteUtil.hex(decrypted));
+        System.out.println("decrypted " + ByteUtil.hex(decrypted));
     }
 
     @Test
@@ -59,14 +58,14 @@ public class RabbitTest {
         rabbit.initKey(key);
         rabbit.cipher(output, decrypted);
 
-        println("source ", ByteUtil.hex(input));
-        println("target ", ByteUtil.hex(output));
-        println("decrypted ", ByteUtil.hex(decrypted));
+        System.out.println("source " + ByteUtil.hex(input));
+        System.out.println("target " + ByteUtil.hex(output));
+        System.out.println("decrypted " + ByteUtil.hex(decrypted));
 
-        println();
+        System.out.println();
         output = cipher(input, key);
         decrypted = cipher(output, key);
-        println("target ", ByteUtil.hex(output));
-        println("decrypted ", ByteUtil.hex(decrypted));
+        System.out.println("target " + ByteUtil.hex(output));
+        System.out.println("decrypted " + ByteUtil.hex(decrypted));
     }
 }

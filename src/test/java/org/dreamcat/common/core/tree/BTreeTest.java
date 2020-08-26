@@ -6,8 +6,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/4/25
  */
@@ -21,7 +19,7 @@ public class BTreeTest {
                 tree.put(i);
             }
             tree.printLevel();
-            println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
+            System.out.println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
         }
     }
 
@@ -36,7 +34,7 @@ public class BTreeTest {
         for (int i = 0; i <= 32; i++) {
             tree.remove(i);
             tree.printLevel();
-            println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
+            System.out.println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
         }
     }
 
@@ -47,10 +45,10 @@ public class BTreeTest {
 
         BTree<Integer> tree = new BTree<>(order, Integer[]::new);
         for (int i : data) {
-            println("insert\t", i);
+            System.out.println("insert\t" + i);
             tree.put(i);
             tree.printLevel();
-            println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
+            System.out.println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
         }
     }
 
@@ -62,10 +60,10 @@ public class BTreeTest {
 
         BTree<Integer> tree = new BTree<>(order, Integer[]::new);
         for (int i : data) {
-            println("insert\t", i);
+            System.out.println("insert\t" + i);
             tree.put(i);
             tree.printLevel();
-            println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
+            System.out.println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
         }
     }
 
@@ -80,7 +78,7 @@ public class BTreeTest {
         }
 
         tree.printLevel();
-        println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
+        System.out.println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
         tree.remove(7);
         tree.printLevel();
     }
@@ -99,10 +97,10 @@ public class BTreeTest {
         for (int i = 0; i <= size; i++) {
             int e = RandomUtil.randi(list.size());
             e = list.remove(e);
-            println("insert\t", e);
+            System.out.println("insert\t" + e);
             tree.put(e);
             tree.printLevel();
-            println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
+            System.out.println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
         }
     }
 
@@ -119,15 +117,15 @@ public class BTreeTest {
         }
 
         tree.printLevel();
-        println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
+        System.out.println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
 
         for (int i = 0; i <= size; i++) {
             int e = RandomUtil.randi(list.size());
             e = list.remove(e);
-            println("delete\t", e);
+            System.out.println("delete\t" + e);
             tree.remove(e);
             tree.printLevel();
-            println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
+            System.out.println("==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====");
         }
     }
 }

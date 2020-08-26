@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static org.dreamcat.common.util.FormatUtil.log;
-import static org.dreamcat.common.util.FormatUtil.println;
+
 
 /**
  * Create by tuke on 2020/4/7
@@ -50,7 +50,7 @@ public class SocketChannelLoopTest {
 
                     if (key.isConnectable()) {
                         socket.finishConnect();
-                        println("client connected to server");
+                        System.out.println("client connected to server");
 
                         socket.write(ByteBuffer.wrap("1".getBytes()));
                         log("client wrote 1 to server");
@@ -61,7 +61,7 @@ public class SocketChannelLoopTest {
                         try {
                             if ((readSize = socket.read(buffer)) > 0) {
                                 long num = Long.parseLong(new String(buffer.array(), 0, readSize));
-                                println("client received:", num);
+                                System.out.println("client received:" + num);
 
                                 buffer.clear();
                                 buffer.put(String.valueOf(++num).getBytes());
@@ -71,7 +71,7 @@ public class SocketChannelLoopTest {
                                 socket.register(selector, SelectionKey.OP_READ);
                             }
                         } catch (IOException e) {
-                            println("client error:", e.getMessage());
+                            System.out.println("client error:" + e.getMessage());
                             key.cancel();
                             socket.close();
                         }
@@ -100,11 +100,11 @@ public class SocketChannelLoopTest {
             selector = Selector.open();
             server.register(selector, SelectionKey.OP_ACCEPT);
         } catch (IOException e) {
-            println(e.getMessage());
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
 
-        println("server started");
+        System.out.println("server started");
         while (true) {
             try {
                 selector.select();
@@ -117,7 +117,7 @@ public class SocketChannelLoopTest {
                         SocketChannel socket = server.accept();
                         socket.configureBlocking(false);
 
-                        println("server accepted a connection from ", SocketUtil.format(socket.getRemoteAddress()));
+                        System.out.println("server accepted a connection from " + SocketUtil.format(socket.getRemoteAddress()));
                         socket.register(selector, SelectionKey.OP_READ);
                     } else if (key.isReadable()) {
                         SocketChannel socket = (SocketChannel) key.channel();
@@ -127,7 +127,7 @@ public class SocketChannelLoopTest {
                         try {
                             if ((readSize = socket.read(buffer)) > 0) {
                                 long num = Long.parseLong(new String(buffer.array(), 0, readSize));
-                                println("server received:", num);
+                                System.out.println("server received:" + num);
 
                                 buffer.clear();
                                 buffer.put(String.valueOf(num).getBytes());
@@ -138,7 +138,7 @@ public class SocketChannelLoopTest {
                                 socket.register(selector, SelectionKey.OP_READ);
                             }
                         } catch (IOException e) {
-                            println(e.getMessage());
+                            System.out.println(e.getMessage());
                             key.cancel();
                             socket.close();
                         }
@@ -147,7 +147,7 @@ public class SocketChannelLoopTest {
                     }
                 }
             } catch (IOException e) {
-                println("server error: " + e.getMessage());
+                System.out.println("server error: " + e.getMessage());
                 break;
             }
         }

@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/4/19
  */
@@ -30,7 +28,7 @@ public class RBHashTreeTest {
         });
 
         String s = msgs.stream().map(line -> String.join("\t", line)).collect(Collectors.joining("\n"));
-        println(s);
+        System.out.println(s);
     }
 
 }

@@ -1,8 +1,8 @@
 package org.dreamcat.common.collection;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.bean.BeanArrayUtil;
 import org.dreamcat.common.bean.BeanFormatUtil;
+import org.dreamcat.common.bean.BeanUtil;
 import org.dreamcat.test.BeanKey;
 import org.dreamcat.test.BeanUnion;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class CollectionUnionBasicUtilTest {
     @SuppressWarnings("unchecked")
     @Test
     public void unionVerticalBlocks() {
-        List<String> stringList = BeanArrayUtil.toStringList(list1.get(0));
+        List<String> stringList = BeanUtil.toStringList(list1.get(0));
         log.info("\n{}", BeanFormatUtil.pretty(stringList));
 
 

@@ -7,8 +7,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/4/4
  */
@@ -59,18 +57,18 @@ public class SortUtilTest {
             list.add(v);
         }
 
-        println(list);
+        System.out.println(list);
         SortUtil.radixSort(list, (e, i) -> {
             // i = 0,1,2
             int ind = i * 2;
             return NumericUtil.digitAt(e, ind + 1) * 10 + NumericUtil.digitAt(e, ind);
         }, 100, 3);
-        println(list);
+        System.out.println(list);
     }
 
     @AllArgsConstructor
     private static class ScoreInteger implements Comparable<ScoreInteger> {
-        private int value;
+        private final int value;
 
         @Override
         public int compareTo(ScoreInteger o) {

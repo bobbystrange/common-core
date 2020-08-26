@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Map;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Pair<T1, T2> {
+public class Pair<T1, T2> implements Map.Entry<T1, T2> {
 
     private T1 first;
 
@@ -48,5 +50,24 @@ public class Pair<T1, T2> {
     @Override
     public String toString() {
         return String.format("(%s, %s)", first().toString(), second().toString());
+    }
+
+    /// impl for Entry
+
+    @Override
+    public T1 getKey() {
+        return first;
+    }
+
+    @Override
+    public T2 getValue() {
+        return second;
+    }
+
+    @Override
+    public T2 setValue(T2 value) {
+        T2 oldValue = second;
+        this.second = value;
+        return oldValue;
     }
 }

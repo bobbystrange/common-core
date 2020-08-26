@@ -6,8 +6,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/4/19
  */
@@ -44,15 +42,15 @@ public class ComparatorUtilTest {
 
     @Test
     public void test() {
-        println(ComparatorUtil.compare(1, 1L));
-        println(ComparatorUtil.compare("a", "b"));
-        println(ComparatorUtil.compare("a", 1));
-        println(ComparatorUtil.compare(1, "a"));
-        println(ComparatorUtil.compare(1, 1.0));
-        println(ComparatorUtil.compare(null, null));
-        println(ComparatorUtil.compare(null, -1));
-        println(ComparatorUtil.compare(1, null));
-        println(ComparatorUtil.compare("aa", "ab"));
+        System.out.println(ComparatorUtil.compare(1, 1L));
+        System.out.println(ComparatorUtil.compare("a", "b"));
+        System.out.println(ComparatorUtil.compare("a", 1));
+        System.out.println(ComparatorUtil.compare(1, "a"));
+        System.out.println(ComparatorUtil.compare(1, 1.0));
+        System.out.println(ComparatorUtil.compare(null, null));
+        System.out.println(ComparatorUtil.compare(null, -1));
+        System.out.println(ComparatorUtil.compare(1, null));
+        System.out.println(ComparatorUtil.compare("aa", "ab"));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package org.dreamcat.common.io.ini;
 
+import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.util.ObjectUtil;
 import org.dreamcat.common.util.StringUtil;
 
@@ -133,14 +134,21 @@ public class IniMapper {
                 }
 
                 Object richValue;
-                if (StringUtil.isFloat(value)) {
-                    richValue = Double.valueOf(value);
-                } else if (StringUtil.isInt(value)) {
-                    richValue = Long.valueOf(value);
-                } else if (StringUtil.isBool(value)) {
-                    richValue = Boolean.valueOf(value);
+
+                Pair<Number, Integer> pair = StringUtil.extractNumber(value, 0);
+                if (pair == null) {
+                    Boolean b = StringUtil.extractBool(value, 0);
+                    if (b != null) {
+                        richValue = b;
+                    } else {
+                        richValue = value;
+                    }
                 } else {
-                    richValue = value;
+                    if (pair.second() == value.length()) {
+                        richValue = pair.first();
+                    } else {
+                        richValue = value;
+                    }
                 }
 
                 Object o = current.remove(name);

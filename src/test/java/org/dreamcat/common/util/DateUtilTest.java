@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static org.dreamcat.common.util.FormatUtil.printf;
 import static org.dreamcat.common.util.RandomUtil.randi;
 
 /**
@@ -21,7 +20,7 @@ public class DateUtilTest {
             int offset = 2 << i;
             int r = randi(offset / 2, offset);
             Date date = new Date(System.currentTimeMillis() - r);
-            printf("[%d] [%d] rand=%d, %s\n", i, offset, r, date + "\t" + date.getTime());
+            System.out.printf("[%d] [%d] rand=%d, %s\n", i, offset, r, date + "\t" + date.getTime());
         }
 
     }

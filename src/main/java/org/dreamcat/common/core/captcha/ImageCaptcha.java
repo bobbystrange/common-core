@@ -12,33 +12,31 @@ import java.awt.image.BufferedImage;
  */
 public class ImageCaptcha {
     private Font font = new Font("DejaVu Sans", Font.ITALIC, 20);
-    private int width = 160;
-    private int height = 40;
     private int rgbStart = 0;
     private int rgbEnd = 256;
     private int padding = 5;
 
-    private ImageCaptcha() {
+    public ImageCaptcha() {
     }
 
     public static Builder builder() {
         return new Builder(new ImageCaptcha());
     }
 
-    public String base64Jpeg(String code) {
-        return base64Image(code, "jpeg");
+    public String base64Jpeg(String code, int width, int height) {
+        return base64Image(code, width, height, "jpeg");
     }
 
-    public String base64Png(String code) {
-        return base64Image(code, "png");
+    public String base64Png(String code, int width, int height) {
+        return base64Image(code, width, height, "png");
     }
 
-    public String base64Image(String code, String imageType) {
-        BufferedImage image = generateImage(code);
+    public String base64Image(String code, int width, int height, String imageType) {
+        BufferedImage image = generateImage(code, width, height);
         return ImageUtil.base64Image(image, imageType);
     }
 
-    public BufferedImage generateImage(String code) {
+    public BufferedImage generateImage(String code, int width, int height) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
         g.setColor(Color.WHITE);
@@ -55,8 +53,8 @@ public class ImageCaptcha {
         Color color;
         AlphaComposite ac;
         for (int i = 0; i < n; i++) {
-            float xi = x + i * dx + dx * ((float) Math.random() * 2 - 1) * 0.382f;
-            float yi = y + dy * ((float) Math.random() * 2 - 1) * 0.382f;
+            float xi = x + i * dx + dx * ((float) Math.random() - 0.5f) * 0.382f;
+            float yi = y + dy * ((float) Math.random() - 0.5f) * 0.382f;
 
             color = RandomUtil.color(rgbStart, rgbEnd);
             g.setColor(color);
@@ -67,12 +65,12 @@ public class ImageCaptcha {
             float alpha = (float) RandomUtil.rand(0.75, 1);
             ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
             g.setComposite(ac);
-            drawNoise(g, 1);
+            drawNoise(g, width, height, 1);
         }
         return image;
     }
 
-    private void drawNoise(Graphics2D g, int n) {
+    private void drawNoise(Graphics2D g, int width, int height, int n) {
         int halfOfW = width >> 1;
         int halfOfH = height >> 1;
         int w = RandomUtil.randi(halfOfW) + halfOfW >> 1;
@@ -92,19 +90,12 @@ public class ImageCaptcha {
     public static class Builder {
         private final ImageCaptcha target;
 
-        public Builder useChinsesFont() {
-            target.font = new Font("宋体", Font.BOLD, 20);
-            return this;
+        public Builder useSongFont() {
+            return useFont(new Font("宋体", Font.BOLD, 20));
         }
 
         public Builder useFont(Font font) {
             target.font = font;
-            return this;
-        }
-
-        public Builder shape(int width, int height) {
-            target.width = width;
-            target.height = height;
             return this;
         }
 

@@ -4,12 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.dreamcat.common.bean.BeanMapUtil;
+import org.dreamcat.common.bean.BeanUtil;
 import org.dreamcat.common.core.Timeit;
 import org.junit.Test;
-
-import static org.dreamcat.common.util.FormatUtil.printf;
-import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2020/5/5
@@ -19,7 +16,7 @@ public class IniMapperTest {
     // ini is much faster then json
     @Test
     public void testSpeed() {
-        println("\t \t jackson\t ini");
+        System.out.println("\t \t jackson\t ini");
         for (int i = 1; i < 1024; i *= 2) {
             String ts = Timeit.ofActions()
                     .addUnaryAction(this::json, it -> {
@@ -30,13 +27,13 @@ public class IniMapperTest {
                         IniMapper iniMapper = IniMapper.newInstance()
                                 .richText(true);
                         iniMapper.loadFrom(it);
-                        Ini ignore = BeanMapUtil.fromMap(iniMapper.getSections(), Ini.class);
+                        Ini ignore = BeanUtil.fromMap(iniMapper.getSections(), Ini.class);
                     })
                     .count(20)
                     .skip(4)
                     .repeat(i)
                     .runAndFormatUs();
-            printf("%4d \t %s\n", i, ts);
+            System.out.printf("%4d \t %s\n", i, ts);
         }
     }
 

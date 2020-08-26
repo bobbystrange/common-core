@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.FormatUtil.printf;
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/4/19
  */
@@ -36,7 +33,7 @@ public class AVLHashTreeTest {
         });
 
         String s = msgs.stream().map(line -> String.join("\t", line)).collect(Collectors.joining("\n"));
-        println(s);
+        System.out.println(s);
     }
 
     @Test
@@ -60,12 +57,12 @@ public class AVLHashTreeTest {
         });
 
         String s = msgs.stream().map(line -> String.join("\t", line)).collect(Collectors.joining("\n"));
-        println(s);
+        System.out.println(s);
     }
 
     @Test
     public void testSpeed() {
-        println("\t\tHashMap\t\tAVLTree\t\tAVLHashMap\tRBHashMap");
+        System.out.println("\t\tHashMap\t\tAVLTree\t\tAVLHashMap\tRBHashMap");
         for (int i = 1; i < (1 << 20); i *= 2) {
             int finalI = i;
             long[] ts = Timeit.ofActions()
@@ -101,14 +98,14 @@ public class AVLHashTreeTest {
 
             String line = Arrays.stream(ts).mapToObj(it -> String.format("%6.3fus", it / 1000.))
                     .collect(Collectors.joining("\t"));
-            printf("%6d\t%s\n", i, line);
+            System.out.printf("%6d\t%s\n", i, line);
         }
 
     }
 
     @Test
     public void testSpeedAsc() {
-        println("\t\tAVLTree\t\t  RBTree\t\tBTree");
+        System.out.println("\t\tAVLTree\t\t  RBTree\t\tBTree");
         for (int i = 1; i < (1 << 20); i *= 2) {
             int finalI = i;
             long[] ts = Timeit.ofActions()
@@ -137,13 +134,13 @@ public class AVLHashTreeTest {
 
             String line = Arrays.stream(ts).mapToObj(it -> String.format("%6.3fus", it / 1000.))
                     .collect(Collectors.joining("\t"));
-            printf("%6d\t%s\n", i, line);
+            System.out.printf("%6d\t%s\n", i, line);
         }
     }
 
     @Test
     public void testSpeedRandom() {
-        println("\t\tAVLTree\t\t  RBTree\t\tBTree");
+        System.out.println("\t\tAVLTree\t\t  RBTree\t\tBTree");
         for (int i = 1; i < (1 << 20); i *= 2) {
             int finalI = i;
             long[] ts = Timeit.ofActions()
@@ -174,7 +171,7 @@ public class AVLHashTreeTest {
 
             String line = Arrays.stream(ts).mapToObj(it -> String.format("%6.3fus", it / 1000.))
                     .collect(Collectors.joining("\t"));
-            printf("%6d\t%s\n", i, line);
+            System.out.printf("%6d\t%s\n", i, line);
         }
     }
 }

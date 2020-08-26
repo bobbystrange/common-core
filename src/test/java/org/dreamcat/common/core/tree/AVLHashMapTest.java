@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.dreamcat.common.util.FormatUtil.println;
 
 /**
  * Create by tuke on 2020/4/19
@@ -18,7 +17,7 @@ public class AVLHashMapTest {
             map.put(i, i * i + "");
         }
         for (int i = 0; i < 32; i++) {
-            println(i, "=>", map.get(i));
+            System.out.printf("%d => %s\n", i, map.get(i));
         }
     }
 
@@ -29,7 +28,7 @@ public class AVLHashMapTest {
             map.put(i, i * i + "");
         }
         for (int i = 0; i < 32; i++) {
-            println(i, "=>", map.get(i));
+            System.out.printf("%d => %s\n", i, map.get(i));
         }
     }
 
@@ -45,7 +44,7 @@ public class AVLHashMapTest {
         }
 
         for (int i = 0; i < 32; i++) {
-            println(i, "=>", map.get(i));
+            System.out.printf("%d => %s\n", i, map.get(i));
         }
     }
 

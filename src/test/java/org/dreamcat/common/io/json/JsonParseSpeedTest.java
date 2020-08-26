@@ -10,9 +10,6 @@ import org.junit.Test;
 
 import java.util.function.IntFunction;
 
-import static org.dreamcat.common.util.FormatUtil.printf;
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/5/7
  */
@@ -46,7 +43,7 @@ public class JsonParseSpeedTest {
     }
 
     public void parse(IntFunction<String> jsonGen, int bound, int levelStart, int levelEnd) {
-        println("\t\t\t for-each \t jackson\t\t gson\t common");
+        System.out.println("\t\t\t for-each \t jackson\t\t gson\t common");
         for (int i = 1; i < (1 << bound); i *= 2) {
             for (int k = levelStart; k <= levelEnd; k++) {
                 int finalK = k;
@@ -67,13 +64,13 @@ public class JsonParseSpeedTest {
                         })
                         .count(10).skip(2).repeat(i)
                         .runAndFormatUs();
-                printf("%4d %2d \t %s\n", i, k, ts);
+                System.out.printf("%4d %2d \t %s\n", i, k, ts);
             }
         }
     }
 
     public void stringify(IntFunction<String> jsonGen, int bound, int level) {
-        println("\t\t\t jackson\t\t gson\t common slow \t ");
+        System.out.println("\t\t\t jackson\t\t gson\t common slow \t ");
         for (int i = 1; i < (1 << bound); i *= 2) {
             for (int k = 1; k <= level; k++) {
                 int finalK = k;
@@ -90,7 +87,7 @@ public class JsonParseSpeedTest {
                         })
                         .count(10).skip(2).repeat(i)
                         .runAndFormatUs();
-                printf("%4d %2d \t %s\n", i, k, ts);
+                System.out.printf("%4d %2d \t %s\n", i, k, ts);
             }
         }
     }

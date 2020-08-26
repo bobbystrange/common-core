@@ -9,6 +9,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,7 +26,13 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ReflectUtil {
 
-    public static void retrieveSuperClasses(Class<?> clazz, List<Class> classList) {
+    public static List<Class<?>> retrieveSuperClasses(Class<?> clazz) {
+        List<Class<?>> classList = new ArrayList<>();
+        retrieveSuperClasses(clazz, classList);
+        return classList;
+    }
+
+    public static void retrieveSuperClasses(Class<?> clazz, List<Class<?>> classList) {
         Class superClazz = clazz.getSuperclass();
         classList.add(superClazz);
         if (!superClazz.equals(Object.class)) {
@@ -50,14 +58,35 @@ public class ReflectUtil {
         retrieveSubClasses(clazz, classList, Arrays.asList(classPaths));
     }
 
+    public static List<Method> retrieveNoStaticMethods(Class<?> clazz) {
+        List<Method> methods = retrieveMethods(clazz);
+        methods.removeIf(method -> Modifier.isStatic(method.getModifiers()));
+        return methods;
+    }
+
+    public static List<Method> retrieveMethods(Class<?> clazz) {
+        List<Method> methods = new ArrayList<>();
+        retrieveMethods(clazz, methods);
+        Collections.reverse(methods);
+        return methods;
+    }
+
     public static void retrieveMethods(Class<?> clazz, List<Method> methodList) {
         Method[] methods = clazz.getDeclaredMethods();
-        methodList.addAll(Arrays.asList(methods));
+        for (int size = methods.length, i = size - 1; i >= 0; i--) {
+            methodList.add(methods[i]);
+        }
 
         Class superClazz = clazz.getSuperclass();
         if (!superClazz.equals(Object.class)) {
             retrieveMethods(superClazz, methodList);
         }
+    }
+
+    public static List<Field> retrieveNoStaticFields(Class<?> clazz) {
+        List<Field> fields = retrieveFields(clazz);
+        fields.removeIf(field -> Modifier.isStatic(field.getModifiers()));
+        return fields;
     }
 
     public static List<Field> retrieveFields(Class<?> clazz) {
@@ -69,7 +98,7 @@ public class ReflectUtil {
 
     public static void retrieveFields(Class<?> clazz, List<Field> fieldList) {
         Field[] fields = clazz.getDeclaredFields();
-        for (int size = fields.length, i=size -1; i>=0; i--) {
+        for (int size = fields.length, i = size - 1; i >= 0; i--) {
             fieldList.add(fields[i]);
         }
 
@@ -140,11 +169,22 @@ public class ReflectUtil {
             return fieldName;
         }
 
-        for (Annotation annotation: annotations) {
+        for (Annotation annotation : annotations) {
             if (!aliasClass.isInstance(annotation)) continue;
             return aliasFunction.apply(aliasClass.cast(annotation));
         }
         return fieldName;
+    }
+
+    public static <A extends Annotation> A retrieveAnnotation(Class<?> clazz, Class<A> annotationClass) {
+        A a = clazz.getDeclaredAnnotation(annotationClass);
+        if (a != null) return a;
+
+        Class<?> superClazz = clazz.getSuperclass();
+        if (!superClazz.equals(Object.class)) {
+            return retrieveAnnotation(superClazz, annotationClass);
+        }
+        return null;
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -362,7 +402,7 @@ public class ReflectUtil {
         }
     }
 
-    // long[][].class  -->  long[][]
+    // long[][].class -> long[][], String -> java.lang.String
     public static String getLiteralType(Class<?> clazz) {
         if (!Objects.requireNonNull(clazz).isPrimitive()) {
             return clazz.getCanonicalName();
@@ -389,6 +429,47 @@ public class ReflectUtil {
         }
     }
 
+    /**
+     * string to object,
+     *
+     * @param s           string
+     * @param targetClass target class
+     * @return object
+     * @throws NumberFormatException           not a number
+     * @throws StringIndexOutOfBoundsException empty string to char
+     */
+    public static Object parse(String s, Class<?> targetClass)
+            throws NumberFormatException, StringIndexOutOfBoundsException {
+        Objects.requireNonNull(targetClass);
+        if (s == null) {
+            return getZeroValue(targetClass);
+        }
+
+        // target is same or a super class of source
+        if (targetClass.isAssignableFrom(String.class)) {
+            return targetClass.cast(s);
+        }
+        if (targetClass.equals(byte.class) || targetClass.equals(Byte.class)) {
+            return Byte.valueOf(s);
+        } else if (targetClass.equals(short.class) || targetClass.equals(Short.class)) {
+            return Short.valueOf(s);
+        } else if (targetClass.equals(char.class) || targetClass.equals(Character.class)) {
+            return s.charAt(0);
+        } else if (targetClass.equals(int.class) || targetClass.equals(Integer.class)) {
+            return Integer.valueOf(s);
+        } else if (targetClass.equals(long.class) || targetClass.equals(Long.class)) {
+            return Long.valueOf(s);
+        } else if (targetClass.equals(float.class) || targetClass.equals(Float.class)) {
+            return Float.valueOf(s);
+        } else if (targetClass.equals(double.class) || targetClass.equals(Double.class)) {
+            return Double.valueOf(s);
+        } else if (targetClass.equals(boolean.class) || targetClass.equals(Boolean.class)) {
+            return Boolean.valueOf(s);
+        }
+
+        return null;
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static String[] getParameterNames(Method method) {
@@ -404,8 +485,6 @@ public class ReflectUtil {
         return parameterNames;
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
     public static <T> Object getFirstFieldValue(T bean) {
         Class<?> clazz = bean.getClass();
         Field[] fields = clazz.getFields();
@@ -419,8 +498,31 @@ public class ReflectUtil {
         }
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+    public static Class<?> getTypeArgument(Field field) {
+        Type genericType = field.getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+            Type[] types = parameterizedType.getActualTypeArguments();
+            return (Class<?>) types[0];
+        }
+        return null;
+    }
 
+    public static Class<?>[] getTypeArguments(Field field) {
+        Type genericType = field.getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+            Type[] types = parameterizedType.getActualTypeArguments();
+
+            int size = types.length;
+            Class<?>[] classes = new Class[size];
+            for (int i = 0; i < size; i++) {
+                classes[i] = (Class<?>) types[i];
+            }
+            return classes;
+        }
+        return null;
+    }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 

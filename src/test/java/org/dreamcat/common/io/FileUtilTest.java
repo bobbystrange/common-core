@@ -3,8 +3,6 @@ package org.dreamcat.common.io;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2019-04-17
  */
@@ -97,7 +95,7 @@ public class FileUtilTest {
                 "/",
         };
 
-        println("\t\t\tpath \t\t\t\t\tdirname \t\tbasename \t\tsuffix \t\tnormalize");
+        System.out.println("\t\t\tpath \t\t\t\t\tdirname \t\tbasename \t\tsuffix \t\tnormalize");
         for (String path : paths) {
             String line = String.format("%20s\t%20s\t%10s\t%10s\t%20s",
                     "'" + path + "'",
@@ -105,7 +103,7 @@ public class FileUtilTest {
                     "'" + FileUtil.basename(path) + "'",
                     "'" + FileUtil.suffix(path) + "'",
                     "'" + FileUtil.normalize(path) + "'");
-            println(line);
+            System.out.println(line);
         }
 
     }
@@ -148,14 +146,14 @@ public class FileUtilTest {
                 "a/./b/../c/.../d.e.f///g.h.j...."
         };
 
-        println("\t\t\t\t\tnormalize \t\t\t\t\tdirname \t\tprefix \tsuffix");
+        System.out.println("\t\t\t\t\tnormalize \t\t\t\t\tdirname \t\tprefix \tsuffix");
         for (String path : paths) {
             String line = String.format("%32s\t%20s\t%10s\t\t%4s",
                     "'" + FileUtil.normalize(path) + "'",
                     "'" + FileUtil.dirname(path) + "'",
                     "'" + FileUtil.prefix(path) + "'",
                     "'" + FileUtil.suffix(path) + "'");
-            println(line);
+            System.out.println(line);
         }
 
     }

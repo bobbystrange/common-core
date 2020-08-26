@@ -2,7 +2,6 @@ package org.dreamcat.common.util;
 
 import org.junit.Test;
 
-import static org.dreamcat.common.util.FormatUtil.println;
 import static org.dreamcat.common.util.RandomUtil.rand;
 import static org.dreamcat.common.util.RandomUtil.uuid;
 
@@ -18,10 +17,10 @@ public class RandomUtilTest {
     @Test
     public void testRand() {
         for (int i = 0; i < 32; i++) {
-            println(i + "\t" + rand(0, 3));
+            System.out.println(i + "\t" + rand(0, 3));
         }
         for (int i = 0; i < 32; i++) {
-            println(i + "\t" + rand(-3, 4));
+            System.out.println(i + "\t" + rand(-3, 4));
         }
     }
 }

@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2019-03-27
  */
@@ -29,12 +27,12 @@ public class ArgParserTest {
         ArgParser parser = newParser();
         parser.parse(args, true);
         parser.key_value_map.forEach((k, v) -> {
-            println(k, "=>", v, "\t", v.getClass());
+            System.out.printf("%s => %s \t %s\n", k, v, v.getClass());
         });
 
-        println("values\t", parser.values);
+        System.out.println("values\t" + parser.values);
         parser.getMap('F').forEach((k, v) -> {
-            println(k, "=>", v);
+            System.out.printf("%s => %s\n", k, v);
         });
 
         assert parser.getInt("p").orElseThrow(AssertionError::new) == 6379;
@@ -60,11 +58,11 @@ public class ArgParserTest {
         parser = newParser();
         parser.parse(args2.split(" "));
 
-        println("\n==== ==== ==== ====\n");
+        System.out.println("\n==== ==== ==== ====\n");
         parser.key_value_map.forEach((k, v) -> {
-            println(k, "=>", v, "\t", v.getClass());
+            System.out.printf("%s => %s \t %s\n", k, v, v.getClass());
         });
-        println("values\t", parser.values);
+        System.out.println("values\t" + parser.values);
     }
 
     private ArgParser newParser() {

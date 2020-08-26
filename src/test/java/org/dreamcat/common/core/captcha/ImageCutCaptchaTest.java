@@ -7,8 +7,6 @@ import org.junit.Test;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2020/5/12
  */
@@ -41,17 +39,17 @@ public class ImageCutCaptchaTest {
                 .areaOffset(0, 20)
                 .build();
         Pair<BufferedImage, BufferedImage> pair = captcha.generateImage(width / 2, height / 2);
-        println(ImageUtil.base64Png(image));
-        println(ImageUtil.base64Png(pair.first()));
-        println(ImageUtil.base64Png(pair.second()));
-        println(pair.second().getWidth(), pair.second().getHeight());
+        System.out.println(ImageUtil.base64Png(image));
+        System.out.println(ImageUtil.base64Png(pair.first()));
+        System.out.println(ImageUtil.base64Png(pair.second()));
+        System.out.println(pair.second().getWidth() + " " + pair.second().getHeight());
     }
 
     @Test
     public void testColor() {
         int i = 0b10__0000_0001__0000_0001__0000_0010;
         Color c = new Color(1, 1, 2, 2);
-        println(Integer.toBinaryString(c.getRGB()));
+        System.out.println(Integer.toBinaryString(c.getRGB()));
     }
 
 }

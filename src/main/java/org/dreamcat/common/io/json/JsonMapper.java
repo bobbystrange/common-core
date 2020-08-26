@@ -2,6 +2,7 @@ package org.dreamcat.common.io.json;
 
 import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.core.Triple;
+import org.dreamcat.common.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class JsonMapper {
             String string = (String) raw;
             // "  ->  \"
             return String.format("\"%s\"", string.replace("\"", "\\\""));
-        } else if (raw instanceof Double || raw instanceof Boolean) {
+        } else if (raw instanceof Number || raw instanceof Boolean) {
             return raw.toString();
         } else if (raw instanceof List) {
             List<Object> array = (List<Object>) raw;
@@ -87,10 +88,9 @@ public class JsonMapper {
             pair = parseArray(expression, offset);
         } else if (c == '"') {
             pair = parseString(expression, offset);
-        } else if (c >= '0' && c <= '9') {
-            pair = parseNumber(expression, offset, false);
-        } else if (c == '-') {
-            pair = parseNumber(expression, offset, true);
+        } else if ((c >= '0' && c <= '9') || c == '-') {
+            pair = StringUtil.extractNumber(expression, offset);
+            if (pair == null) throw new IllegalArgumentException("invalid token " + c + " at pos " + offset);
         } else {
             pair = parseLiteral(expression, offset);
         }
@@ -173,26 +173,6 @@ public class JsonMapper {
         return Pair.of(s.toString(), offset);
     }
 
-    // Note that number case, make sure offset char is [0-9]
-    private static Pair<Number, Integer> parseNumber(String expression, int offset, boolean negative) {
-        int len = expression.length();
-        StringBuilder s = new StringBuilder();
-        if (negative) s.append("-");
-        Pair<Integer, Boolean> pair = extractNumber(expression, offset, len, s);
-        offset = pair.first();
-        String num = s.toString();
-        if (pair.second()) {
-            return new Pair<>(Double.valueOf(num), offset);
-        } else {
-            long n = Long.parseLong(num);
-            if (n <= Integer.MAX_VALUE && n >= Integer.MIN_VALUE) {
-                return Pair.of((int) n, offset);
-            } else {
-                return Pair.of(n, offset);
-            }
-        }
-    }
-
     // Note that false,null,true case
     private static Pair<Boolean, Integer> parseLiteral(String expression, int offset) {
         int len = expression.length();
@@ -255,10 +235,10 @@ public class JsonMapper {
             return parseArray(expression, offset).join(false);
         } else if (c == '"') {
             return parseString(expression, offset).join(false);
-        } else if (c >= '0' && c <= '9') {
-            return parseNumber(expression, offset, false).join(false);
-        } else if (c == '-') {
-            return parseNumber(expression, offset + 1, true).join(false);
+        } else if ((c >= '0' && c <= '9') || c == '-') {
+            Pair<Number, Integer> pair = StringUtil.extractNumber(expression, offset);
+            if (pair == null) throw new IllegalArgumentException("invalid token " + c + " at pos " + offset);
+            return pair.join(false);
         } else {
             return parseLiteral(expression, offset).join(false);
         }
@@ -342,61 +322,6 @@ public class JsonMapper {
         }
 
         return offset;
-    }
-
-    // Note that parse [0-9]+([.][0-9]+)?([eE][+-]?[0-9]+)?
-    static Pair<Integer, Boolean> extractNumber(String expression, int offset, int len, StringBuilder s) {
-        boolean dot = false;
-        boolean edot = false;
-        boolean permitDot = false;
-        boolean hasE = false;
-        boolean enterSign = false;
-        for (; offset < len; offset++) {
-            char c = expression.charAt(offset);
-
-            if (c == '-' || c == '+') {
-                if (enterSign) {
-                    s.append(c);
-                    enterSign = false;
-                } else {
-                    throw new IllegalArgumentException("invalid number format `" + c + "` at pos " + offset);
-                }
-                continue;
-            } else {
-                enterSign = false;
-            }
-
-            if (c >= '0' && c <= '9') {
-                s.append(c);
-                permitDot = true;
-            } else if (c == '.') {
-                if (!permitDot) {
-                    throw new IllegalArgumentException("invalid number format `.` at pos " + offset);
-                }
-
-                if (!dot) {
-                    s.append(c);
-                    dot = true;
-                } else if (hasE && !edot) {
-                    s.append(c);
-                    edot = true;
-                } else {
-                    throw new IllegalArgumentException("invalid number format `.` at pos " + offset);
-                }
-            } else if (c == 'e' || c == 'E') {
-                if (!hasE) {
-                    s.append(c);
-                    hasE = true;
-                    enterSign = true;
-                } else {
-                    throw new IllegalArgumentException("invalid number format `" + c + "` at pos " + offset);
-                }
-            } else {
-                break;
-            }
-        }
-
-        return Pair.of(offset, dot || hasE);
     }
 
 }

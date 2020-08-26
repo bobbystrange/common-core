@@ -1,5 +1,7 @@
 package org.dreamcat.common.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.dreamcat.common.core.WriteResult;
 import org.dreamcat.common.function.IntToByteFunction;
 
@@ -7,6 +9,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntToLongFunction;
@@ -15,12 +19,10 @@ import java.util.function.IntUnaryOperator;
 /**
  * Create by tuke on 2020/3/3
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ArrayUtil {
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
-    private ArrayUtil() {
-    }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
@@ -422,5 +424,45 @@ public class ArrayUtil {
         }
         return b;
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static <T> T get(T[] a, int index) {
+        if (index >= a.length || index < 0) {
+            return null;
+        }
+        return a[index];
+    }
+
+    public static <T> T get(List<T> a, int index) {
+        if (index >= a.size() || index < 0) {
+            return null;
+        }
+        return a.get(index);
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static <T, R> List<List<R>> map(List<List<T>> list, Function<T, R> function) {
+        if (list == null) return null;
+        if (list.isEmpty()) return new ArrayList<>();
+
+        List<List<R>> result = new ArrayList<>(list.size());
+        for (List<T> row : list) {
+            if (row == null) {
+                result.add(null);
+                continue;
+            }
+
+            List<R> col = new ArrayList<>(row.size());
+            result.add(col);
+
+            for (T column : row) {
+                col.add(function.apply(column));
+            }
+        }
+        return result;
+    }
+
 
 }

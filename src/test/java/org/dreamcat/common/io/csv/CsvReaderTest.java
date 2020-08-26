@@ -1,7 +1,7 @@
 package org.dreamcat.common.io.csv;
 
 import org.dreamcat.common.core.Pair;
-import org.dreamcat.common.util.FormatUtil;
+import org.dreamcat.common.io.LineTerminatedReaderTest;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -10,7 +10,7 @@ import java.io.StringReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.FormatUtil.fmtCRLF;
+import static org.dreamcat.common.io.LineTerminatedReaderTest.formatCRLF;
 
 /**
  * Create by tuke on 2020/8/3
@@ -72,26 +72,26 @@ public class CsvReaderTest {
     }
 
     private void readWord(String input) throws IOException {
-        System.out.println(fmtCRLF(input));
+        System.out.println(formatCRLF(input));
         System.out.println();
 
         try (CsvReader reader = new CsvReader(new BufferedReader(new StringReader(input)))) {
             Pair<String, Boolean> word;
             while ((word = reader.readWord()) != null) {
-                System.out.printf("[%s] \t %s\n", fmtCRLF(word.first()), word.second());
+                System.out.printf("[%s] \t %s\n", formatCRLF(word.first()), word.second());
             }
         }
     }
 
     public void readRecord(String input) throws IOException {
-        System.out.println(fmtCRLF(input));
+        System.out.println(formatCRLF(input));
         System.out.println();
 
         try (CsvReader reader = new CsvReader(new BufferedReader(new StringReader(input)))) {
             List<String> record;
             while ((record = reader.readRecord()) != null) {
                 System.out.printf("[%s]\n", record.stream()
-                        .map(FormatUtil::fmtCRLF)
+                        .map(LineTerminatedReaderTest::formatCRLF)
                         .collect(Collectors.joining("]  ---  [")));
             }
         }

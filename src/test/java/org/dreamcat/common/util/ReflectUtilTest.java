@@ -6,21 +6,16 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2019-02-12
  */
 @Slf4j
-@SuppressWarnings("unchecked")
 public class ReflectUtilTest<T> {
 
     @Test
@@ -48,13 +43,13 @@ public class ReflectUtilTest<T> {
     }
 
     @Test
-    public void e() {
+    public void retrieveFields() {
         List<Field> fields = ReflectUtil.retrieveFields(C.class);
         fields.forEach(System.out::println);
 
-        System.out.println("getDeclaredFields");
+        System.out.println("\ngetDeclaredFields");
         Arrays.stream(C.class.getDeclaredFields()).forEach(System.out::println);
-        System.out.println("getFields");
+        System.out.println("\ngetFields");
         Arrays.stream(C.class.getFields()).forEach(System.out::println);
 
     }
@@ -62,16 +57,19 @@ public class ReflectUtilTest<T> {
     private static class A {
         int a;
         String a2;
+        static long a3;
     }
 
     private static class B extends A {
         int b;
         Date b2;
+        static String b3;
     }
 
     private static class C extends B {
         int c;
         Long a2;
+        static double b3;
     }
 
 }

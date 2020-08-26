@@ -10,9 +10,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static org.dreamcat.common.util.FormatUtil.fmt;
-import static org.dreamcat.common.util.FormatUtil.fmtCRLF;
+import java.util.stream.Collectors;
 
 /**
  * Create by tuke on 2020/8/3
@@ -231,7 +229,7 @@ public class CsvReader implements Closeable {
                                         }
                                     }
                                 } else {
-                                    throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt(nextChar), offset + 1, fmtCRLF(new String(cb, 0, size))));
+                                    throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt(nextChar), offset + 1, formatCRLF(new String(cb, 0, size))));
                                 }
                             }
                             // offset = size - 1
@@ -245,7 +243,7 @@ public class CsvReader implements Closeable {
                                     append(pair, c);
                                     fill();
                                     if (size == 0) {
-                                        throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt(c), offset + 1, fmtCRLF(new String(cb, 0, size))));
+                                        throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt(c), offset + 1, formatCRLF(new String(cb, 0, size))));
                                     }
                                     continue escape_loop;
                                 } else if (nextChar == delimiter) {
@@ -272,7 +270,7 @@ public class CsvReader implements Closeable {
                                         return;
                                     }
                                 } else {
-                                    throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt((char) nextChar), offset + 1, fmtCRLF(new String(cb, 0, size))));
+                                    throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt((char) nextChar), offset + 1, formatCRLF(new String(cb, 0, size))));
                                 }
                             }
                         }
@@ -392,5 +390,23 @@ public class CsvReader implements Closeable {
         sb.append(cb, offset, size - offset);
     }
 
+    private static String formatCRLF(String s) {
+        return s.chars().mapToObj(c -> {
+            if (c == '\r') return "\\r";
+            if (c == '\n') return "\\n";
+            return (char) c + "";
+        }).collect(Collectors.joining());
+    }
 
+    private static String formatCRLF(int lineTerminated) {
+        if (lineTerminated == '\r') return "\\r";
+        if (lineTerminated == '\n') return "\\n";
+        else return "\\r\\n";
+    }
+
+    public static String fmt(char c) {
+        if (c == '\r') return "\\r";
+        if (c == '\n') return "\\n";
+        return String.valueOf(c);
+    }
 }

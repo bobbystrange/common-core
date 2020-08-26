@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.dreamcat.common.util.FormatUtil.*;
+import static org.dreamcat.common.util.FormatUtil.log;
 
 /**
  * Create by tuke on 2020/4/7
@@ -48,9 +48,9 @@ public class SocketChannelPingPongTest {
             int readSize = socket.read(buffer);
             log("client received: ({})", new String(buffer.array(), 0, readSize));
         } catch (IOException e) {
-            printf("%s, failed to connect to %s\n", e.getMessage(), "localhost:8192");
+            System.out.printf("%s, failed to connect to %s\n", e.getMessage(), "localhost:8192");
         } finally {
-            println("client closed");
+            System.out.println("client closed");
         }
     }
 
@@ -72,9 +72,9 @@ public class SocketChannelPingPongTest {
                 log("client2 received: ({})", new String(buf, 0, readSize));
             }
         } catch (IOException e) {
-            printf("%s, failed to connect to %s\n", e.getMessage(), "localhost:8192");
+            System.out.printf("%s, failed to connect to %s\n", e.getMessage(), "localhost:8192");
         } finally {
-            println("client2 closed");
+            System.out.println("client2 closed");
         }
     }
 
@@ -88,11 +88,11 @@ public class SocketChannelPingPongTest {
             selector = Selector.open();
             server.register(selector, SelectionKey.OP_ACCEPT);
         } catch (IOException e) {
-            println(e.getMessage());
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
 
-        println("server started");
+        System.out.println("server started");
         while (true) {
             try {
                 // block until
@@ -106,7 +106,7 @@ public class SocketChannelPingPongTest {
                         SocketChannel socket = server.accept();
                         socket.configureBlocking(false);
 
-                        println("server accepted a connection from ", SocketUtil.format(socket.getRemoteAddress()));
+                        System.out.println("server accepted a connection from " + SocketUtil.format(socket.getRemoteAddress()));
                         //socket.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(bufferSize));
                         socket.register(selector, SelectionKey.OP_READ);
                     } else if (key.isReadable()) {
@@ -117,7 +117,7 @@ public class SocketChannelPingPongTest {
                         int readSize;
                         try {
                             if ((readSize = socket.read(buffer)) > 0) {
-                                println("server received:", new String(buffer.array(), 0, readSize));
+                                System.out.println("server received:" + new String(buffer.array(), 0, readSize));
 
                                 buffer.clear();
                                 buffer.put("PONG".getBytes());
@@ -129,7 +129,7 @@ public class SocketChannelPingPongTest {
                                 socket.register(selector, SelectionKey.OP_READ);
                             }
                         } catch (IOException e) {
-                            println(e.getMessage());
+                            System.out.println(e.getMessage());
                             key.cancel();
                             socket.close();
                         }
@@ -138,7 +138,7 @@ public class SocketChannelPingPongTest {
                     }
                 }
             } catch (IOException e) {
-                println("server error: " + e.getMessage());
+                System.out.println("server error: " + e.getMessage());
                 break;
             }
         }

@@ -12,9 +12,6 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.FormatUtil.printf;
-import static org.dreamcat.common.util.FormatUtil.println;
-
 /**
  * Create by tuke on 2019-06-03
  */
@@ -40,7 +37,7 @@ public class BeanCopySpeedTest {
         String fmt = Arrays.stream(ts)
                 .mapToObj(it -> String.format("%09.3f", it / 1000.))
                 .collect(Collectors.joining("\t"));
-        printf("%07d times copy cost us %s\n", repeat, fmt);
+        System.out.printf("%07d times copy cost us %s\n", repeat, fmt);
     }
 
     // cglib is about twice as fast as common
@@ -51,7 +48,7 @@ public class BeanCopySpeedTest {
         BeanData.Pojo source = BeanData.ofPojo();
         ThrowableSupplier<Object[]> supplier = () -> new Object[]{source};
         Supplier<Object> constructor = BeanData::ofPojo;
-        println("pojo\t\t\t\t\t\tcglib\t\tspring\t\tcommon");
+        System.out.println("pojo\t\t\t\t\t\tcglib\t\tspring\t\tcommon");
         for (int i = 1; i < 1 << 13; i *= 2) {
             speed(50, 5, i, supplier, constructor, copier);
         }
@@ -64,7 +61,7 @@ public class BeanCopySpeedTest {
         BeanData.All source = BeanData.ofAll();
         ThrowableSupplier<Object[]> supplier = () -> new Object[]{source};
         Supplier<Object> constructor = BeanData::ofAll;
-        println("all\t\t\t\t\t\tcglib\t\tspring\t\tcommon");
+        System.out.println("all\t\t\t\t\t\tcglib\t\tspring\t\tcommon");
         for (int i = 1; i < 1 << 13; i *= 2) {
             speed(100, 10, i, supplier, constructor, copier);
         }

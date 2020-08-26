@@ -1,9 +1,10 @@
 package org.dreamcat.common.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.core.Pair;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.io.Reader;
 
 /**
  * Create by tuke on 2019-02-16
@@ -11,14 +12,104 @@ import java.util.regex.Pattern;
 @Slf4j
 public class StringUtil {
 
-    private static final Pattern INT_PATTERN = Pattern.compile(
-            "[+-]?[0-9]+");
-    private static final Pattern FLOAT_PATTERN = Pattern.compile(
-            "[+-]?[0-9]*[.]?[0-9]*([eE][+-]?[0-9]+)?");
-    private static final Pattern NUMBER_PATTERN = Pattern.compile(
-            "[+-]?[0-9]*[.]?[0-9]*([eE][+-]?[0-9]+)?|[+-]?[0-9]+");
-    private static final Pattern BOOL_PATTERN = Pattern.compile(
-            "true|false", Pattern.CASE_INSENSITIVE);
+    // for double, 1sign + 11 exponent + 52 fraction
+    // +1023.2251799813685248
+    private static final int EXPECT_MAX_NUMBER_SIZE = 22;
+
+    // {input}{filler}{input}{filler}{input}
+    public static String interval(String input, String filler, int size) {
+        StringBuilder sb = new StringBuilder(input.length() * size + filler.length() * (size - 1));
+        for (int i = 0; i < size - 1; i++) {
+            sb.append(input).append(filler);
+        }
+        sb.append(input);
+        return sb.toString();
+    }
+
+    public static String repeat(char c, int length) {
+        if (length <= 0) return "";
+
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+
+    public static String repeat(CharSequence s, int length) {
+        if (length <= 0) return "";
+
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(s);
+        }
+        return sb.toString();
+    }
+
+    public static char[] repeatArray(char c, int length) {
+        if (length <= 0) return new char[0];
+
+        char[] result = new char[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = c;
+        }
+        return result;
+    }
+
+    public static String[] repeatArray(String s, int length) {
+        if (length <= 0) return new String[0];
+        String[] result = new String[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = s;
+        }
+        return result;
+    }
+
+    public static String repeatJoin(char c, int length, CharSequence joining) {
+        return String.join(joining, repeatArray(String.valueOf(c), length));
+    }
+
+    public static String repeatJoin(String s, int length, CharSequence joining) {
+        return String.join(joining, repeatArray(s, length));
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    // never throws ArrayIndexOutOfBoundsException
+    public static String substring(String s, int beginIndex, int endIndex) {
+        if (s == null) return null;
+        return s.substring(Math.max(beginIndex, 0), Math.min(endIndex, s.length()));
+    }
+
+    // for function only
+    public static String toString(Object o) {
+        return o == null ? null : o.toString();
+    }
+
+    // only upper case first letter, and keep others
+    public static String toCapitalCase(String s) {
+        if (ObjectUtil.isBlank(s)) return s;
+        char firstChar = s.charAt(0);
+        if (firstChar >= 'a' && firstChar <= 'z') {
+            int size = s.length();
+            StringBuilder sb = new StringBuilder(size);
+            sb.append((char) (firstChar - 32)).append(s, 1, size);
+            return sb.toString();
+        }
+        return s;
+    }
+
+    public static String toCapitalLowerCase(String s) {
+        if (ObjectUtil.isBlank(s)) return s;
+        char firstChar = s.charAt(0);
+        if (firstChar >= 'A' && firstChar <= 'Z') {
+            int size = s.length();
+            StringBuilder sb = new StringBuilder(size);
+            sb.append((char) (firstChar + 32)).append(s, 1, size);
+            return sb.toString();
+        }
+        return s;
+    }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
@@ -61,137 +152,297 @@ public class StringUtil {
         return sb.toString();
     }
 
-    // only upper case first letter, and keep others
-    public static String toCapitalCase(String s) {
-        if (ObjectUtil.isBlank(s)) return s;
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
-    }
-
-    // never throws ArrayIndexOutOfBoundsException
-    public static String substring(String s, int beginIndex, int endIndex) {
-        if (s == null) return null;
-        return s.substring(Math.max(beginIndex, 0), Math.min(endIndex, s.length()));
-    }
-
-    public static String repeat(char c, int length) {
-        if (length <= 0) return "";
-
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            sb.append(c);
-        }
-        return sb.toString();
-    }
-
-    public static String repeat(CharSequence s, int length) {
-        if (length <= 0) return "";
-
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            sb.append(s);
-        }
-        return sb.toString();
-    }
-
-    // {input}{filler}{input}{filler}{input}
-    public static String interval(String input, String filler, int size) {
-        StringBuilder sb = new StringBuilder(input.length() * size + filler.length() * (size - 1));
-        for (int i = 0; i < size - 1; i++) {
-            sb.append(input).append(filler);
-        }
-        sb.append(input);
-        return sb.toString();
-    }
-
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static char[] repeatArray(char c, int length) {
-        if (length <= 0) return new char[0];
+    /**
+     * try extract a number at the offset
+     * int/long     [+-]?[0-9]+
+     * double       [+-]?[0-9]*[.]?[0-9]*([eE][+-]?[0-9]+)?
+     *
+     * @param s      string
+     * @param offset offset in string
+     * @return number+offset
+     */
+    public static Pair<Number, Integer> extractNumber(String s, int offset) {
+        boolean dot = false;
+        boolean permitDot = true;
+        boolean hasE = false;
+        boolean hasESign = false;
+        boolean hasPow = false;
+        boolean expectPow = false;
+        boolean expectESignOrPow = false;
+        boolean permitSign = true;
+        int i;
+        int len = s.length();
 
-        char[] result = new char[length];
-        for (int i = 0; i < length; i++) {
-            result[i] = c;
-        }
-        return result;
-    }
+        for (i = offset; i < len; i++) {
+            char c = s.charAt(i);
 
-    public static String[] repeatArray(String s, int length) {
-        if (length <= 0) return new String[0];
-        String[] result = new String[length];
-        for (int i = 0; i < length; i++) {
-            result[i] = s;
-        }
-        return result;
-    }
+            if (c == '-' || c == '+') {
+                if (!permitSign) break;
+                permitSign = false;
+                if (hasE) {
+                    hasESign = true;
+                    expectPow = true;
+                    expectESignOrPow = false;
+                }
+                continue;
+            }
 
-    public static String repeatJoin(char c, int length, CharSequence joining) {
-        return String.join(joining, repeatArray(String.valueOf(c), length));
-    }
+            if (c >= '0' && c <= '9') {
+                if (hasE) {
+                    hasPow = true;
+                    expectPow = false;
+                    expectESignOrPow = false;
+                }
+                permitSign = false;
+            } else if (c == '.') {
+                if (!permitDot) {
+                    if (hasPow) break;
+                    // go back
+                    //if (expectPow) i ++;
+                    if (hasESign) i--;
+                    if (expectPow) i--;
+                    expectPow = false;
+                    break;
+                }
 
-    public static String repeatJoin(String s, int length, CharSequence joining) {
-        return String.join(joining, repeatArray(s, length));
-    }
-
-    public static boolean isInt(CharSequence n) {
-        return INT_PATTERN.matcher(n).matches();
-    }
-
-    public static boolean isFloat(CharSequence n) {
-        return FLOAT_PATTERN.matcher(n).matches();
-    }
-
-    public static boolean isNumber(CharSequence n) {
-        return isInt(n) || isFloat(n);
-    }
-
-    public static boolean isBool(CharSequence n) {
-        return BOOL_PATTERN.matcher(n).matches();
-    }
-
-    public static String extractInt(CharSequence s, int offset) {
-        return extractPattern(s, offset, INT_PATTERN);
-    }
-
-    public static String extractFloat(CharSequence s, int offset) {
-        return extractPattern(s, offset, FLOAT_PATTERN);
-    }
-
-    public static String extractNumber(CharSequence s, int offset) {
-        return extractPattern(s, offset, NUMBER_PATTERN);
-    }
-
-    public static String extractBool(CharSequence s, int offset) {
-        return extractPattern(s, offset, BOOL_PATTERN);
-    }
-
-    public static String extractPattern(CharSequence s, int offset, Pattern pattern) {
-        Matcher matcher = pattern.matcher(s);
-        while (matcher.find()) {
-            int start = matcher.start();
-            if (start == offset) {
-                return matcher.group();
-            } else if (start > offset) {
+                dot = true;
+                permitDot = false;
+            } else if (c == 'e' || c == 'E') {
+                if (!hasE) {
+                    hasE = true;
+                    permitSign = true;
+                    permitDot = false;
+                    expectESignOrPow = true;
+                } else {
+                    break;
+                }
+            } else {
                 break;
             }
+        }
+        if ((i == offset)) return null;
+        // go back
+        if (expectESignOrPow) {
+            i -= 1;
+        } else if (expectPow) {
+            i -= 2;
+        }
+
+        String num = s.substring(offset, i);
+        // float case
+        if (dot || hasE) {
+            return Pair.of(Double.valueOf(num), i);
+        } else {
+            long n = Long.parseLong(num);
+            if (n <= Integer.MAX_VALUE && n >= Integer.MIN_VALUE) {
+                return Pair.of((int) n, i);
+            } else {
+                return Pair.of(n, i);
+            }
+        }
+    }
+
+    /**
+     * try extract a number in the head
+     *
+     * @param reader which support mark/reset
+     * @return one of int, long or double
+     * @see #extractNumber(String, int)
+     */
+    public static Number extractNumber(Reader reader) throws IOException {
+        if (!reader.markSupported()) {
+            throw new IllegalArgumentException("reader is unsupported to mark/reset");
+        }
+
+        boolean dot = false;
+        boolean permitDot = true;
+        boolean hasE = false;
+        boolean hasESign = false;
+        boolean hasPow = false;
+        boolean expectPow = false;
+        boolean expectESignOrPow = false;
+        boolean permitSign = true;
+
+        int i = 0;
+        int c;
+        reader.mark(EXPECT_MAX_NUMBER_SIZE);
+        for (; ; i++) {
+            c = reader.read();
+            if (c == -1) break;
+            if (c == '-' || c == '+') {
+                if (!permitSign) break;
+                permitSign = false;
+                if (hasE) {
+                    hasESign = true;
+                    expectPow = true;
+                    expectESignOrPow = false;
+                }
+                continue;
+            }
+
+            if (c >= '0' && c <= '9') {
+                if (hasE) {
+                    hasPow = true;
+                    expectPow = false;
+                    expectESignOrPow = false;
+                }
+                permitSign = false;
+            } else if (c == '.') {
+                if (!permitDot) {
+                    if (hasPow) break;
+                    ;
+                    // go back
+                    //if (expectPow) i ++;
+                    if (hasESign) i--;
+                    if (expectPow) i--;
+                    expectPow = false;
+                    break;
+                }
+
+                dot = true;
+                permitDot = false;
+            } else if (c == 'e' || c == 'E') {
+                if (!hasE) {
+                    hasE = true;
+                    permitSign = true;
+                    permitDot = false;
+                    expectESignOrPow = true;
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        reader.reset();
+
+        // no input
+        if ((i == 0)) {
+            return null;
+        }
+
+        // go back
+        if (expectESignOrPow) {
+            i -= 1;
+        } else if (expectPow) {
+            i -= 2;
+        }
+        // consume it
+        char[] s = new char[i];
+        if (reader.read(s) != i) {
+            log.warn("Assertion failure");
+        }
+
+        String num = new String(s);
+        // float case
+        if (dot || hasE) {
+            return Double.valueOf(num);
+        } else {
+            long n = Long.parseLong(num);
+            if (n <= Integer.MAX_VALUE && n >= Integer.MIN_VALUE) {
+                return (int) n;
+            } else {
+                return n;
+            }
+        }
+    }
+
+    public static Boolean extractBool(String s, int offset) {
+        int size = s.length();
+        int diff = size - offset;
+        if (diff < 4) return null;
+        // then size - offset >= 4
+        Boolean enterTrueCase = null;
+        for (int i = offset; i <= offset + 3; i++) {
+            char c = s.charAt(i);
+            // toLowerCase
+            if (c >= 'A' && c <= 'Z') c += 32;
+
+            if (c == ("true".charAt(i - offset))) {
+                if (enterTrueCase == null) {
+                    enterTrueCase = true;
+                } else if (!enterTrueCase) {
+                    return null;
+                }
+            } else if (c == ("false".charAt(i - offset))) {
+                if (enterTrueCase == null) {
+                    enterTrueCase = false;
+                } else if (enterTrueCase) {
+                    return null;
+                }
+            } else return null;
+        }
+
+        // never null
+        if (enterTrueCase == null) throw new RuntimeException("Assertion failure");
+
+        if (enterTrueCase) {
+            return true;
+        }
+        if (diff < 5) return null;
+        char c = s.charAt(offset + 4);
+        if (c >= 'A' && c <= 'Z') c += 32;
+        // "false".charAt(4)
+        if (c == 'e') {
+            return false;
         }
         return null;
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+    public static Boolean extractBool(Reader reader) throws IOException {
+        if (!reader.markSupported()) {
+            throw new IllegalArgumentException("reader is unsupported to mark/reset");
+        }
 
-    /**
-     * @param s      "... \" ..."
-     * @param offset begin index to search
-     * @return index of matched quote
-     */
-    public static int searchMatchedQuote(String s, int offset) {
-        // search matched quote
-        int secondQuote = offset;
-        do {
-            secondQuote = s.indexOf("\"", secondQuote);
-            // not found
-            if (secondQuote == -1) return -1;
-        } while (s.charAt(secondQuote - 1) == '\\');
-        return secondQuote;
+        char[] s = new char[5];
+        reader.mark(5);
+        int n = reader.read(s);
+        reader.reset();
+        if (n == -1) return null;
+
+        Boolean enterTrueCase = null;
+        for (int i = 0; i <= 3; i++) {
+            char c = s[i];
+            // toLowerCase
+            if (c >= 'A' && c <= 'Z') c += 32;
+
+            if (c == ("true".charAt(i))) {
+                if (enterTrueCase == null) {
+                    enterTrueCase = true;
+                } else if (!enterTrueCase) {
+                    return null;
+                }
+            } else if (c == ("false".charAt(i))) {
+                if (enterTrueCase == null) {
+                    enterTrueCase = false;
+                } else if (enterTrueCase) {
+                    return null;
+                }
+            } else return null;
+        }
+
+        // never null
+        if (enterTrueCase == null) throw new RuntimeException("Assertion failure");
+
+        if (enterTrueCase) {
+            if (reader.read(s, 0, 4) != 4) {
+                throw new RuntimeException("Assertion failure");
+            }
+            return true;
+        }
+        if (n < 5) return null;
+        char c = s[4];
+        if (c >= 'A' && c <= 'Z') c += 32;
+        // "false".charAt(4)
+        if (c == 'e') {
+            if (reader.read(s, 0, 5) != 5) {
+                throw new RuntimeException("Assertion failure");
+            }
+            return false;
+        }
+        return null;
     }
+
 }

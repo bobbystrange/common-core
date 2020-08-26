@@ -5,8 +5,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static org.dreamcat.common.util.FormatUtil.printf;
-
 /**
  * Create by tuke on 2020/4/4
  */
@@ -16,7 +14,7 @@ public class TimeitTest {
     public void testTimeit() {
         for (int count = 1; count <= 8; count++) {
             for (int repeat = 1; repeat <= 8; repeat++) {
-                speed(count, repeat, count / 10);
+                speed(count, repeat, 0);
             }
         }
     }
@@ -36,6 +34,6 @@ public class TimeitTest {
         String fmt = Arrays.stream(ts)
                 .mapToObj(it -> String.format("%09.3f", it / 1000.))
                 .collect(Collectors.joining("\t"));
-        printf("count %6d repeat %6d skip %4d cost us %s\n", count, repeat, skip, fmt);
+        System.out.printf("count %6d repeat %6d skip %4d cost us %s\n", count, repeat, skip, fmt);
     }
 }
