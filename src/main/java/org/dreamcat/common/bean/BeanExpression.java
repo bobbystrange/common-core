@@ -31,9 +31,7 @@ public class BeanExpression {
             return;
         }
 
-        List<String> fieldNames = new ArrayList<>();
-        ReflectUtil.retrieveFieldNames(clazz, fieldNames);
-
+        List<String> fieldNames = ReflectUtil.retrieveFieldNames(clazz);
         List<String> keptFiledNames = new ArrayList<>();
         List<String> levelOneFiledNames = new ArrayList<>();
         retrieveExpression(expression, levelOneFiledNames);

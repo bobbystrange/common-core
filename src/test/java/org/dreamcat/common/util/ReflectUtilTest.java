@@ -16,7 +16,17 @@ import java.util.List;
  * Create by tuke on 2019-02-12
  */
 @Slf4j
-public class ReflectUtilTest<T> {
+public class ReflectUtilTest {
+
+    @Test
+    public void retrieveSuperClasses() {
+        ReflectUtil.retrieveSuperClasses(C.class).forEach(System.out::println);
+    }
+
+    @Test
+    public void retrieveSubClasses() {
+        ReflectUtil.retrieveSubClasses(A.class).forEach(System.out::println);
+    }
 
     @Test
     public void hasAnnotation() throws NoSuchFieldException {

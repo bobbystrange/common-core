@@ -211,7 +211,7 @@ public class BeanUtil {
             Class<A> aliasClass, Function<A, String> aliasFunction) {
         Class<?> clazz = bean.getClass();
         Map<String, Object> map = new HashMap<>();
-        Map<String, Field> fieldMap = ReflectUtil.retrieveFields(clazz, aliasClass, aliasFunction);
+        Map<String, Field> fieldMap = ReflectUtil.retrieveFieldMap(clazz, aliasClass, aliasFunction);
 
         Set<Map.Entry<String, Field>> entrySet = fieldMap.entrySet();
         for (Map.Entry<String, Field> entry : entrySet) {
@@ -247,7 +247,7 @@ public class BeanUtil {
             throw new RuntimeException(e);
         }
 
-        Map<String, Field> fieldMap = ReflectUtil.retrieveFields(clazz, aliasClass, aliasFunction);
+        Map<String, Field> fieldMap = ReflectUtil.retrieveFieldMap(clazz, aliasClass, aliasFunction);
 
         Set<Map.Entry<String, Field>> entrySet = fieldMap.entrySet();
         for (Map.Entry<String, Field> entry : entrySet) {
@@ -306,11 +306,8 @@ public class BeanUtil {
 
     // slower than cglib, use it in field-based pojo (no getter/setter) only
     public static void copy(Object source, Object target) {
-        Map<String, Field> sourceFieldMap = new HashMap<>();
-        ReflectUtil.retrieveFields(source.getClass(), sourceFieldMap);
-
-        Map<String, Field> targetFieldMap = new HashMap<>();
-        ReflectUtil.retrieveFields(target.getClass(), targetFieldMap);
+        Map<String, Field> sourceFieldMap = ReflectUtil.retrieveFieldMap(source.getClass());
+        Map<String, Field> targetFieldMap = ReflectUtil.retrieveFieldMap(target.getClass());
 
         Set<String> targetFields = targetFieldMap.keySet();
         for (String sourceFieldName : sourceFieldMap.keySet()) {

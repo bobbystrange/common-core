@@ -28,8 +28,7 @@ public class BeanUtilTest {
 
         Map<String, Object> map = new HashMap<>();
         List<Method> methodList = ReflectUtil.retrieveMethods(clazz);
-        List<String> fieldNames = new ArrayList<>();
-        ReflectUtil.retrieveFieldNames(clazz, fieldNames);
+        List<String> fieldNames = ReflectUtil.retrieveFieldNames(clazz);
 
         for (Method method : methodList) {
             Class<?> returnType = method.getReturnType();
