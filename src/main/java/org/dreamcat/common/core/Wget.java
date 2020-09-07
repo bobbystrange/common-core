@@ -1,7 +1,5 @@
 package org.dreamcat.common.core;
 
-import org.dreamcat.common.io.IOUtil;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,11 +13,7 @@ public interface Wget<Req, Resp> {
     String APPLICATION_JSON_UTF_8 = "application/json; charset=UTF-8";
     String APPLICATION_OCTET_STREAM = "application/octet-stream";
     String TEXT_PLAIN_UTF_8 = "text/plain; charset=UTF-8";
-    int BUFFER_SIZE = 4096;
-
-    default int getBufferSize() {
-        return BUFFER_SIZE;
-    }
+    int DEFAULT_BUFFER_SIZE = 4096;
 
     default Req prepare(String url, String method) {
         return prepare(url, method, null);
@@ -41,17 +35,23 @@ public interface Wget<Req, Resp> {
 
     Resp request(Req request) throws IOException;
 
-    default String string(Resp response) throws IOException {
-        try (Reader reader = reader(response)) {
-            return IOUtil.readAsString(reader);
-        }
-    }
+    /**
+     * expect to override it using <strong>Content-Length & Content-Type</strong>
+     *
+     * @param response http response
+     * @return response body
+     * @throws IOException I/O error
+     */
+    String string(Resp response) throws IOException;
 
-    default byte[] bytes(Resp response) throws IOException {
-        try (InputStream inputStream = inputStream(response)) {
-            return IOUtil.readFully(inputStream);
-        }
-    }
+    /**
+     * expect to override it using <strong>Content-Length</strong>
+     *
+     * @param response http response
+     * @return response body
+     * @throws IOException I/O error
+     */
+    byte[] bytes(Resp response) throws IOException;
 
     Reader reader(Resp response) throws IOException;
 
@@ -68,7 +68,7 @@ public interface Wget<Req, Resp> {
             }
 
             try (FileOutputStream fos = new FileOutputStream(file)) {
-                byte[] buf = new byte[getBufferSize()];
+                byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
                 int readSize;
                 while ((readSize = ins.read(buf)) > 0) {
                     fos.write(buf, 0, readSize);
@@ -389,7 +389,7 @@ public interface Wget<Req, Resp> {
     interface Callback<Req, Resp> {
         void onError(Req request, Exception e);
 
-        void onComptele(Req request, Resp response);
+        void onComplete(Req request, Resp response);
     }
 
 }
