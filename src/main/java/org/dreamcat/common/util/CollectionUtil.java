@@ -1,6 +1,4 @@
-package org.dreamcat.common.collection;
-
-import org.dreamcat.common.util.ObjectUtil;
+package org.dreamcat.common.util;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CollectionUtil {
 
     @SuppressWarnings("unchecked")
-    public static <K, V> HashMap<K, V> newHashMap(Object... input) {
+    public static <K, V> HashMap<K, V> ofHashMap(Object... input) {
         if (ObjectUtil.isEmpty(input)) return new HashMap<>();
 
         int size = input.length;
@@ -24,7 +22,7 @@ public class CollectionUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(Object... input) {
+    public static <K, V> ConcurrentHashMap<K, V> ofConcurrentHashMap(Object... input) {
         if (ObjectUtil.isEmpty(input)) return new ConcurrentHashMap<>();
 
         int size = input.length;
@@ -35,6 +33,5 @@ public class CollectionUtil {
         }
         return map;
     }
-
 
 }

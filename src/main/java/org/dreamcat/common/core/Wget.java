@@ -78,18 +78,38 @@ public interface Wget<Req, Resp> {
         }
     }
 
-    default void download(String url, String file) throws IOException {
-        download(url, new File(file));
+    default boolean saveTo(Resp response, String dir) throws IOException {
+        return saveTo(response, new File(dir));
     }
 
-    default void download(String url, File file) throws IOException {
-        download(url, file, null);
+    boolean saveTo(Resp response, File dir) throws IOException;
+
+    default boolean download(String url, String file) throws IOException {
+        return download(url, new File(file));
     }
 
-    default void download(String url, File file, Map<String, String> headers) throws IOException {
+    default boolean download(String url, File file) throws IOException {
+        return download(url, file, null);
+    }
+
+    default boolean download(String url, File file, Map<String, String> headers) throws IOException {
         Req req = prepare(url, "GET", headers);
         Resp res = request(req);
-        save(res, file);
+        return save(res, file);
+    }
+
+    default boolean downloadTo(String url, String dir) throws IOException {
+        return downloadTo(url, new File(dir));
+    }
+
+    default boolean downloadTo(String url, File dir) throws IOException {
+        return downloadTo(url, dir, null);
+    }
+
+    default boolean downloadTo(String url, File dir, Map<String, String> headers) throws IOException {
+        Req req = prepare(url, "GET", headers);
+        Resp res = request(req);
+        return saveTo(res, dir);
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====

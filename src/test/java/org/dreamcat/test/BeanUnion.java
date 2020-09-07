@@ -5,9 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.dreamcat.common.util.DateUtil;
 import org.dreamcat.common.util.RandomUtil;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -32,39 +30,6 @@ public class BeanUnion {
         obj.setSub2(new BeanBlock2(date2, partnerIds[1], RandomUtil.uuid(), RANDOM.nextLong()));
         obj.setSub3(new BeanBlock3(date3, partnerIds[2], RandomUtil.choose26(8), RANDOM.nextInt(4), RandomUtil.choose26(4)));
         return obj;
-    }
-
-    public static List<BeanBlock1> ofSub1() {
-        List<BeanBlock1> list = new ArrayList<>();
-        for (long partnerId : partnerIds) {
-            list.add(new BeanBlock1(date1, partnerId, RandomUtil.uuid(), RANDOM.nextLong()));
-            list.add(new BeanBlock1(date2, partnerId, RandomUtil.uuid(), RANDOM.nextLong()));
-            list.add(new BeanBlock1(date3, partnerId, RandomUtil.uuid(), RANDOM.nextLong()));
-            list.add(new BeanBlock1(date4, partnerId, RandomUtil.uuid(), RANDOM.nextLong()));
-        }
-        return list;
-    }
-
-    public static List<BeanBlock2> ofSub2() {
-        List<BeanBlock2> list = new ArrayList<>();
-        for (long partnerId : partnerIds) {
-            list.add(new BeanBlock2(date1, partnerId, RandomUtil.uuid(), RANDOM.nextLong()));
-            list.add(new BeanBlock2(date2, partnerId, RandomUtil.uuid(), RANDOM.nextLong()));
-            list.add(new BeanBlock2(date3, partnerId, RandomUtil.uuid(), RANDOM.nextLong()));
-            list.add(new BeanBlock2(date4, partnerId, RandomUtil.uuid(), RANDOM.nextLong()));
-        }
-        return list;
-    }
-
-    public static List<BeanBlock3> ofSub3() {
-        List<BeanBlock3> list = new ArrayList<>();
-        for (long partnerId : partnerIds) {
-            list.add(new BeanBlock3(date1, partnerId, RandomUtil.choose26(8), RANDOM.nextInt(4), RandomUtil.choose26(4)));
-            list.add(new BeanBlock3(date2, partnerId, RandomUtil.choose26(8), RANDOM.nextInt(4), RandomUtil.choose26(4)));
-            list.add(new BeanBlock3(date3, partnerId, RandomUtil.choose26(8), RANDOM.nextInt(4), RandomUtil.choose26(4)));
-            list.add(new BeanBlock3(date4, partnerId, RandomUtil.choose26(8), RANDOM.nextInt(4), RandomUtil.choose26(4)));
-        }
-        return list;
     }
 
     @EqualsAndHashCode(callSuper = false)

@@ -1,7 +1,5 @@
 package org.dreamcat.common.util;
 
-import org.dreamcat.common.collection.CollectionUtil;
-
 import java.util.Map;
 import java.util.function.DoubleUnaryOperator;
 
@@ -51,7 +49,7 @@ public class MathUtil {
         if (fibonacciCache == null) {
             synchronized (MathUtil.class) {
                 if (fibonacciCache == null) {
-                    fibonacciCache = CollectionUtil.newConcurrentHashMap(
+                    fibonacciCache = CollectionUtil.ofConcurrentHashMap(
                             1, 1L,
                             2, 1L,
                             3, 2L,
