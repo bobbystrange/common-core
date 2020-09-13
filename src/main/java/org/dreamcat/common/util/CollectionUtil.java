@@ -1,6 +1,7 @@
 package org.dreamcat.common.util;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -34,4 +35,35 @@ public class CollectionUtil {
         return map;
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static <T> T firstElement(List<T> o) {
+        return elementAt(o, 0);
+    }
+
+    public static <T> T firstElement(T[] o) {
+        return elementAt(o, 0);
+    }
+
+    public static <T> T lastElement(List<T> o) {
+        if (ObjectUtil.isEmpty(o)) return null;
+        return o.get(o.size() - 1);
+    }
+
+    public static <T> T lastElement(T[] o) {
+        if (ObjectUtil.isEmpty(o)) return null;
+        return o[o.length - 1];
+    }
+
+    public static <T> T elementAt(List<T> o, int index) {
+        if (ObjectUtil.isEmpty(o)) return null;
+        if (index < 0 || index >= o.size()) return null;
+        return o.get(index);
+    }
+
+    public static <T> T elementAt(T[] o, int index) {
+        if (ObjectUtil.isEmpty(o)) return null;
+        if (index < 0 || index >= o.length) return null;
+        return o[index];
+    }
 }

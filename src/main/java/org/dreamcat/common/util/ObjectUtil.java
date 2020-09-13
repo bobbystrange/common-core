@@ -1,7 +1,6 @@
 package org.dreamcat.common.util;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public final class ObjectUtil {
@@ -273,33 +272,22 @@ public final class ObjectUtil {
         return o;
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     public static <T> T requireBelong(T elem, Collection<T> collection) {
-        return requireBelong(elem, collection, new IllegalArgumentException());
-    }
-
-    public static <T> T requireBelong(T elem, Collection<T> collection, RuntimeException e) {
         if (isEmpty(collection)) return elem;
         if (!collection.contains(elem)) {
-            throw e;
+            throw new IllegalArgumentException();
         }
         return elem;
     }
 
     // [start, end)
-    public static int requireRange(int index, int start, int end) {
-        return requireRange(index, start, end, new IllegalArgumentException(String.format("the first argument must belong [%d, %d)", start, end)));
-    }
-
-    public static int requireRange(int index, int start, int end, RuntimeException e) {
+    public static void requireRange(int index, int start, int end) {
         if (index < start || index >= end) {
-            throw e;
+            throw new IllegalArgumentException(String.format("the first argument must belong [%d, %d)", start, end));
         }
-        return index;
     }
-
-    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     public static int requireEqualSize(int[] xData, int[] yData) {
         if (xData.length != yData.length) {
@@ -373,35 +361,4 @@ public final class ObjectUtil {
         return xData.size();
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
-
-    public static <T> T firstElement(List<T> o) {
-        return elementAt(o, 0);
-    }
-
-    public static <T> T firstElement(T[] o) {
-        return elementAt(o, 0);
-    }
-
-    public static <T> T lastElement(List<T> o) {
-        if (isEmpty(o)) return null;
-        return o.get(o.size() - 1);
-    }
-
-    public static <T> T lastElement(T[] o) {
-        if (isEmpty(o)) return null;
-        return o[o.length - 1];
-    }
-
-    public static <T> T elementAt(List<T> o, int index) {
-        if (isEmpty(o)) return null;
-        if (index < 0 || index >= o.size()) return null;
-        return o.get(index);
-    }
-
-    public static <T> T elementAt(T[] o, int index) {
-        if (isEmpty(o)) return null;
-        if (index < 0 || index >= o.length) return null;
-        return o[index];
-    }
 }

@@ -11,6 +11,11 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -325,7 +330,7 @@ public class ReflectUtil {
         } else if (clazz.equals(boolean.class)) {
             return false;
         } else {
-            throw new AssertionError("Primitive types are not enumerated completely");
+            throw new IllegalStateException("primitive types are not enumerated completely");
         }
     }
 
@@ -411,7 +416,12 @@ public class ReflectUtil {
     }
 
     public static Object[] castToArray(Object a) {
+        if (a == null) return null;
         Class<?> clazz = a.getClass();
+        if (!clazz.isArray()) {
+            throw new ClassCastException(clazz + " is not a Array");
+        }
+
         Class<?> componentType = clazz.getComponentType();
         if (!componentType.isPrimitive()) {
             return (Object[]) a;
@@ -434,36 +444,11 @@ public class ReflectUtil {
         } else if (clazz == double[].class) {
             return ArrayUtil.boxed((double[]) a);
         } else {
-            throw new AssertionError("Primitive types are not enumerated completely");
+            throw new IllegalStateException("primitive types are not enumerated completely");
         }
     }
 
-    // long[][].class -> long[][], String -> java.lang.String
-    public static String getLiteralType(Class<?> clazz) {
-        if (!Objects.requireNonNull(clazz).isPrimitive()) {
-            return clazz.getCanonicalName();
-        }
-
-        if (clazz.equals(byte.class)) {
-            return "byte";
-        } else if (clazz.equals(short.class)) {
-            return "short";
-        } else if (clazz.equals(char.class)) {
-            return "char";
-        } else if (clazz.equals(int.class)) {
-            return "int";
-        } else if (clazz.equals(long.class)) {
-            return "long";
-        } else if (clazz.equals(float.class)) {
-            return "float";
-        } else if (clazz.equals(double.class)) {
-            return "double";
-        } else if (clazz.equals(boolean.class)) {
-            return "boolean";
-        } else {
-            throw new AssertionError("Primitive types are not enumerated completely");
-        }
-    }
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     /**
      * string to object,
@@ -476,21 +461,17 @@ public class ReflectUtil {
      */
     public static Object parse(String s, Class<?> targetClass)
             throws NumberFormatException, StringIndexOutOfBoundsException {
-        Objects.requireNonNull(targetClass);
-        if (s == null) {
-            return getZeroValue(targetClass);
-        }
+        if (targetClass == null) return null;
+        if (s == null) return getZeroValue(targetClass);
 
-        // target is same or a super class of source
+        // target is same or a super class of String
         if (targetClass.isAssignableFrom(String.class)) {
-            return targetClass.cast(s);
+            return s;
         }
         if (targetClass.equals(byte.class) || targetClass.equals(Byte.class)) {
             return Byte.valueOf(s);
         } else if (targetClass.equals(short.class) || targetClass.equals(Short.class)) {
             return Short.valueOf(s);
-        } else if (targetClass.equals(char.class) || targetClass.equals(Character.class)) {
-            return s.charAt(0);
         } else if (targetClass.equals(int.class) || targetClass.equals(Integer.class)) {
             return Integer.valueOf(s);
         } else if (targetClass.equals(long.class) || targetClass.equals(Long.class)) {
@@ -501,8 +482,103 @@ public class ReflectUtil {
             return Double.valueOf(s);
         } else if (targetClass.equals(boolean.class) || targetClass.equals(Boolean.class)) {
             return Boolean.valueOf(s);
+        } else if (targetClass.equals(char.class)) {
+            // a string cannot be cast to a char normally, so ignore it
+            return (char) 0;
         }
+        return null;
+    }
 
+    public static Object parse(boolean b, Class<?> targetClass) {
+        if (targetClass == null) return null;
+        if (targetClass.equals(Boolean.class) || targetClass.equals(boolean.class)) {
+            return b;
+        }
+        if (targetClass.equals(String.class)) {
+            return Boolean.toString(b);
+        }
+        if (targetClass.equals(byte.class) || targetClass.equals(Byte.class)) {
+            return b ? 0b1 : 0b0;
+        } else if (targetClass.equals(short.class) || targetClass.equals(Short.class)) {
+            return b ? (short) 1 : (short) 0;
+        } else if (targetClass.equals(char.class) || targetClass.equals(Character.class)) {
+            return b ? (char) 1 : (char) 0;
+        } else if (targetClass.equals(int.class) || targetClass.equals(Integer.class)) {
+            return b ? (int) 1 : (int) 0;
+        } else if (targetClass.equals(long.class) || targetClass.equals(Long.class)) {
+            return b ? (long) 1 : (long) 0;
+        } else if (targetClass.equals(float.class) || targetClass.equals(Float.class)) {
+            return b ? (float) 1 : (float) 0;
+        } else if (targetClass.equals(double.class) || targetClass.equals(Double.class)) {
+            return b ? (double) 1 : (double) 0;
+        } else if (targetClass.equals(BigInteger.class)) {
+            return b ? BigInteger.ONE : BigInteger.ZERO;
+        } else if (targetClass.equals(BigDecimal.class)) {
+            return b ? BigDecimal.ONE : BigDecimal.ZERO;
+        }
+        return null;
+    }
+
+    // helpful for Data-Access-Object
+    public static Object parse(long n, Class<?> targetClass, ZoneId zoneId) {
+        if (targetClass == null) return null;
+        if (targetClass.equals(String.class)) {
+            return Long.toString(n);
+        } else if (targetClass.equals(Date.class)) {
+            return new Date(n);
+        } else if (targetClass.equals(LocalDateTime.class)) {
+            return TimeUtil.ofEpochMilli(n, zoneId);
+        } else if (targetClass.equals(LocalDate.class)) {
+            return TimeUtil.ofEpochMilli(n, zoneId).toLocalDate();
+        } else if (targetClass.equals(byte.class) || targetClass.equals(Byte.class)) {
+            return (byte) n;
+        } else if (targetClass.equals(short.class) || targetClass.equals(Short.class)) {
+            return (short) n;
+        } else if (targetClass.equals(char.class) || targetClass.equals(Character.class)) {
+            return (char) n;
+        } else if (targetClass.equals(int.class) || targetClass.equals(Integer.class)) {
+            return (int) n;
+        } else if (targetClass.equals(long.class) || targetClass.equals(Long.class)) {
+            return n;
+        } else if (targetClass.equals(float.class) || targetClass.equals(Float.class)) {
+            return (float) n;
+        } else if (targetClass.equals(double.class) || targetClass.equals(Double.class)) {
+            return (double) n;
+        } else if (targetClass.equals(boolean.class) || targetClass.equals(Boolean.class)) {
+            return n != 0;
+        } else if (targetClass.equals(BigInteger.class)) {
+            return BigInteger.valueOf(n);
+        } else if (targetClass.equals(BigDecimal.class)) {
+            return BigDecimal.valueOf(n);
+        }
+        return null;
+    }
+
+    public static Object parse(double n, Class<?> targetClass) {
+        if (targetClass == null) return null;
+        if (targetClass.isAssignableFrom(String.class)) {
+            return Double.toString(n);
+        } else if (targetClass.equals(byte.class) || targetClass.equals(Byte.class)) {
+            return (byte) n;
+        } else if (targetClass.equals(short.class) || targetClass.equals(Short.class)) {
+            return (short) n;
+        } else if (targetClass.equals(char.class) || targetClass.equals(Character.class)) {
+            return (char) n;
+        } else if (targetClass.equals(int.class) || targetClass.equals(Integer.class)) {
+            return (int) n;
+        } else if (targetClass.equals(long.class) || targetClass.equals(Long.class)) {
+            return (long) n;
+        } else if (targetClass.equals(float.class) || targetClass.equals(Float.class)) {
+            return (float) n;
+        } else if (targetClass.equals(double.class) || targetClass.equals(Double.class)) {
+            return n;
+        } else if (targetClass.equals(boolean.class) || targetClass.equals(Boolean.class)) {
+            return n != 0;
+        } else if (targetClass.equals(BigInteger.class)) {
+            return BigInteger.valueOf((long) n);
+        } else if (targetClass.equals(BigDecimal.class)) {
+            return BigDecimal.valueOf(n);
+        }
         return null;
     }
 
@@ -558,6 +634,33 @@ public class ReflectUtil {
             return classes;
         }
         return null;
+    }
+
+    // long[][].class -> long[][], String -> java.lang.String
+    public static String getLiteralType(Class<?> clazz) {
+        if (!Objects.requireNonNull(clazz).isPrimitive()) {
+            return clazz.getCanonicalName();
+        }
+
+        if (clazz.equals(byte.class)) {
+            return "byte";
+        } else if (clazz.equals(short.class)) {
+            return "short";
+        } else if (clazz.equals(char.class)) {
+            return "char";
+        } else if (clazz.equals(int.class)) {
+            return "int";
+        } else if (clazz.equals(long.class)) {
+            return "long";
+        } else if (clazz.equals(float.class)) {
+            return "float";
+        } else if (clazz.equals(double.class)) {
+            return "double";
+        } else if (clazz.equals(boolean.class)) {
+            return "boolean";
+        } else {
+            throw new AssertionError("Primitive types are not enumerated completely");
+        }
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
