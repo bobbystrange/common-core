@@ -13,6 +13,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -34,8 +35,9 @@ public class ReflectUtil {
 
     public static List<Class<?>> retrieveSuperClasses(Class<?> clazz) {
         List<Class<?>> classList = new ArrayList<>();
-        while (!clazz.isPrimitive() && !clazz.equals(Object.class)) {
+        while (!clazz.equals(Object.class)) {
             Class superClass = clazz.getSuperclass();
+            if (superClass == null) break;
 
             classList.add(clazz);
 
@@ -55,8 +57,14 @@ public class ReflectUtil {
 
         List<Class<? extends T>> classList = new ArrayList<>();
         for (String classPath : classPaths) {
-            String name = "/" + classPath.replace(".", "/");
-            File classFile = new File(Class.class.getResource(name).getFile());
+            String name = classPath.replace(".", "/");
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            URL url = loader.getResource(name);
+            if (url == null) {
+                throw new IllegalArgumentException(
+                        "the resource under the path " + name + " is not found");
+            }
+            File classFile = new File(url.getFile());
             String prefix = classFile.getPath() + "/";
             findSubClasses(classFile, prefix, clazz, classList);
         }
@@ -72,8 +80,9 @@ public class ReflectUtil {
 
     public static List<Method> retrieveMethods(Class<?> clazz) {
         List<Method> methodList = new ArrayList<>();
-        while (!clazz.isPrimitive() && !clazz.equals(Object.class)) {
+        while (!clazz.equals(Object.class)) {
             Class superClass = clazz.getSuperclass();
+            if (superClass == null) break;
 
             Method[] methods = clazz.getDeclaredMethods();
             for (int size = methods.length, i = size - 1; i >= 0; i--) {
@@ -94,8 +103,9 @@ public class ReflectUtil {
 
     public static List<Field> retrieveFields(Class<?> clazz) {
         List<Field> fieldList = new ArrayList<>();
-        while (!clazz.isPrimitive() && !clazz.equals(Object.class)) {
+        while (!clazz.equals(Object.class)) {
             Class superClass = clazz.getSuperclass();
+            if (superClass == null) break;
 
             Field[] fields = clazz.getDeclaredFields();
             for (int size = fields.length, i = size - 1; i >= 0; i--) {
@@ -114,8 +124,9 @@ public class ReflectUtil {
 
     public static <A extends Annotation> Map<String, Field> retrieveFieldMap(Class<?> clazz, Class<A> aliasClass, Function<A, String> aliasFunction) {
         Map<String, Field> fieldMap = new HashMap<>();
-        while (!clazz.isPrimitive() && !clazz.equals(Object.class)) {
+        while (!clazz.equals(Object.class)) {
             Class superClass = clazz.getSuperclass();
+            if (superClass == null) break;
 
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
@@ -135,8 +146,9 @@ public class ReflectUtil {
     // only no static field
     public static <A extends Annotation> List<String> retrieveFieldNames(Class<?> clazz, Class<A> aliasClass, Function<A, String> aliasFunction) {
         List<String> fieldNameList = new ArrayList<>();
-        while (!clazz.isPrimitive() && !clazz.equals(Object.class)) {
+        while (!clazz.equals(Object.class)) {
             Class superClass = clazz.getSuperclass();
+            if (superClass == null) break;
 
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
@@ -168,36 +180,42 @@ public class ReflectUtil {
 
     public static List<Annotation> retrieveAnnotations(Class<?> clazz) {
         List<Annotation> annotationList = new ArrayList<>();
-        retrieveAnnotations(clazz, annotationList);
+        while (!clazz.equals(Object.class)) {
+            Class superClass = clazz.getSuperclass();
+            if (superClass == null) break;
+
+            Annotation[] annotations = clazz.getDeclaredAnnotations();
+            for (int size = annotations.length, i = size - 1; i >= 0; i--) {
+                annotationList.add(annotations[i]);
+            }
+
+            clazz = superClass;
+        }
         Collections.reverse(annotationList);
         return annotationList;
     }
 
-    public static void retrieveAnnotations(Class<?> clazz, List<Annotation> annotationList) {
-        Annotation[] annotations = clazz.getDeclaredAnnotations();
-        for (int size = annotations.length, i = size - 1; i >= 0; i--) {
-            annotationList.add(annotations[i]);
-        }
-
-        Class<?> superClazz = clazz.getSuperclass();
-        if (!superClazz.equals(Object.class)) {
-            retrieveAnnotations(superClazz, annotationList);
-        }
-    }
-
-    public static List<Annotation> retrieveAnnotations(Field field) {
-        return new ArrayList<>(Arrays.asList(field.getDeclaredAnnotations()));
-    }
-
     public static <A extends Annotation> A retrieveAnnotation(Class<?> clazz, Class<A> annotationClass) {
-        A a = clazz.getDeclaredAnnotation(annotationClass);
-        if (a != null) return a;
+        List<A> annotationList = retrieveAnnotations(clazz, annotationClass);
+        if (annotationList.isEmpty()) return null;
+        return annotationList.get(annotationList.size() - 1);
+    }
 
-        Class<?> superClazz = clazz.getSuperclass();
-        if (!superClazz.equals(Object.class)) {
-            return retrieveAnnotation(superClazz, annotationClass);
+    public static <A extends Annotation> List<A> retrieveAnnotations(Class<?> clazz, Class<A> annotationClass) {
+        List<A> annotationList = new ArrayList<>();
+        while (!clazz.equals(Object.class)) {
+            Class superClass = clazz.getSuperclass();
+            if (superClass == null) break;
+
+            A[] annotations = clazz.getDeclaredAnnotationsByType(annotationClass);
+            for (int size = annotations.length, i = size - 1; i >= 0; i--) {
+                annotationList.add(annotations[i]);
+            }
+
+            clazz = superClass;
         }
-        throw new RuntimeException("Assertion failure");
+        Collections.reverse(annotationList);
+        return annotationList;
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -674,19 +692,18 @@ public class ReflectUtil {
             }
             return;
         }
+        if (!classFile.getPath().contains(".class")) return;
 
+        String path = classFile.getPath();
+        // 6 for .class
+        String className = path.substring(prefix.length(), path.length() - 6)
+                .replace("/", ".");
         try {
-            if (classFile.getPath().contains(".class")) {
-                String className = classFile.getPath()
-                        .replace(prefix, "")
-                        .replace(".class", "")
-                        .replace("/", ".");
-                Class<?> classObject = Class.forName(className);
-                classObject.asSubclass(clazz);
+            Class<?> classObject = Class.forName(className);
+            // not a subtype or same type, then skip it
+            if (!clazz.isAssignableFrom(classObject) || clazz.equals(classObject)) return;
 
-                if (!className.equals(clazz.getCanonicalName()))
-                    classList.add((Class<? extends T>) classObject);
-            }
+            classList.add((Class<? extends T>) classObject);
         } catch (ClassNotFoundException e) {
             log.error(e.getMessage());
         } catch (ClassCastException e) {

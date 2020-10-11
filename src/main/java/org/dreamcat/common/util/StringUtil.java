@@ -111,6 +111,71 @@ public class StringUtil {
         return s;
     }
 
+    public static String toCamelCase(String snake) {
+        if (snake == null) return null;
+        int len = snake.length();
+        StringBuilder s = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = snake.charAt(i);
+            if (c == '_') {
+                if (i < len - 1 && i > 0 &&
+                        snake.charAt(i - 1) >= 'a' && snake.charAt(i - 1) <= 'z') {
+                    char nextChar = snake.charAt(i + 1);
+                    if (nextChar >= 'a' && nextChar <= 'z') {
+                        s.append((char) (nextChar - 32));
+                        i++;
+                        continue;
+                    }
+                }
+            }
+            s.append(c);
+        }
+        return s.toString();
+    }
+
+    public static String toCapitalCamelCase(String snake) {
+        if (snake == null) return null;
+        int len = snake.length();
+        if (len == 0) return snake;
+        StringBuilder s = new StringBuilder(len);
+        char firstChar = snake.charAt(0);
+        if (firstChar >= 'a' && firstChar <= 'z') {
+            s.append((char) (firstChar - 32));
+        }
+        for (int i = 1; i < len; i++) {
+            char c = snake.charAt(i);
+            if (c == '_') {
+                if (i < len - 1 && i > 0 &&
+                        snake.charAt(i - 1) >= 'a' && snake.charAt(i - 1) <= 'z') {
+                    char nextChar = snake.charAt(i + 1);
+                    if (nextChar >= 'a' && nextChar <= 'z') {
+                        s.append((char) (nextChar - 32));
+                        i++;
+                        continue;
+                    }
+                }
+            }
+            s.append(c);
+        }
+        return s.toString();
+    }
+
+    public static String toSnakeCase(String camel) {
+        if (camel == null) return null;
+        int len = camel.length();
+        StringBuilder s = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = camel.charAt(i);
+            if (c >= 'A' && c <= 'Z' && i > 0 &&
+                    camel.charAt(i - 1) >= 'a' && camel.charAt(i - 1) <= 'z') {
+                s.append('_').append((char) (c + 32));
+                continue;
+            }
+            s.append(c);
+        }
+        return s.toString();
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     // \a\b\c  --> abc
@@ -153,6 +218,10 @@ public class StringUtil {
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static Pair<Number, Integer> extractNumber(String s) {
+        return extractNumber(s, 0);
+    }
 
     /**
      * try extract a number at the offset

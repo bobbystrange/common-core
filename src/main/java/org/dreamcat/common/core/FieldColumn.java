@@ -7,6 +7,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -45,7 +46,7 @@ public class FieldColumn {
 
             Class<?> fieldType = field.getType();
             column.field = field;
-            column.annotations = ReflectUtil.retrieveAnnotations(field);
+            column.annotations = new ArrayList<>(Arrays.asList(field.getDeclaredAnnotations()));
             if (flatPredicate.test(fieldType)) continue;
 
             Class<?> type = fieldType;

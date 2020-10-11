@@ -2,6 +2,18 @@
 
 a common and useful pure java library
 
+### Feature
+- common utils
+- data structure(such as B-tree)
+- design pattern(chain,creator,factory...)
+- reflect
+- POJO Ops and Bean expression
+- encrypt/decrypt and encode/decode
+- CLI arguments parser
+- captcha
+- snowflake
+- text parser(JSON,Yaml,INI,CSV...)
+
 ### crypto algorithm
 <table>
        <thead>

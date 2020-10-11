@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Create by tuke on 2019-01-23
  */
 @Slf4j
-public class ResultSetUtil {
+public final class ResultSetUtil {
 
     public static <T> T mapper(ResultSet rs, Class<T> clazz) throws SQLException {
         T bean;
@@ -59,7 +59,7 @@ public class ResultSetUtil {
         return a;
     }
 
-    public static List<Object[]> bacthGetAll(ResultSet rs, int columnSize, int batchNumber) throws SQLException {
+    public static List<Object[]> batchGetAll(ResultSet rs, int columnSize, int batchNumber) throws SQLException {
         List<Object[]> a = new ArrayList<>(batchNumber);
         for (int i = 0; i < batchNumber; i++) {
             if (!rs.next()) break;
