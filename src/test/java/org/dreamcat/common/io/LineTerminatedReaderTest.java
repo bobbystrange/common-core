@@ -1,16 +1,15 @@
 package org.dreamcat.common.io;
 
-import org.dreamcat.common.core.Pair;
-import org.dreamcat.common.core.Timeit;
-import org.dreamcat.common.function.ThrowableConsumer;
-import org.dreamcat.common.io.csv.CsvReaderTest;
-import org.junit.Test;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.StringReader;
 import java.util.stream.Collectors;
+import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.function.ThrowableConsumer;
+import org.dreamcat.common.io.csv.CsvReaderTest;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/8/6
@@ -34,7 +33,8 @@ public class LineTerminatedReaderTest {
                         }
                     })
                     .addAction(() -> {
-                        try (LineTerminatedReader reader = new LineTerminatedReader(new FileReader(file))) {
+                        try (LineTerminatedReader reader = new LineTerminatedReader(
+                                new FileReader(file))) {
                             while ((reader.read()) != -1) ;
                         }
                     })
@@ -44,7 +44,8 @@ public class LineTerminatedReaderTest {
                         }
                     })
                     .addAction(() -> {
-                        try (LineTerminatedReader reader = new LineTerminatedReader(new FileReader(file))) {
+                        try (LineTerminatedReader reader = new LineTerminatedReader(
+                                new FileReader(file))) {
                             while ((reader.readLine()) != null) ;
                         }
                     })

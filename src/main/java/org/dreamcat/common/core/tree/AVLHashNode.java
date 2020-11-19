@@ -13,11 +13,15 @@ import org.dreamcat.common.util.ComparatorUtil;
  */
 @Getter
 @AllArgsConstructor
-public class AVLHashNode<K, V> extends AVLNode<AVLHashNode<K, V>> implements Comparable<AVLHashNode<K, V>>, HashNode<K, V> {
+public class AVLHashNode<K, V> extends AVLNode<AVLHashNode<K, V>> implements
+        Comparable<AVLHashNode<K, V>>, HashNode<K, V> {
+
     protected K key;
     protected V value;
 
-    static <K, V> AVLHashNode<K, V> insert(AVLHashNode<K, V> node, K key, V value, boolean onlyIfAbsent, WriteResult<K, V> result) {
+    static <K, V> AVLHashNode<K, V> insert(
+            AVLHashNode<K, V> node, K key, V value,
+            boolean onlyIfAbsent, WriteResult<K, V> result) {
         if (node == null) {
             if (result != null) result.applied = true;
             node = new AVLHashNode<>(key, value);
@@ -48,11 +52,14 @@ public class AVLHashNode<K, V> extends AVLNode<AVLHashNode<K, V>> implements Com
 
     /// static tree methods
 
-    static <K, V> AVLHashNode<K, V> delete(AVLHashNode<K, V> node, K key, WriteResult<K, V> result) {
+    static <K, V> AVLHashNode<K, V> delete(
+            AVLHashNode<K, V> node, K key, WriteResult<K, V> result) {
         return delete(node, key, null, false, result);
     }
 
-    static <K, V> AVLHashNode<K, V> delete(AVLHashNode<K, V> node, K key, V value, boolean matchValue, WriteResult<K, V> result) {
+    static <K, V> AVLHashNode<K, V> delete(
+            AVLHashNode<K, V> node, K key, V value,
+            boolean matchValue, WriteResult<K, V> result) {
         if (node == null) return null;
 
         if (compare(key, node.key) == 0) {
@@ -161,6 +168,7 @@ public class AVLHashNode<K, V> extends AVLNode<AVLHashNode<K, V>> implements Com
     }
 
     static class WriteResult<K, V> {
+
         boolean applied;
         K key;
         V value;

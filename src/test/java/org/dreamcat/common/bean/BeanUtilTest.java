@@ -1,12 +1,7 @@
 package org.dreamcat.common.bean;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.core.Timeit;
-import org.dreamcat.common.util.ReflectUtil;
-import org.dreamcat.test.BeanData;
-import org.dreamcat.test.BeanUnion;
-import org.junit.Test;
+import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
+import static org.dreamcat.common.util.FormatUtil.log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,9 +10,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
-import static org.dreamcat.common.util.FormatUtil.log;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.util.ReflectUtil;
+import org.dreamcat.test.BeanData;
+import org.dreamcat.test.BeanUnion;
+import org.junit.Test;
 
 @Slf4j
 public class BeanUtilTest {
@@ -167,6 +166,7 @@ public class BeanUtilTest {
 
     @Data
     private static class Query {
+
         private String digest;
         private Integer nonce;
         private Long timestamp;

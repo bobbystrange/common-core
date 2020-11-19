@@ -1,8 +1,7 @@
 package org.dreamcat.common.util;
 
-import org.junit.Test;
-
 import java.util.Arrays;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/5/4

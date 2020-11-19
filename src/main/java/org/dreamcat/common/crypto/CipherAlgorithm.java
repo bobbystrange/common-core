@@ -1,13 +1,5 @@
 package org.dreamcat.common.crypto;
 
-import lombok.extern.slf4j.Slf4j;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -16,6 +8,13 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.function.BiFunction;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public enum CipherAlgorithm implements CipherCrackAlgorithm {
@@ -213,7 +212,8 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
                 (k, m) -> newCipherByIv(CBC_NO_PADDING, k, m));
     }
 
-    public int encryptCbcNoPadding(ByteBuffer input, ByteBuffer output, byte[] key) throws Exception {
+    public int encryptCbcNoPadding(ByteBuffer input, ByteBuffer output, byte[] key)
+            throws Exception {
         return encrypt(input, output, key,
                 (k, m) -> newCipherByIv(CBC_NO_PADDING, k, m));
     }
@@ -235,7 +235,8 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
                 (k, m) -> newCipherByIv(CBC_NO_PADDING, k, m));
     }
 
-    public int decryptCbcNoPadding(ByteBuffer input, ByteBuffer output, byte[] key) throws Exception {
+    public int decryptCbcNoPadding(ByteBuffer input, ByteBuffer output, byte[] key)
+            throws Exception {
         return decrypt(input, output, key,
                 (k, m) -> newCipherByIv(CBC_NO_PADDING, k, m));
     }
@@ -312,71 +313,84 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     }
 
     private byte[] encrypt(
-            byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor)
+            throws Exception {
         return crypto(data, key, constructor, Cipher.ENCRYPT_MODE);
     }
 
     private byte[] encrypt(
-            byte[] data, int offset, int length, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            byte[] data, int offset, int length, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
         return crypto(data, offset, length, key, constructor, Cipher.ENCRYPT_MODE);
     }
 
     private byte[] encrypt(
-            InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor)
+            throws Exception {
         return crypto(data, key, constructor, Cipher.ENCRYPT_MODE);
     }
 
     private void encrypt(
-            InputStream input, OutputStream output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            InputStream input, OutputStream output, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
         crypto(input, output, key, constructor, Cipher.ENCRYPT_MODE);
     }
 
     private int encrypt(
-            ByteBuffer input, ByteBuffer output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            ByteBuffer input, ByteBuffer output, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
         return crypto(input, output, key, constructor, Cipher.ENCRYPT_MODE);
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     private byte[] decrypt(
-            byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor)
+            throws Exception {
         return crypto(data, key, constructor, Cipher.DECRYPT_MODE);
     }
 
     private byte[] decrypt(
-            byte[] data, int offset, int length, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            byte[] data, int offset, int length, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
         return crypto(data, offset, length, key, constructor, Cipher.DECRYPT_MODE);
     }
 
     private byte[] decrypt(
-            InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor)
+            throws Exception {
         return crypto(data, key, constructor, Cipher.DECRYPT_MODE);
     }
 
     private void decrypt(
-            InputStream input, OutputStream output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            InputStream input, OutputStream output, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
         crypto(input, output, key, constructor, Cipher.DECRYPT_MODE);
     }
 
     private int decrypt(
-            ByteBuffer input, ByteBuffer output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
+            ByteBuffer input, ByteBuffer output, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor) throws Exception {
         return crypto(input, output, key, constructor, Cipher.DECRYPT_MODE);
     }
 
     private byte[] crypto(
-            byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
+            byte[] data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode)
+            throws Exception {
         return crypto(data, 0, data.length, key, constructor, mode);
     }
 
     private byte[] crypto(
-            byte[] data, int offset, int length, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
+            byte[] data, int offset, int length, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
         Cipher cipher = constructor.apply(key, mode);
         return cipher.doFinal(data, offset, length);
     }
 
     @Deprecated
     private byte[] crypto(
-            InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
+            InputStream data, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode)
+            throws Exception {
         Cipher cipher = constructor.apply(key, mode);
         final int size = bufferSize;
         byte[] buffer = new byte[size];
@@ -388,7 +402,8 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     }
 
     private void crypto(
-            InputStream input, OutputStream output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
+            InputStream input, OutputStream output, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
         final int size = bufferSize;
         byte[] buffer = new byte[size];
         int readSize;
@@ -400,7 +415,8 @@ public enum CipherAlgorithm implements CipherCrackAlgorithm {
     }
 
     private int crypto(
-            ByteBuffer input, ByteBuffer output, byte[] key, BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
+            ByteBuffer input, ByteBuffer output, byte[] key,
+            BiFunction<byte[], Integer, Cipher> constructor, int mode) throws Exception {
         Cipher cipher = constructor.apply(key, mode);
         return cipher.doFinal(input, output);
     }

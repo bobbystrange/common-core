@@ -1,9 +1,8 @@
 package org.dreamcat.common.util;
 
-import org.junit.Test;
-
 import java.math.BigInteger;
 import java.util.Arrays;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/4

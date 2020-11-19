@@ -1,9 +1,8 @@
 package org.dreamcat.common.core.captcha;
 
+import java.util.function.IntBinaryOperator;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-
-import java.util.function.IntBinaryOperator;
 
 /**
  * Create by tuke on 2020/5/12
@@ -29,6 +28,7 @@ public class ImageCutAreaFx {
 
     @RequiredArgsConstructor
     public static class Rect implements IntBinaryOperator {
+
         private final int w;
         private final int h;
 
@@ -51,6 +51,7 @@ public class ImageCutAreaFx {
 
     @AllArgsConstructor
     public static class ClassicNotchedRect implements IntBinaryOperator {
+
         private final int w;
         private final int h;
         private final int radius;

@@ -1,8 +1,5 @@
 package org.dreamcat.common.bean;
 
-import lombok.Getter;
-import org.dreamcat.common.util.ObjectUtil;
-
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,11 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * Create by tuke on 2018/11/9
  */
 public class BeanConstructor {
+
     @Getter
     @SuppressWarnings("rawtypes")
     private final Map<Class, Function<String, Object>> mapper = new HashMap<>();
@@ -26,10 +26,8 @@ public class BeanConstructor {
 
     public BeanConstructor(String... patterns) {
         registerMapper();
-        if (ObjectUtil.isEmpty(patterns))
-            registerFormat();
-        else
-            format.addAll(Arrays.asList(patterns));
+        if (ObjectUtil.isEmpty(patterns)) registerFormat();
+        else format.addAll(Arrays.asList(patterns));
     }
 
     @SuppressWarnings("rawtypes")

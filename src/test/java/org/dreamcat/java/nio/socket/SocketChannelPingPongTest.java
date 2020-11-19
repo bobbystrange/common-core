@@ -1,8 +1,6 @@
 package org.dreamcat.java.nio.socket;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.net.SocketUtil;
-import org.junit.Test;
+import static org.dreamcat.common.util.FormatUtil.log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,14 +16,16 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import static org.dreamcat.common.util.FormatUtil.log;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.net.SocketUtil;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/7
  */
 @Slf4j
 public class SocketChannelPingPongTest {
+
     private static final int bufferSize = 4 * 1024;
 
     @Test
@@ -64,7 +64,7 @@ public class SocketChannelPingPongTest {
         try (Socket socket = new Socket("localhost", 8192)) {
             log("client2 connected server {}", SocketUtil.format(socket));
             try (InputStream ins = socket.getInputStream();
-                 OutputStream outs = socket.getOutputStream()) {
+                    OutputStream outs = socket.getOutputStream()) {
                 outs.write("PING".getBytes());
                 log("client2 sent PING to {}", SocketUtil.format(socket));
                 byte[] buf = new byte[bufferSize];
@@ -106,7 +106,8 @@ public class SocketChannelPingPongTest {
                         SocketChannel socket = server.accept();
                         socket.configureBlocking(false);
 
-                        System.out.println("server accepted a connection from " + SocketUtil.format(socket.getRemoteAddress()));
+                        System.out.println("server accepted a connection from " + SocketUtil
+                                .format(socket.getRemoteAddress()));
                         //socket.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(bufferSize));
                         socket.register(selector, SelectionKey.OP_READ);
                     } else if (key.isReadable()) {
@@ -117,14 +118,17 @@ public class SocketChannelPingPongTest {
                         int readSize;
                         try {
                             if ((readSize = socket.read(buffer)) > 0) {
-                                System.out.println("server received:" + new String(buffer.array(), 0, readSize));
+                                System.out.println(
+                                        "server received:" + new String(buffer.array(), 0,
+                                                readSize));
 
                                 buffer.clear();
                                 buffer.put("PONG".getBytes());
                                 // read mode
                                 buffer.flip();
                                 socket.write(buffer);
-                                log("server sent PONG to {}", SocketUtil.format(socket.getRemoteAddress()));
+                                log("server sent PONG to {}",
+                                        SocketUtil.format(socket.getRemoteAddress()));
                                 //socket.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(bufferSize));
                                 socket.register(selector, SelectionKey.OP_READ);
                             }

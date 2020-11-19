@@ -8,6 +8,7 @@ import java.util.Base64;
  * Create by tuke on 2019-02-15
  */
 public class Base64Util {
+
     private static final Charset DEFAULT_CHARSET = StandardCharsets.ISO_8859_1;
 
     private static final Base64.Encoder ENCODER = Base64.getEncoder();
@@ -16,27 +17,55 @@ public class Base64Util {
     private static final Base64.Decoder URL_DECODER = Base64.getUrlDecoder();
 
     public static byte[] encode(byte[] input) {
-        return ENCODER.encode(input);
+        return encode(input, false);
+    }
+
+    public static byte[] encode(byte[] input, boolean trimEnd) {
+        byte[] bytes = ENCODER.encode(input);
+        return trimEnd ? ArrayUtil.trimEnd(bytes, (byte) '=') : bytes;
     }
 
     public static byte[] encode(String input) {
-        return encode(input, DEFAULT_CHARSET);
+        return encode(input, false);
+    }
+
+    public static byte[] encode(String input, boolean trimEnd) {
+        byte[] bytes = encode(input, DEFAULT_CHARSET);
+        return trimEnd ? ArrayUtil.trimEnd(bytes, (byte) '=') : bytes;
     }
 
     public static byte[] encode(String input, Charset charset) {
-        return encode(input.getBytes(charset));
+        return encode(input, charset, false);
+    }
+
+    public static byte[] encode(String input, Charset charset, boolean trimEnd) {
+        byte[] bytes = encode(input.getBytes(charset));
+        return trimEnd ? ArrayUtil.trimEnd(bytes, (byte) '=') : bytes;
     }
 
     public static String encodeAsString(byte[] input) {
-        return ENCODER.encodeToString(input);
+        return encodeAsString(input, false);
+    }
+
+    public static String encodeAsString(byte[] input, boolean trimEnd) {
+        String s = ENCODER.encodeToString(input);
+        return trimEnd ? StringUtil.trimEnd(s, '=') : s;
     }
 
     public static String encodeAsString(String input) {
-        return encodeAsString(input, DEFAULT_CHARSET);
+        return encodeAsString(input, false);
+    }
+
+    public static String encodeAsString(String input, boolean trimEnd) {
+        return encodeAsString(input, DEFAULT_CHARSET, trimEnd);
     }
 
     public static String encodeAsString(String input, Charset charset) {
-        return encodeAsString(input.getBytes(charset));
+        return encodeAsString(input, charset, false);
+    }
+
+    public static String encodeAsString(String input, Charset charset, boolean trimEnd) {
+        return encodeAsString(input.getBytes(charset), trimEnd);
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
@@ -65,34 +94,63 @@ public class Base64Util {
         return decodeAsString(input, DEFAULT_CHARSET, DEFAULT_CHARSET);
     }
 
-    public static String decodeAsString(String input, Charset sourceCharset, Charset targetCharset) {
+    public static String decodeAsString(String input, Charset sourceCharset,
+            Charset targetCharset) {
         return new String(decode(input, sourceCharset), targetCharset);
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static byte[] encodeUrlSafe(byte[] input) {
-        return URL_ENCODER.encode(input);
+        return encodeUrlSafe(input, false);
+    }
+
+    public static byte[] encodeUrlSafe(byte[] input, boolean trimEnd) {
+        byte[] bytes = URL_ENCODER.encode(input);
+        return trimEnd ? ArrayUtil.trimEnd(bytes, (byte) '=') : bytes;
     }
 
     public static byte[] encodeUrlSafe(String input) {
-        return encodeUrlSafe(input, DEFAULT_CHARSET);
+        return encodeUrlSafe(input, false);
+    }
+
+    public static byte[] encodeUrlSafe(String input, boolean trimEnd) {
+        byte[] bytes = encodeUrlSafe(input, DEFAULT_CHARSET);
+        return trimEnd ? ArrayUtil.trimEnd(bytes, (byte) '=') : bytes;
     }
 
     public static byte[] encodeUrlSafe(String input, Charset charset) {
-        return encodeUrlSafe(input.getBytes(charset));
+        return encodeUrlSafe(input, charset, false);
+    }
+
+    public static byte[] encodeUrlSafe(String input, Charset charset, boolean trimEnd) {
+        byte[] bytes = encodeUrlSafe(input.getBytes(charset));
+        return trimEnd ? ArrayUtil.trimEnd(bytes, (byte) '=') : bytes;
     }
 
     public static String encodeUrlSafeAsString(byte[] input) {
-        return URL_ENCODER.encodeToString(input);
+        return encodeUrlSafeAsString(input, false);
+    }
+
+    public static String encodeUrlSafeAsString(byte[] input, boolean trimEnd) {
+        String s = URL_ENCODER.encodeToString(input);
+        return trimEnd ? StringUtil.trimEnd(s, '=') : s;
     }
 
     public static String encodeUrlSafeAsString(String input) {
-        return encodeUrlSafeAsString(input, DEFAULT_CHARSET);
+        return encodeUrlSafeAsString(input, false);
+    }
+
+    public static String encodeUrlSafeAsString(String input, boolean trimEnd) {
+        return encodeUrlSafeAsString(input, DEFAULT_CHARSET, trimEnd);
     }
 
     public static String encodeUrlSafeAsString(String input, Charset charset) {
-        return encodeUrlSafeAsString(input.getBytes(charset));
+        return encodeUrlSafeAsString(input, charset, false);
+    }
+
+    public static String encodeUrlSafeAsString(String input, Charset charset, boolean trimEnd) {
+        return encodeUrlSafeAsString(input.getBytes(charset), trimEnd);
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
@@ -121,7 +179,8 @@ public class Base64Util {
         return decodeUrlSafeAsString(input, DEFAULT_CHARSET, DEFAULT_CHARSET);
     }
 
-    public static String decodeUrlSafeAsString(String input, Charset sourceCharset, Charset targetCharset) {
+    public static String decodeUrlSafeAsString(String input, Charset sourceCharset,
+            Charset targetCharset) {
         return new String(decodeUrlSafe(input, sourceCharset), targetCharset);
     }
 

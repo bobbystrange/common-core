@@ -1,8 +1,9 @@
 package org.dreamcat.common.io;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.function.TriConsumer;
-import org.dreamcat.common.util.ObjectUtil;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,11 +33,13 @@ import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static java.nio.file.StandardWatchEventKinds.*;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.function.TriConsumer;
+import org.dreamcat.common.util.ObjectUtil;
 
 @Slf4j
 public final class FileUtil {
+
     private static final int BUFFER_SIZE = 4096;
 
     /**
@@ -117,7 +120,8 @@ public final class FileUtil {
                 return ".";
             }
             if (slashPosition == filename.length() - 1)
-                throw new IllegalArgumentException(String.format("invalid filename '%s'", filename));
+                throw new IllegalArgumentException(
+                        String.format("invalid filename '%s'", filename));
         }
 
         // if filename like /a
@@ -291,7 +295,8 @@ public final class FileUtil {
         writeFrom(filename, reader, false);
     }
 
-    public static void writeFrom(String filename, Reader reader, boolean append) throws IOException {
+    public static void writeFrom(String filename, Reader reader, boolean append)
+            throws IOException {
         writeFrom(new File(filename), reader, append);
     }
 
@@ -309,7 +314,8 @@ public final class FileUtil {
         writeFrom(filename, input, false);
     }
 
-    public static void writeFrom(String filename, InputStream input, boolean append) throws IOException {
+    public static void writeFrom(String filename, InputStream input, boolean append)
+            throws IOException {
         writeFrom(new File(filename), input, append);
     }
 
@@ -327,7 +333,8 @@ public final class FileUtil {
         writeFrom(filename, input, false);
     }
 
-    public static void writeFrom(String filename, ByteChannel input, boolean append) throws IOException {
+    public static void writeFrom(String filename, ByteChannel input, boolean append)
+            throws IOException {
         writeFrom(new File(filename), input, append);
     }
 
@@ -367,7 +374,7 @@ public final class FileUtil {
             options = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.WRITE};
         }
         try (FileChannel inputChannel = FileChannel.open(input.toPath(), StandardOpenOption.READ);
-             FileChannel outputChannel = FileChannel.open(file.toPath(), options)) {
+                FileChannel outputChannel = FileChannel.open(file.toPath(), options)) {
             inputChannel.transferTo(0, input.length(), outputChannel);
         }
     }
@@ -388,14 +395,16 @@ public final class FileUtil {
         }
     }
 
-    private static void convertFile(File subFile, File srcFile, Charset srcCS, File destFile, Charset destCS) throws IOException {
+    private static void convertFile(File subFile, File srcFile, Charset srcCS, File destFile,
+            Charset destCS) throws IOException {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(subFile), srcCS))) {
             String path = destFile.getPath()
                     + subFile.getAbsolutePath().substring(srcFile.getPath().length());
             File outfile = new File(path);
             if (!outfile.getParentFile().mkdirs() && !outfile.getParentFile().exists()) {
-                throw new IOException("Cannot create directory " + outfile.getParentFile().getAbsolutePath());
+                throw new IOException(
+                        "Cannot create directory " + outfile.getParentFile().getAbsolutePath());
             }
             try (BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(new FileOutputStream(outfile), destCS))) {

@@ -1,8 +1,5 @@
 package org.dreamcat.common.compress;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.ObjectUtil;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -14,9 +11,12 @@ import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ObjectUtil;
 
 @Slf4j
 public class ZipCompressUtil {
+
     private static final int BUFFER_SIZE = 4096;
 
     // level compression_level = [0-9]
@@ -55,7 +55,8 @@ public class ZipCompressUtil {
         }
     }
 
-    private static void zipFile(File file, ZipOutputStream outs, String basePath) throws IOException {
+    private static void zipFile(File file, ZipOutputStream outs, String basePath)
+            throws IOException {
         ZipEntry entry = new ZipEntry(basePath + file.getName());
         entry.setSize(file.length());
         outs.putNextEntry(entry);

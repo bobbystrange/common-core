@@ -6,6 +6,7 @@ import org.junit.Test;
  * Create by tuke on 2020/7/22
  */
 public class UnionTest {
+
     @Test
     public void test() {
         Union union = new Union(1);

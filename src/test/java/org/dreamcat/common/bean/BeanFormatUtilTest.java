@@ -1,17 +1,16 @@
 package org.dreamcat.common.bean;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.test.BeanData;
-import org.junit.Test;
+import static org.dreamcat.common.bean.BeanFormatUtil.inline;
+import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Date;
-
-import static org.dreamcat.common.bean.BeanFormatUtil.inline;
-import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.test.BeanData;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/3/3

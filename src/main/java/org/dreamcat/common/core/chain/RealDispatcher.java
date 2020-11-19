@@ -1,9 +1,5 @@
 package org.dreamcat.common.core.chain;
 
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.ThreadUtil;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiPredicate;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ThreadUtil;
 
 @Slf4j
 @NoArgsConstructor
@@ -30,7 +29,8 @@ public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
     private ExecutorService executorService;
 
     public synchronized void enqueue(Interceptor.AsyncCall<I, O> call) {
-        if (runningAsyncCalls.size() < maxRequests && runningCallsForCase(call) < maxRequestsForSameCase) {
+        if (runningAsyncCalls.size() < maxRequests &&
+                runningCallsForCase(call) < maxRequestsForSameCase) {
             runningAsyncCalls.add(call);
             executorService().execute(call);
         } else {
@@ -89,7 +89,7 @@ public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
         if (readyAsyncCalls.isEmpty()) return; // No ready calls to promote.
 
         for (Iterator<Interceptor.AsyncCall<I, O>> i
-             = readyAsyncCalls.iterator(); i.hasNext(); ) {
+                = readyAsyncCalls.iterator(); i.hasNext(); ) {
             Interceptor.AsyncCall<I, O> call = i.next();
 
             if (runningCallsForCase(call) < maxRequestsForSameCase) {

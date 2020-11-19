@@ -1,5 +1,6 @@
 package org.dreamcat.common.util;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -101,4 +102,102 @@ public class NumericUtil {
         return digits;
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static boolean equalTo(Number a, Number b) {
+        return equalTo(a, b, false);
+    }
+
+    public static boolean equalTo(Number a, Number b, boolean truncated) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        // not integer/float, then just equals
+        if ((!isInteger(a) && !isFloat(a)) || (!isInteger(b) && !isFloat(b))) return a.equals(b);
+        if (isFloat(a) && isInteger(b)) return equalTo(b, a, truncated);
+
+        if (isInteger(a)) {
+            if (a instanceof BigInteger) {
+                if (isInteger(b)) {
+                    if (b instanceof BigInteger) {
+                        return a.equals(b);
+                    } else {
+                        return a.equals(BigInteger.valueOf(b.longValue()));
+                    }
+                } else {
+                    if (!truncated) return false;
+                    if (b instanceof BigDecimal) {
+                        return ((BigDecimal) b).toBigInteger().equals(a);
+                    } else {
+                        return a.equals(BigInteger.valueOf(b.longValue()));
+                    }
+                }
+            } else {
+                if (isInteger(b)) {
+                    if (b instanceof BigInteger) {
+                        return b.equals(BigInteger.valueOf(a.longValue()));
+                    } else {
+                        return b.longValue() == a.longValue();
+                    }
+                } else {
+                    if (!truncated) return false;
+                    if (b instanceof BigDecimal) {
+                        return ((BigDecimal) b).toBigInteger()
+                                .equals(BigInteger.valueOf(a.longValue()));
+                    } else {
+                        return b.longValue() == a.longValue();
+                    }
+                }
+            }
+        } else {
+            if (a instanceof BigDecimal) {
+                if (b instanceof BigDecimal) {
+                    return a.equals(b);
+                } else {
+                    return a.equals(BigDecimal.valueOf(b.doubleValue()));
+                }
+            } else {
+                if (b instanceof BigDecimal) {
+                    return b.equals(BigDecimal.valueOf(a.doubleValue()));
+                } else {
+                    return a.doubleValue() == b.doubleValue();
+                }
+            }
+        }
+    }
+
+    public static boolean isInteger(Number n) {
+        return n instanceof Byte || n instanceof Short ||
+                n instanceof Integer || n instanceof Long || n instanceof BigInteger;
+    }
+
+    public static boolean isFloat(Number n) {
+        return n instanceof Float || n instanceof Double || n instanceof BigDecimal;
+    }
+
+    public static Number toBigNumber(Number n) {
+        if (n instanceof BigInteger || n instanceof BigDecimal) return n;
+        if (isInteger(n)) {
+            return BigInteger.valueOf(n.longValue());
+        } else {
+            return BigDecimal.valueOf(n.doubleValue());
+        }
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    // public static Number add(Number a, Number b) {
+    //
+    // }
+    //
+    // public static Number subtract(Number a, Number b) {
+    // }
+    //
+    // public static Number multiply(Number a, Number b) {
+    // }
+    //
+    // public static Number divide(Number a, Number b) {
+    // }
+    //
+    // public static Number remainder(Number a, Number b) {
+    // }
 }

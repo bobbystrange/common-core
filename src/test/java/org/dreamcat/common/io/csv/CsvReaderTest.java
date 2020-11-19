@@ -1,16 +1,15 @@
 package org.dreamcat.common.io.csv;
 
-import org.dreamcat.common.core.Pair;
-import org.dreamcat.common.io.LineTerminatedReaderTest;
-import org.junit.Test;
+import static org.dreamcat.common.io.LineTerminatedReaderTest.formatCRLF;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.dreamcat.common.io.LineTerminatedReaderTest.formatCRLF;
+import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.io.LineTerminatedReaderTest;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/8/3

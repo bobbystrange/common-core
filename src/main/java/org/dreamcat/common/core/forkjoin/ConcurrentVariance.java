@@ -1,11 +1,10 @@
 package org.dreamcat.common.core.forkjoin;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 /**
  * Create by tuke on 2019-05-24
@@ -26,6 +25,7 @@ public class ConcurrentVariance {
     @NoArgsConstructor
     @AllArgsConstructor
     static class MeanRecursiveTask extends RecursiveTask<Double> {
+
         private double[] data;
         private int start;
         private int end;
@@ -57,6 +57,7 @@ public class ConcurrentVariance {
     @NoArgsConstructor
     @AllArgsConstructor
     static class VarianceRecursiveTask extends RecursiveTask<Double> {
+
         private double[] data;
         private int start;
         private int end;
@@ -75,8 +76,10 @@ public class ConcurrentVariance {
                 variance += sum / len;
             } else {
                 int middle = (start + end) / 2;
-                VarianceRecursiveTask subTaskA = new VarianceRecursiveTask(data, start, middle, mean, seq);
-                VarianceRecursiveTask subTaskB = new VarianceRecursiveTask(data, middle, end, mean, seq);
+                VarianceRecursiveTask subTaskA = new VarianceRecursiveTask(
+                        data, start, middle, mean, seq);
+                VarianceRecursiveTask subTaskB = new VarianceRecursiveTask(
+                        data, middle, end, mean, seq);
                 subTaskA.fork();
                 subTaskB.fork();
 

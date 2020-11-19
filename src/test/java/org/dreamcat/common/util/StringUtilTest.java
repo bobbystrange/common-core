@@ -1,10 +1,9 @@
 package org.dreamcat.common.util;
 
-import org.dreamcat.common.io.IOUtil;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.StringReader;
+import org.dreamcat.common.io.IOUtil;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/5/7
@@ -226,7 +225,6 @@ public class StringUtilTest {
     public void extractNumberReader() throws IOException {
         try (StringReader sr = new StringReader("3.14e-2.csv")) {
             System.out.println(StringUtil.extractNumber(sr));
-            ;
             System.out.println(IOUtil.readAsString(sr));
         }
     }

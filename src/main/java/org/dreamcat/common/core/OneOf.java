@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode
 public class OneOf<L, R> {
+
     private L left;
     private R right;
 

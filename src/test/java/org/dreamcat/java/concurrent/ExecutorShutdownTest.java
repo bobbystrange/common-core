@@ -1,11 +1,10 @@
 package org.dreamcat.java.concurrent;
 
-import org.junit.Test;
-
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2019-03-27
@@ -32,7 +31,8 @@ public class ExecutorShutdownTest {
             });
         }
         executor.shutdown();
-        System.out.println(lineno.getAndIncrement() + " " + (System.currentTimeMillis() - timestamp) + "ms");
+        System.out.println(
+                lineno.getAndIncrement() + " " + (System.currentTimeMillis() - timestamp) + "ms");
     }
 
     @Test

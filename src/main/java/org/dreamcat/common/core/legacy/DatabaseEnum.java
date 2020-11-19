@@ -48,14 +48,14 @@ enum DatabaseEnum {
     // jdbc:derby;//localhost:1527/testdb;create=true,user=,password=;
     Derby("org.apache.derby.jdbc.ClientDriver");
 
-    private String value;
+    private final String value;
 
     DatabaseEnum(String value) {
         this.value = value;
     }
 
     public static Statement openStatement(String sql, DatabaseEnum kind, String url,
-                                          String user, String password) throws ClassNotFoundException, SQLException {
+            String user, String password) throws ClassNotFoundException, SQLException {
         Class.forName(kind.toString());
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             return connection.prepareStatement(sql);

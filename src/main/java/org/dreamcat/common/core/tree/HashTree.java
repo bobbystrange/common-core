@@ -1,15 +1,15 @@
 package org.dreamcat.common.core.tree;
 
-import org.dreamcat.common.function.TriConsumer;
-
 import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import org.dreamcat.common.function.TriConsumer;
 
 /**
  * Create by tuke on 2020/4/25
  */
 public interface HashTree<K, V, Node extends BinaryNode<Node> & HashNode<K, V>> {
+
     Node getRoot();
 
     int size();
@@ -121,6 +121,7 @@ public interface HashTree<K, V, Node extends BinaryNode<Node> & HashNode<K, V>> 
     }
 
     class KeyIter<K, V, Node extends BinaryNode<Node> & HashNode<K, V>> implements Iterator<K> {
+
         private final BinaryNode.Iter<Node> delegate;
 
         public KeyIter(Node root) {
@@ -139,6 +140,7 @@ public interface HashTree<K, V, Node extends BinaryNode<Node> & HashNode<K, V>> 
     }
 
     class ValueIter<K, V, Node extends BinaryNode<Node> & HashNode<K, V>> implements Iterator<V> {
+
         private final BinaryNode.Iter<Node> delegate;
 
         public ValueIter(Node root) {

@@ -15,7 +15,7 @@ public class SerializableUtil {
     public static <T extends Serializable> byte[] toBytes(T obj)
             throws IOException {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream(128);
-             ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(obj);
             oos.flush();
             return baos.toByteArray();
@@ -25,7 +25,7 @@ public class SerializableUtil {
     public static <T extends Serializable> byte[] toBytes(List<T> objs)
             throws IOException {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream(128);
-             ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             for (T obj : objs) {
                 oos.writeObject(obj);
             }

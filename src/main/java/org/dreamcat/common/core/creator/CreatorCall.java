@@ -22,7 +22,8 @@ public class CreatorCall<T> implements ModalCreator.Call<T> {
         this.converter = converter;
     }
 
-    public static <T> CreatorCall<T> newCall(Object original, ThrowableFunction<Object, T> converter) {
+    public static <T> CreatorCall<T> newCall(
+            Object original, ThrowableFunction<Object, T> converter) {
         return new CreatorCall<>(original, converter);
     }
 

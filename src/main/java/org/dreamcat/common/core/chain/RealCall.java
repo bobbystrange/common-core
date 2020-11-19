@@ -1,9 +1,8 @@
 package org.dreamcat.common.core.chain;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class RealCall<I, O>
@@ -28,7 +27,8 @@ public class RealCall<I, O>
         this.original = original;
     }
 
-    public static <Resp, Req> RealCall<Req, Resp> newCall(InterceptTarget<Req, Resp> interceptTarget, Req originalRequest) {
+    public static <Resp, Req> RealCall<Req, Resp> newCall(
+            InterceptTarget<Req, Resp> interceptTarget, Req originalRequest) {
         return new RealCall<>(interceptTarget, originalRequest);
     }
 

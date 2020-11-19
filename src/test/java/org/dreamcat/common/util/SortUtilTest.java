@@ -1,11 +1,10 @@
 package org.dreamcat.common.util;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.LinkedList;
 
 /**
  * Create by tuke on 2020/4/4
@@ -68,6 +67,7 @@ public class SortUtilTest {
 
     @AllArgsConstructor
     private static class ScoreInteger implements Comparable<ScoreInteger> {
+
         private final int value;
 
         @Override

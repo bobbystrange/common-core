@@ -1,12 +1,11 @@
 package org.dreamcat.common.core.creator;
 
-import org.dreamcat.common.function.ThrowableFunction;
-
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import org.dreamcat.common.function.ThrowableFunction;
 
 /**
  * Create by tuke on 2018-09-09
@@ -73,7 +72,8 @@ public interface ModalCreator {
         }
 
         if (service.getInterfaces().length > 0) {
-            throw new IllegalArgumentException(service.getName() + " must not extend other interfaces.");
+            throw new IllegalArgumentException(
+                    service.getName() + " must not extend other interfaces.");
         }
     }
 

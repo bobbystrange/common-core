@@ -1,11 +1,15 @@
 package org.dreamcat.common.core.tree;
 
-import static org.dreamcat.common.core.tree.AVLHashNode.*;
+import static org.dreamcat.common.core.tree.AVLHashNode.delete;
+import static org.dreamcat.common.core.tree.AVLHashNode.drop;
+import static org.dreamcat.common.core.tree.AVLHashNode.insert;
+import static org.dreamcat.common.core.tree.AVLHashNode.select;
 
 /**
  * Create by tuke on 2020/4/19
  */
 public class AVLHashTree<K, V> implements HashTree<K, V, AVLHashNode<K, V>> {
+
     private AVLHashNode<K, V> root;
     private int size;
 

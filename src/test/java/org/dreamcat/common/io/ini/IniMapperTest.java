@@ -63,12 +63,14 @@ public class IniMapperTest {
     @Getter
     @Setter
     public static class Json {
+
         Base c;
         Base d;
     }
 
     @Data
     public static class Ini {
+
         Base c;
         Base d;
     }
@@ -76,6 +78,7 @@ public class IniMapperTest {
     @Getter
     @Setter
     public static class Base {
+
         int a;
         String b;
     }

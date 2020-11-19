@@ -1,5 +1,10 @@
 package org.dreamcat.common.core;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
 import org.dreamcat.common.function.ThrowableConsumer;
 import org.dreamcat.common.function.ThrowableObjectArrayConsumer;
@@ -8,17 +13,12 @@ import org.dreamcat.common.function.ThrowableVoidConsumer;
 import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.ObjectUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 /**
  * Create by tuke on 2019-06-06
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Timeit {
+
     private final List actions = new ArrayList();
     // assert skip < count
     // such as count=100, skip=10, then discard head 10 & tail 10 before merge
@@ -63,7 +63,8 @@ public class Timeit {
     }
 
     public String runAndFormat(String unit, double unitBase, String delimiter) {
-        return Arrays.stream(run()).mapToObj(it -> String.format("%6.3f%s", it / unitBase, unit)).collect(Collectors.joining(delimiter));
+        return Arrays.stream(run()).mapToObj(it -> String.format("%6.3f%s", it / unitBase, unit))
+                .collect(Collectors.joining(delimiter));
     }
 
     /**
@@ -99,7 +100,9 @@ public class Timeit {
         }
     }
 
-    public Timeit addAction(ThrowableSupplier<Object[]> supplier, ThrowableObjectArrayConsumer action) {
+    public Timeit addAction(
+            ThrowableSupplier<Object[]> supplier,
+            ThrowableObjectArrayConsumer action) {
         this.actions.add(new Action(supplier, action));
         return this;
     }
@@ -217,18 +220,21 @@ public class Timeit {
 
     @AllArgsConstructor
     private static class Action {
+
         ThrowableSupplier<Object[]> supplier;
         ThrowableObjectArrayConsumer action;
     }
 
     @AllArgsConstructor
     private static class UnaryAction<T> {
+
         ThrowableSupplier<T> supplier;
         ThrowableConsumer<T> action;
     }
 
     @AllArgsConstructor
     private static class VoidAction {
+
         ThrowableVoidConsumer action;
     }
 }

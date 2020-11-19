@@ -1,9 +1,8 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.io.FileUtil;
-
 import java.io.File;
 import java.io.RandomAccessFile;
+import org.dreamcat.common.io.FileUtil;
 
 /**
  * Create by tuke on 2020/5/5
@@ -20,7 +19,8 @@ public interface CipherCrackAlgorithm {
         decryptCbc(input, output, key, maxSize, 0L);
     }
 
-    default void decryptCbc(File input, File output, byte[] key, int maxSize, long offset) throws Exception {
+    default void decryptCbc(File input, File output, byte[] key, int maxSize, long offset)
+            throws Exception {
         byte[] buffer = new byte[maxSize];
         int n;
         try (RandomAccessFile raf = new RandomAccessFile(input, "r")) {

@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
  * Create by tuke on 2020/3/29
  */
 public class RealFilterChain<S, T> implements ModalFilter.Chain<S, T> {
+
     private final BiConsumer<S, T> service;
     private final List<ModalFilter<S, T>> filters = new ArrayList<>();
     private int pos = 0;

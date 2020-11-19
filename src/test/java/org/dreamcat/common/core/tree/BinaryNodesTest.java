@@ -1,9 +1,8 @@
 package org.dreamcat.common.core.tree;
 
+import java.util.ArrayList;
 import org.dreamcat.common.core.Timeit;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 /**
  * Create by tuke on 2020/5/29

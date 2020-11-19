@@ -1,11 +1,10 @@
 package org.dreamcat.common.crypto;
 
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.util.ByteUtil;
 import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 /**
  * Create by tuke on 2019-02-17

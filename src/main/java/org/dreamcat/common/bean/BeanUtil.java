@@ -1,8 +1,5 @@
 package org.dreamcat.common.bean;
 
-import org.dreamcat.common.util.ObjectUtil;
-import org.dreamcat.common.util.ReflectUtil;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -13,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.dreamcat.common.util.ObjectUtil;
+import org.dreamcat.common.util.ReflectUtil;
 
 /**
  * Create by tuke on 2019-06-04
@@ -52,7 +51,9 @@ public class BeanUtil {
 
         return fields.stream()
                 .filter(field -> {
-                    boolean exclude = ReflectUtil.isStaticAndHasExtraModifiersAndAnyAnnotation(field, extraExcludeModifiers, excludeAnnotations);
+                    boolean exclude = ReflectUtil
+                            .isStaticAndHasExtraModifiersAndAnyAnnotation(
+                                    field, extraExcludeModifiers, excludeAnnotations);
                     return !exclude;
                 })
                 .map(field -> {
@@ -103,7 +104,9 @@ public class BeanUtil {
 
         return fields.stream()
                 .filter(field -> {
-                    boolean exclude = ReflectUtil.isStaticAndHasExtraModifiersAndAnyAnnotation(field, extraExcludeModifiers, excludeAnnotations);
+                    boolean exclude = ReflectUtil
+                            .isStaticAndHasExtraModifiersAndAnyAnnotation(
+                                    field, extraExcludeModifiers, excludeAnnotations);
                     return !exclude;
                 })
                 .map(field -> {
@@ -143,7 +146,9 @@ public class BeanUtil {
             Object bean, int extraExcludeModifiers,
             Class<? extends Annotation>[] excludeAnnotations, int level,
             Class... expandClasses) {
-        if (level < 1 || level > 256) throw new IllegalArgumentException("level must belong [1-256] but got " + level);
+        if (level < 1 || level > 256) {
+            throw new IllegalArgumentException("level must belong [1-256] but got " + level);
+        }
         List<Object> values = toList(bean, extraExcludeModifiers, excludeAnnotations);
 
         for (Object value : values) {
@@ -211,7 +216,8 @@ public class BeanUtil {
             Class<A> aliasClass, Function<A, String> aliasFunction) {
         Class<?> clazz = bean.getClass();
         Map<String, Object> map = new HashMap<>();
-        Map<String, Field> fieldMap = ReflectUtil.retrieveFieldMap(clazz, aliasClass, aliasFunction);
+        Map<String, Field> fieldMap = ReflectUtil.retrieveFieldMap(
+                clazz, aliasClass, aliasFunction);
 
         Set<Map.Entry<String, Field>> entrySet = fieldMap.entrySet();
         for (Map.Entry<String, Field> entry : entrySet) {
@@ -247,7 +253,8 @@ public class BeanUtil {
             throw new RuntimeException(e);
         }
 
-        Map<String, Field> fieldMap = ReflectUtil.retrieveFieldMap(clazz, aliasClass, aliasFunction);
+        Map<String, Field> fieldMap = ReflectUtil.retrieveFieldMap(
+                clazz, aliasClass, aliasFunction);
 
         Set<Map.Entry<String, Field>> entrySet = fieldMap.entrySet();
         for (Map.Entry<String, Field> entry : entrySet) {

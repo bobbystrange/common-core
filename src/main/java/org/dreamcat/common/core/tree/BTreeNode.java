@@ -1,11 +1,5 @@
 package org.dreamcat.common.core.tree;
 
-import lombok.AllArgsConstructor;
-import org.dreamcat.common.core.WriteResult;
-import org.dreamcat.common.util.ArrayUtil;
-import org.dreamcat.common.util.ComparatorUtil;
-import org.dreamcat.common.util.ObjectUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,12 +8,18 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import lombok.AllArgsConstructor;
+import org.dreamcat.common.core.WriteResult;
+import org.dreamcat.common.util.ArrayUtil;
+import org.dreamcat.common.util.ComparatorUtil;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * Create by tuke on 2020/4/24
  */
 @AllArgsConstructor
 public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
+
     protected BTreeNode<E> parent;
     // p e p e p
     protected E[] elements;
@@ -30,7 +30,8 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
     // index in parent
     protected int index;
 
-    static <E> BTreeNode<E> insert(BTreeNode<E> root, BTreeNode<E> x, E element, boolean onlyIfAbsent, Result<E> result) {
+    static <E> BTreeNode<E> insert(BTreeNode<E> root, BTreeNode<E> x, E element,
+            boolean onlyIfAbsent, Result<E> result) {
         E[] elements = x.elements;
 
         WriteResult<Integer> writeResult = WriteResult.empty();
@@ -69,7 +70,8 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
         return balanceInsertion(root, x);
     }
 
-    static <E> BTreeNode<E> delete(BTreeNode<E> root, BTreeNode<E> x, E element, Predicate<E> match, Result<E> result) {
+    static <E> BTreeNode<E> delete(BTreeNode<E> root, BTreeNode<E> x, E element, Predicate<E> match,
+            Result<E> result) {
         E[] elements = x.elements;
 
         WriteResult<Integer> writeResult = WriteResult.empty();
@@ -180,14 +182,16 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
         int ind = writeResult.getData();
         newParentElements[ind] = middleElement;
         if (ind < parentElements.length) {
-            System.arraycopy(parentElements, ind, newParentElements, ind + 1, newParentElements.length - ind - 1);
+            System.arraycopy(parentElements, ind, newParentElements, ind + 1,
+                    newParentElements.length - ind - 1);
         }
 
         newParentNodes[index] = leftNode;
         newParentNodes[index + 1] = rightNode;
         // if not the last node
         if (index < parentNodes.length - 1) {
-            System.arraycopy(parentNodes, index + 1, newParentNodes, index + 2, parentNodes.length - index - 1);
+            System.arraycopy(parentNodes, index + 1, newParentNodes, index + 2,
+                    parentNodes.length - index - 1);
         }
 
         p.elements = newParentElements;
@@ -213,7 +217,6 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
 
         E[] elements = x.elements;
         int len = elements.length;
-
 
         E[] newElements = Arrays.copyOf(elements, len - 1);
         if (ind < len - 1) {
@@ -290,7 +293,6 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
                 }
                 mergedNode.nodes = mergedNodes;
             }
-
 
             p.nodes = Arrays.copyOf(pns, pns.length - 1);
             // index - 1
@@ -410,7 +412,9 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
 
     // ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
-    private void levelOrder(List<BTreeNode<E>> levelNodes, int level, BiConsumer<? super BTreeNode<E>, Integer> action) {
+    private void levelOrder(
+            List<BTreeNode<E>> levelNodes, int level,
+            BiConsumer<? super BTreeNode<E>, Integer> action) {
         if (ObjectUtil.isEmpty(levelNodes)) return;
 
         List<BTreeNode<E>> nextLevelNodes = new ArrayList<>();
@@ -431,6 +435,7 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
     }
 
     protected static class Iter<E> implements Iterator<BTreeNode<E>> {
+
         private List<BTreeNode<E>> levelNodes;
         private List<BTreeNode<E>> nextLevelNodes;
         private int pos;
@@ -468,6 +473,7 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
     }
 
     static class Result<E> {
+
         boolean applied;
         E element;
         int index;

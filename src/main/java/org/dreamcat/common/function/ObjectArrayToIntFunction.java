@@ -5,5 +5,6 @@ package org.dreamcat.common.function;
  */
 @FunctionalInterface
 public interface ObjectArrayToIntFunction {
+
     int apply(Object... args);
 }

@@ -1,10 +1,9 @@
 package org.dreamcat.common.core.tree;
 
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/19
@@ -27,7 +26,8 @@ public class RBHashTreeTest {
             msgs.get(level - 1).add(k + "(" + (red ? "R" : "B") + ")");
         });
 
-        String s = msgs.stream().map(line -> String.join("\t", line)).collect(Collectors.joining("\n"));
+        String s = msgs.stream().map(line -> String.join("\t", line))
+                .collect(Collectors.joining("\n"));
         System.out.println(s);
     }
 

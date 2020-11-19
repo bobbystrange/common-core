@@ -1,14 +1,14 @@
 package org.dreamcat.common.core.event;
 
-import lombok.Getter;
-
 import java.util.EventObject;
+import lombok.Getter;
 
 /**
  * Create by tuke on 2020/3/29
  */
 @Getter
 public class ModalEvent extends EventObject {
+
     private final long timestamp;
 
     /**

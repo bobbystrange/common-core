@@ -1,15 +1,14 @@
 package org.dreamcat.common.core.tree;
 
-import org.dreamcat.common.core.Timeit;
-import org.dreamcat.common.function.ThrowableSupplier;
-import org.dreamcat.common.util.RandomUtil;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.function.ThrowableSupplier;
+import org.dreamcat.common.util.RandomUtil;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/19
@@ -32,7 +31,8 @@ public class AVLHashTreeTest {
             msgs.get(level - 1).add(k + "");
         });
 
-        String s = msgs.stream().map(line -> String.join("\t", line)).collect(Collectors.joining("\n"));
+        String s = msgs.stream().map(line -> String.join("\t", line))
+                .collect(Collectors.joining("\n"));
         System.out.println(s);
     }
 
@@ -56,7 +56,8 @@ public class AVLHashTreeTest {
             msgs.get(level - 1).add(k + "");
         });
 
-        String s = msgs.stream().map(line -> String.join("\t", line)).collect(Collectors.joining("\n"));
+        String s = msgs.stream().map(line -> String.join("\t", line))
+                .collect(Collectors.joining("\n"));
         System.out.println(s);
     }
 

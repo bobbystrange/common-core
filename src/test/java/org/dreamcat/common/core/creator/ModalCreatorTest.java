@@ -1,8 +1,5 @@
 package org.dreamcat.common.core.creator;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,6 +7,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Date;
 import java.util.function.BiFunction;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2018-09-09
@@ -88,6 +87,7 @@ public class ModalCreatorTest {
      */
     @Retention(RetentionPolicy.RUNTIME)
     @interface Value {
+
         String value();
     }
 }

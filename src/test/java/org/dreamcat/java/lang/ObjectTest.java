@@ -1,10 +1,9 @@
 package org.dreamcat.java.lang;
 
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import org.dreamcat.common.core.Timeit;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 /**
  * Create by tuke on 2020/4/18
@@ -39,12 +38,14 @@ public class ObjectTest {
 
     @AllArgsConstructor
     static class WaitNotify {
+
         private volatile boolean even;
         private int n;
     }
 
     @AllArgsConstructor
     static class PrintEvenNumber implements Runnable {
+
         private final WaitNotify waitNotify;
 
         @Override
@@ -71,6 +72,7 @@ public class ObjectTest {
 
     @AllArgsConstructor
     static class PrintOddNumber implements Runnable {
+
         private final WaitNotify waitNotify;
 
         @Override

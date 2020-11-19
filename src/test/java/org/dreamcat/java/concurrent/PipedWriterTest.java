@@ -1,10 +1,9 @@
 package org.dreamcat.java.concurrent;
 
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/22

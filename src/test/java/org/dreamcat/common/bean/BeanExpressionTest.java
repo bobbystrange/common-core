@@ -10,6 +10,7 @@ import org.junit.Test;
  */
 @Slf4j
 public class BeanExpressionTest {
+
     BeanExpression beanExpression;
 
     @Before

@@ -1,8 +1,7 @@
 package org.dreamcat.common.io;
 
-import org.junit.Test;
-
 import java.io.IOException;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/10

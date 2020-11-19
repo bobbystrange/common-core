@@ -8,6 +8,7 @@ public interface ExchangeFilter<T> {
     void filter(T exchange, Chain<T> chain);
 
     interface Chain<T> {
+
         void filter(T exchange);
     }
 }

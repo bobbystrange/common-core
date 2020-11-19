@@ -7,17 +7,14 @@ import java.util.function.DoubleUnaryOperator;
  * @author tuke
  */
 public class MathUtil {
+
     private static volatile Map<Integer, Long> fibonacciCache;
 
     //difference quotient
     public static double diffq(double[] a, double[] b) {
         int n = a.length;
-        if (n == 2) {
-            return (b[0] - b[1]) / (a[0] - a[1]);
-        }
-        if (n == 1) {
-            return b[0] / a[0];
-        }
+        if (n == 2) return (b[0] - b[1]) / (a[0] - a[1]);
+        if (n == 1) return b[0] / a[0];
 
         double[] c = new double[n - 1];
         System.arraycopy(a, 0, c, 0, n - 1);
@@ -38,9 +35,7 @@ public class MathUtil {
     // f(x) = x, such as cos(x) = x
     public static double fxeqx(double x, DoubleUnaryOperator fx) {
         double xq = fx.applyAsDouble(x);
-        if (xq == x) {
-            return x;
-        }
+        if (xq == x) return x;
         return fxeqx(xq, fx);
     }
 
@@ -49,7 +44,7 @@ public class MathUtil {
         if (fibonacciCache == null) {
             synchronized (MathUtil.class) {
                 if (fibonacciCache == null) {
-                    fibonacciCache = CollectionUtil.ofConcurrentHashMap(
+                    fibonacciCache = CollectionUtil.concurrentMapOf(
                             1, 1L,
                             2, 1L,
                             3, 2L,

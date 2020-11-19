@@ -1,8 +1,5 @@
 package org.dreamcat.common.bean;
 
-import org.dreamcat.common.util.ObjectUtil;
-import org.dreamcat.common.util.ReflectUtil;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -18,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.dreamcat.common.util.ObjectUtil;
+import org.dreamcat.common.util.ReflectUtil;
 
 /**
  * Create by tuke on 2020/3/3

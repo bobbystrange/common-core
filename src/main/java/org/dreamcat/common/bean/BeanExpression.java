@@ -1,14 +1,13 @@
 package org.dreamcat.common.bean;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.ReflectUtil;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ReflectUtil;
 
 /**
  * Create by tuke on 2018-12-27
@@ -78,7 +77,8 @@ public class BeanExpression {
                 Class<?> fieldFieldObjectClass = fieldFieldObject.getClass();
                 if (fieldFieldObjectClass.isPrimitive()) {
                     if (log.isDebugEnabled())
-                        log.debug("ignore primitive type field `{}` of class `{}`", rest, fieldFieldObjectClass);
+                        log.debug("ignore primitive type field `{}` of class `{}`",
+                                rest, fieldFieldObjectClass);
                     continue;
                 }
                 fieldField.set(fieldObject, null);
@@ -117,7 +117,8 @@ public class BeanExpression {
                         // wanna kept field is not exists, so remove the object self
                         if (fieldClass.isPrimitive()) {
                             if (log.isDebugEnabled())
-                                log.debug("ignore primitive type field `{}` of class `{}`", name, fieldClass);
+                                log.debug("ignore primitive type field `{}` of class `{}`",
+                                        name, fieldClass);
                         } else {
                             field.set(bean, null);
                         }
@@ -197,7 +198,8 @@ public class BeanExpression {
     }
 
     // work on this case: c.{m.x,n.{y,z}},b,a
-    private static void retrieveForFirstLeftBigParentheses(String expression, List<String> levelOneFiledNames) {
+    private static void retrieveForFirstLeftBigParentheses(
+            String expression, List<String> levelOneFiledNames) {
         int leftPos = expression.indexOf("{");
         int len = expression.length();
         // '{' count 1, '}' count -1, matched until count equal 0
@@ -222,7 +224,8 @@ public class BeanExpression {
             if (rightPos < len - 1) {
                 char ch = expression.charAt(rightPos + 1);
                 if (ch != ',') {
-                    throw new IllegalArgumentException(String.format("invalid char `%s` after `}`", ch + ""));
+                    throw new IllegalArgumentException(
+                            String.format("invalid char `%s` after `}`", ch + ""));
                 }
                 // still has some chars after matched '},'
                 if (rightPos + 1 < len - 1) {

@@ -6,6 +6,7 @@ import java.util.Objects;
  * Create by tuke on 2020/4/4
  */
 class SkipNode<K, V> {
+
     int hash;
     K key;
     V value;

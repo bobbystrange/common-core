@@ -4,16 +4,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import java.util.function.IntFunction;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.util.StringUtil;
 import org.junit.Test;
-
-import java.util.function.IntFunction;
 
 /**
  * Create by tuke on 2020/5/7
  */
 public class JsonParseSpeedTest {
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Gson gson = new Gson();
     private static final String no_nested = "{\n" +
@@ -78,9 +78,11 @@ public class JsonParseSpeedTest {
                         .addUnaryAction(() -> objectMapper.readTree(jsonGen.apply(finalK)), it -> {
                             String ignore = objectMapper.writeValueAsString(it);
                         })
-                        .addUnaryAction(() -> gson.fromJson(jsonGen.apply(finalK), JsonElement.class), it -> {
-                            String ignore = gson.toJson(it);
-                        })
+                        .addUnaryAction(
+                                () -> gson.fromJson(jsonGen.apply(finalK), JsonElement.class),
+                                it -> {
+                                    String ignore = gson.toJson(it);
+                                })
                         .addUnaryAction(() -> JsonMapper.parse(jsonGen.apply(finalK)), it -> {
                             @SuppressWarnings("deprecation")
                             String ignore = JsonMapper.stringify(it);

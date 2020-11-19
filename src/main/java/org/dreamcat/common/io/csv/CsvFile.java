@@ -1,9 +1,5 @@
 package org.dreamcat.common.io.csv;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.dreamcat.common.util.ObjectUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +12,9 @@ import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * Create by tuke on 2018-09-22
@@ -23,6 +22,7 @@ import java.util.List;
  * @see CsvReader
  */
 public class CsvFile implements AutoCloseable {
+
     private final BufferedReader reader;
     @Getter
     @Setter

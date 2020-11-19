@@ -1,18 +1,18 @@
 package org.dreamcat.java.lang;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.ObjectUtil;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * Create by tuke on 2020/5/29
  */
 @Slf4j
 public class NetworkClassLoader extends ClassLoader {
+
     private final String baseUrl;
 
     public NetworkClassLoader(String baseUrl) {
@@ -28,7 +28,7 @@ public class NetworkClassLoader extends ClassLoader {
 
         byte[] classBytes;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             InputStream is = new URL(path).openConnection().getInputStream()) {
+                InputStream is = new URL(path).openConnection().getInputStream()) {
             byte[] buf = new byte[4096];
             int readSize;
             while ((readSize = is.read(buf)) > 0) {

@@ -1,7 +1,5 @@
 package org.dreamcat.java.io;
 
-import org.junit.Test;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,6 +7,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/8/7

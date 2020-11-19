@@ -380,7 +380,8 @@ public class SortUtil {
         }
     }
 
-    public static <T extends Comparable<T>> void selectSort(List<T> a, int offset, int size, Comparator<T> c) {
+    public static <T extends Comparable<T>> void selectSort(List<T> a, int offset, int size,
+            Comparator<T> c) {
         for (int i = offset + size - 1; i > offset + 1; i--) {
             // index of max
             int k = 0;
@@ -607,7 +608,8 @@ public class SortUtil {
     }
 
     // radix sort
-    public static <E> void radixSort(LinkedList<E> list, BiFunction<E, Integer, Integer> scorer, int binBound, int bound) {
+    public static <E> void radixSort(LinkedList<E> list, BiFunction<E, Integer, Integer> scorer,
+            int binBound, int bound) {
         for (int j = 0; j <= bound - 1; j++) {
             int finalJ = j;
             binSort(list, e -> scorer.apply(e, finalJ), binBound);

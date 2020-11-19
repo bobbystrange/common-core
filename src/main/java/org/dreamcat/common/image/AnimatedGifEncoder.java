@@ -1,6 +1,7 @@
 package org.dreamcat.common.image;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.BufferedOutputStream;
@@ -82,7 +83,6 @@ public class AnimatedGifEncoder {
      * image is added.
      *
      * @param iter int number of iterations.
-     * @return
      */
     public void setRepeat(int iter) {
         if (iter >= 0) {
@@ -203,7 +203,6 @@ public class AnimatedGifEncoder {
      * than 20 do not yield significant improvements in speed.
      *
      * @param quality int greater than 0.
-     * @return
      */
     public void setQuality(int quality) {
         if (quality < 1) quality = 1;

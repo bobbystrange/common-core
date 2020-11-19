@@ -11,6 +11,7 @@ import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 public class DeflaterCompressUtil {
+
     private static final int BUFFER_SIZE = 4096;
 
     // compress

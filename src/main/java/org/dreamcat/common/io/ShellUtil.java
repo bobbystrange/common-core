@@ -1,8 +1,5 @@
 package org.dreamcat.common.io;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.ObjectUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * Create by tuke on 2019-02-13
@@ -59,14 +58,16 @@ public class ShellUtil {
 
             List<String> output = new ArrayList<>();
             String line;
-            try (BufferedReader stdOutput = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            try (BufferedReader stdOutput = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()))) {
                 while ((line = stdOutput.readLine()) != null) {
                     output.add(line);
                     if (verbose) log.info(line);
                 }
             }
 
-            try (BufferedReader errorOutput = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+            try (BufferedReader errorOutput = new BufferedReader(
+                    new InputStreamReader(process.getErrorStream()))) {
                 while ((line = errorOutput.readLine()) != null) {
                     output.add(line);
                     if (verbose) log.error(line);
@@ -119,13 +120,15 @@ public class ShellUtil {
 
             if (verbose) {
                 String line;
-                try (BufferedReader stdOutput = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                try (BufferedReader stdOutput = new BufferedReader(
+                        new InputStreamReader(process.getInputStream()))) {
                     while ((line = stdOutput.readLine()) != null) {
                         log.info(line);
                     }
                 }
 
-                try (BufferedReader errorOutput = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+                try (BufferedReader errorOutput = new BufferedReader(
+                        new InputStreamReader(process.getErrorStream()))) {
                     while ((line = errorOutput.readLine()) != null) {
                         log.error(line);
                     }

@@ -1,12 +1,12 @@
 package org.dreamcat.common.bean.copy;
 
+import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
+
 import net.sf.cglib.beans.BeanCopier;
 import org.dreamcat.common.bean.BeanUtil;
 import org.dreamcat.test.BeanData;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
-
-import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
 
 /**
  * Create by tuke on 2019-06-03
@@ -107,7 +107,6 @@ public class BeanCopyTypeTest {
     public void testNotSupportDeepCloneForCglib() {
         BeanCopier copier = BeanCopier.create(
                 BeanData.Pojo.class, BeanData.Pojo.class, false);
-
 
         BeanData.Pojo source = BeanData.ofPojo();
         BeanData.Pojo target = new BeanData.Pojo();

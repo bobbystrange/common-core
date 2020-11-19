@@ -1,12 +1,11 @@
 package org.dreamcat.common.io;
 
-import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.channels.ByteChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/9

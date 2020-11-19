@@ -5,5 +5,6 @@ package org.dreamcat.common.function;
  */
 @FunctionalInterface
 public interface ObjectArrayToDoubleFunction {
+
     double apply(Object... args);
 }

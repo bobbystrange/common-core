@@ -1,13 +1,12 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.Base64Util;
-
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import org.dreamcat.common.util.Base64Util;
 
 // Message Authentication Code
 public enum HmacUtil {

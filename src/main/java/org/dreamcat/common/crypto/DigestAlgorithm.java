@@ -1,14 +1,13 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.Base64Util;
-import org.dreamcat.common.util.ByteUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import org.dreamcat.common.util.Base64Util;
+import org.dreamcat.common.util.ByteUtil;
 
 /**
  * Create by tuke on 2019-02-17
@@ -63,7 +62,8 @@ public enum DigestAlgorithm {
         return md.digest();
     }
 
-    public byte[] digest(InputStream input, OutputStream output) throws NoSuchAlgorithmException, IOException {
+    public byte[] digest(InputStream input, OutputStream output)
+            throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance(algorithm);
         final int size = bufferSize;
         final byte[] buffer = new byte[size];
@@ -91,7 +91,8 @@ public enum DigestAlgorithm {
         return ByteUtil.hex(digest(input));
     }
 
-    public String digestAsHex(InputStream input, OutputStream output) throws NoSuchAlgorithmException, IOException {
+    public String digestAsHex(InputStream input, OutputStream output)
+            throws NoSuchAlgorithmException, IOException {
         return ByteUtil.hex(digest(input, output));
     }
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
@@ -108,7 +109,8 @@ public enum DigestAlgorithm {
         return Base64Util.encodeAsString(digest(input));
     }
 
-    public String digestAsBase64(InputStream input, OutputStream output) throws NoSuchAlgorithmException, IOException {
+    public String digestAsBase64(InputStream input, OutputStream output)
+            throws NoSuchAlgorithmException, IOException {
         return Base64Util.encodeAsString(digest(input, output));
     }
 

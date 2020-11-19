@@ -1,9 +1,5 @@
 package org.dreamcat.common.util;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.test.BeanData;
-import org.junit.Test;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -11,6 +7,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.test.BeanData;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2019-02-12
@@ -39,7 +38,8 @@ public class ReflectUtilTest {
     @Test
     public void anyAssignable() {
         assert ReflectUtil.hasAnySuperClass(ArrayList.class, List.class, int.class, Date.class);
-        assert ReflectUtil.hasAnySuperClass(ArrayList.class, String.class, Collection.class, Iterable.class);
+        assert ReflectUtil
+                .hasAnySuperClass(ArrayList.class, String.class, Collection.class, Iterable.class);
     }
 
     @Test
@@ -65,18 +65,21 @@ public class ReflectUtilTest {
     }
 
     private static class A {
+
         int a;
         String a2;
         static long a3;
     }
 
     private static class B extends A {
+
         int b;
         Date b2;
         static String b3;
     }
 
     private static class C extends B {
+
         int c;
         Long a2;
         static double b3;

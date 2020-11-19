@@ -7,4 +7,5 @@ package org.dreamcat.common.function;
  */
 @FunctionalInterface
 public interface QuaternaryOperator<T> extends QuaFunction<T, T, T, T, T> {
+
 }

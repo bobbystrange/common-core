@@ -8,6 +8,7 @@ import java.util.Arrays;
  * Create by tuke on 2020/8/17
  */
 public class ParameterizedTypeTest<T, R> {
+
     T left;
     R right;
 

@@ -1,9 +1,9 @@
 package org.dreamcat.common.util;
 
-import org.junit.Test;
-
 import static org.dreamcat.common.util.RandomUtil.rand;
 import static org.dreamcat.common.util.RandomUtil.uuid;
+
+import org.junit.Test;
 
 public class RandomUtilTest {
 

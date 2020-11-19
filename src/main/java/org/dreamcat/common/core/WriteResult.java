@@ -4,6 +4,7 @@ package org.dreamcat.common.core;
  * Create by tuke on 2020/4/25
  */
 public class WriteResult<T> {
+
     public boolean applied;
     public T data;
 

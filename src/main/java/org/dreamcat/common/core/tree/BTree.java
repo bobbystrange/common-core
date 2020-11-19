@@ -1,6 +1,9 @@
 package org.dreamcat.common.core.tree;
 
-import lombok.RequiredArgsConstructor;
+import static org.dreamcat.common.core.tree.BTreeNode.Result;
+import static org.dreamcat.common.core.tree.BTreeNode.delete;
+import static org.dreamcat.common.core.tree.BTreeNode.insert;
+import static org.dreamcat.common.core.tree.BTreeNode.search;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,14 +12,14 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
-
-import static org.dreamcat.common.core.tree.BTreeNode.*;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Create by tuke on 2020/4/25
  */
 @RequiredArgsConstructor
 public class BTree<E> {
+
     private final int order;
     private final IntFunction<E[]> arrGen;
     private BTreeNode<E> root;
@@ -133,8 +136,8 @@ public class BTree<E> {
             lines.get(level - 1).add(Arrays.deepToString(elements));
         });
 
-
-        String s = lines.stream().map(line -> String.join(" ", line)).collect(Collectors.joining("\n"));
+        String s = lines.stream().map(line -> String.join(" ", line))
+                .collect(Collectors.joining("\n"));
         System.out.println(s);
     }
 }

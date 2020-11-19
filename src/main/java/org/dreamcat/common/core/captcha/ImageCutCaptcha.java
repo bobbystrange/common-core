@@ -1,18 +1,19 @@
 package org.dreamcat.common.core.captcha;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.function.IntBinaryOperator;
 import lombok.RequiredArgsConstructor;
 import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.image.ImageUtil;
 import org.dreamcat.common.util.ObjectUtil;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.function.IntBinaryOperator;
-
 /**
  * Create by tuke on 2020/5/12
  */
 public class ImageCutCaptcha {
+
     private static final Color WHITE_ALPHA = new Color(255, 255, 255, 0);
     private int width;
     private int height;
@@ -73,7 +74,8 @@ public class ImageCutCaptcha {
         //AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0);
         //g.setComposite(ac);
 
-        BufferedImage cutting = new BufferedImage(areaWidth, areaHeight, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage cutting = new BufferedImage(areaWidth, areaHeight,
+                BufferedImage.TYPE_INT_ARGB);
         Graphics2D cg = cutting.createGraphics();
         //g.setColor(Color.WHITE);
         cg.setColor(WHITE_ALPHA);
@@ -108,6 +110,7 @@ public class ImageCutCaptcha {
 
     @RequiredArgsConstructor
     public static class Builder {
+
         private final ImageCutCaptcha target;
 
         public Builder source(BufferedImage image) {

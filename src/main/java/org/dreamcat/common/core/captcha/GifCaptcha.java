@@ -1,22 +1,25 @@
 package org.dreamcat.common.core.captcha;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import lombok.RequiredArgsConstructor;
 import org.dreamcat.common.image.AnimatedGifEncoder;
 import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.Base64Util;
 import org.dreamcat.common.util.RandomUtil;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UncheckedIOException;
-
 /**
  * Create by tuke on 2020/5/12
  */
 public class GifCaptcha {
+
     private Font font = new Font("DejaVu Sans", Font.ITALIC, 20);
     private int width = 160;
     private int height = 40;
@@ -131,9 +134,10 @@ public class GifCaptcha {
 
     @RequiredArgsConstructor
     public static class Builder {
+
         private final GifCaptcha target;
 
-        public Builder useChinsesFont() {
+        public Builder useChineseFont() {
             target.font = new Font("宋体", Font.BOLD, 20);
             return this;
         }

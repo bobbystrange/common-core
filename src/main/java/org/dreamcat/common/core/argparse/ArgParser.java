@@ -1,6 +1,9 @@
 package org.dreamcat.common.core.argparse;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.dreamcat.common.core.argparse.Argument.flag_bool;
+import static org.dreamcat.common.core.argparse.Argument.flag_list;
+import static org.dreamcat.common.core.argparse.Argument.flag_property;
+import static org.dreamcat.common.core.argparse.Argument.flag_string;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,8 +15,7 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
-
-import static org.dreamcat.common.core.argparse.Argument.*;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Create by tuke on 2019-03-26
@@ -21,6 +23,7 @@ import static org.dreamcat.common.core.argparse.Argument.*;
 @Slf4j
 @SuppressWarnings("unchecked")
 public abstract class ArgParser {
+
     // key, argument
     Map<String, Argument> key_argument_map = new HashMap<>();
     // key, value

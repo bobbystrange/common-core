@@ -1,12 +1,5 @@
 package org.dreamcat.common.net;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLParameters;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.X509TrustManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +14,13 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Create by tuke on 2018-09-13
@@ -66,7 +66,8 @@ public class SocketUtil {
 
             tks.load(is, certPassword.toCharArray());
 
-            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            KeyManagerFactory keyManagerFactory = KeyManagerFactory
+                    .getInstance(KeyManagerFactory.getDefaultAlgorithm());
             keyManagerFactory.init(tks, certPassword.toCharArray());
 
             sslContext.init(keyManagerFactory.getKeyManagers(), null, new SecureRandom());
@@ -86,12 +87,14 @@ public class SocketUtil {
         if (x509TrustManager == null) {
             x509TrustManager = new X509TrustManager() {
                 @Override
-                public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                public void checkClientTrusted(X509Certificate[] x509Certificates, String s)
+                        throws CertificateException {
 
                 }
 
                 @Override
-                public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                public void checkServerTrusted(X509Certificate[] x509Certificates, String s)
+                        throws CertificateException {
 
                 }
 

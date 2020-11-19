@@ -1,16 +1,19 @@
 package org.dreamcat.common.core.captcha;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import lombok.RequiredArgsConstructor;
 import org.dreamcat.common.image.ImageUtil;
 import org.dreamcat.common.util.RandomUtil;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 /**
  * Create by tuke on 2020/5/11
  */
 public class ImageCaptcha {
+
     private Font font = new Font("DejaVu Sans", Font.ITALIC, 20);
     private int rgbStart = 0;
     private int rgbEnd = 256;
@@ -88,6 +91,7 @@ public class ImageCaptcha {
 
     @RequiredArgsConstructor
     public static class Builder {
+
         private final ImageCaptcha target;
 
         public Builder useSongFont() {

@@ -1,13 +1,5 @@
 package org.dreamcat.common.net;
 
-import org.dreamcat.common.util.Base64Util;
-
-import javax.crypto.Cipher;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
 import java.io.FileInputStream;
 import java.security.Key;
 import java.security.KeyStore;
@@ -18,6 +10,13 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+import javax.crypto.Cipher;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+import org.dreamcat.common.util.Base64Util;
 
 public class CertificateUtil {
 
@@ -159,7 +158,7 @@ public class CertificateUtil {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     private static PrivateKey getPrivateKey(String keyStorePath, String alias,
-                                            String password) throws Exception {
+            String password) throws Exception {
         KeyStore ks = getKeyStore(keyStorePath, password);
         return (PrivateKey) ks.getKey(alias, password.toCharArray());
     }

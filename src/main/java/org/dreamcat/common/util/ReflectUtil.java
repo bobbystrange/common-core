@@ -1,7 +1,5 @@
 package org.dreamcat.common.util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -28,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SuppressWarnings({"unchecked", "rawtypes"})
@@ -46,11 +45,13 @@ public class ReflectUtil {
         return classList;
     }
 
-    public static <T> List<Class<? extends T>> retrieveSubClasses(Class<T> clazz, String... classPaths) {
+    public static <T> List<Class<? extends T>> retrieveSubClasses(Class<T> clazz,
+            String... classPaths) {
         return retrieveSubClasses(clazz, Arrays.asList(classPaths));
     }
 
-    public static <T> List<Class<? extends T>> retrieveSubClasses(Class<T> clazz, Collection<String> classPaths) {
+    public static <T> List<Class<? extends T>> retrieveSubClasses(Class<T> clazz,
+            Collection<String> classPaths) {
         if (ObjectUtil.isEmpty(classPaths)) {
             return retrieveSubClasses(clazz, "");
         }
@@ -122,7 +123,8 @@ public class ReflectUtil {
         return retrieveFieldMap(clazz, null, null);
     }
 
-    public static <A extends Annotation> Map<String, Field> retrieveFieldMap(Class<?> clazz, Class<A> aliasClass, Function<A, String> aliasFunction) {
+    public static <A extends Annotation> Map<String, Field> retrieveFieldMap(Class<?> clazz,
+            Class<A> aliasClass, Function<A, String> aliasFunction) {
         Map<String, Field> fieldMap = new HashMap<>();
         while (!clazz.equals(Object.class)) {
             Class superClass = clazz.getSuperclass();
@@ -144,7 +146,8 @@ public class ReflectUtil {
     }
 
     // only no static field
-    public static <A extends Annotation> List<String> retrieveFieldNames(Class<?> clazz, Class<A> aliasClass, Function<A, String> aliasFunction) {
+    public static <A extends Annotation> List<String> retrieveFieldNames(Class<?> clazz,
+            Class<A> aliasClass, Function<A, String> aliasFunction) {
         List<String> fieldNameList = new ArrayList<>();
         while (!clazz.equals(Object.class)) {
             Class superClass = clazz.getSuperclass();
@@ -162,7 +165,8 @@ public class ReflectUtil {
         return fieldNameList;
     }
 
-    public static <A extends Annotation> String retrieveFieldName(Field field, Class<A> aliasClass, Function<A, String> aliasFunction) {
+    public static <A extends Annotation> String retrieveFieldName(Field field, Class<A> aliasClass,
+            Function<A, String> aliasFunction) {
         String fieldName = field.getName();
         Annotation[] annotations = field.getAnnotations();
 
@@ -195,13 +199,15 @@ public class ReflectUtil {
         return annotationList;
     }
 
-    public static <A extends Annotation> A retrieveAnnotation(Class<?> clazz, Class<A> annotationClass) {
+    public static <A extends Annotation> A retrieveAnnotation(Class<?> clazz,
+            Class<A> annotationClass) {
         List<A> annotationList = retrieveAnnotations(clazz, annotationClass);
         if (annotationList.isEmpty()) return null;
         return annotationList.get(annotationList.size() - 1);
     }
 
-    public static <A extends Annotation> List<A> retrieveAnnotations(Class<?> clazz, Class<A> annotationClass) {
+    public static <A extends Annotation> List<A> retrieveAnnotations(Class<?> clazz,
+            Class<A> annotationClass) {
         List<A> annotationList = new ArrayList<>();
         while (!clazz.equals(Object.class)) {
             Class superClass = clazz.getSuperclass();
@@ -683,7 +689,8 @@ public class ReflectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    private static <T> void findSubClasses(File classFile, String prefix, Class<T> clazz, List<Class<? extends T>> classList) {
+    private static <T> void findSubClasses(File classFile, String prefix, Class<T> clazz,
+            List<Class<? extends T>> classList) {
         if (classFile.isDirectory()) {
             File[] files = classFile.listFiles();
             if (ObjectUtil.isEmpty(files)) return;

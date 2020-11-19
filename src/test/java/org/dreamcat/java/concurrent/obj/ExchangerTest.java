@@ -1,8 +1,7 @@
 package org.dreamcat.java.concurrent.obj;
 
-import org.junit.Test;
-
 import java.util.concurrent.Exchanger;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/24

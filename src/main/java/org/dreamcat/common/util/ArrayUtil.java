@@ -1,10 +1,5 @@
 package org.dreamcat.common.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.dreamcat.common.core.WriteResult;
-import org.dreamcat.common.function.IntToByteFunction;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,9 +10,15 @@ import java.util.function.IntFunction;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntToLongFunction;
 import java.util.function.IntUnaryOperator;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.dreamcat.common.core.WriteResult;
+import org.dreamcat.common.function.IntToByteFunction;
 
 /**
  * Create by tuke on 2020/3/3
+ * <p>
+ * Note that end is endIndexExclusive since We follow the common rules or JDK
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ArrayUtil {
@@ -162,6 +163,24 @@ public class ArrayUtil {
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
+    public static int sum(int[] a, int start, int end) {
+        // just avoid the infinite loop
+        ObjectUtil.requireNotNegative(end - start, "end - start");
+        int sum = 0;
+        for (int i = start; i < end; i++) sum += a[i];
+        return sum;
+    }
+
+    public static int sumInclusive(int[] a, int start, int endInclusive) {
+        // just avoid the infinite loop
+        ObjectUtil.requireNotNegative(endInclusive - start, "endInclusive - start");
+        int sum = 0;
+        for (int i = start; i <= endInclusive; i++) sum += a[i];
+        return sum;
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
     public static int[] arrange(int[] a, int[] order) {
         int size = a.length;
         int[] b = new int[size];
@@ -206,6 +225,22 @@ public class ArrayUtil {
             b[order[i]] = a[i];
         }
         return b;
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static byte[] trimEnd(byte[] a) {
+        return trimEnd(a, (byte) 0);
+    }
+
+    public static byte[] trimEnd(byte[] a, byte b) {
+        int offset = 0, size = a.length;
+        for (int i = size - 1; i >= 0; i--) {
+            if (a[i] != b) break;
+            offset++;
+        }
+        if (offset == 0) return a;
+        return Arrays.copyOf(a, size - offset);
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -266,7 +301,8 @@ public class ArrayUtil {
         return binarySearch(a, 0, a.length, key, result);
     }
 
-    public static int binarySearch(int[] a, int fromIndex, int toIndex, int key, WriteResult<Integer> result) {
+    public static int binarySearch(int[] a, int fromIndex, int toIndex, int key,
+            WriteResult<Integer> result) {
         int low = fromIndex;
         int high = toIndex - 1;
 
@@ -274,11 +310,11 @@ public class ArrayUtil {
             int mid = (low + high) >>> 1;
             int midVal = a[mid];
             int cmp = midVal - key;
-            if (cmp < 0)
+            if (cmp < 0) {
                 low = mid + 1;
-            else if (cmp > 0)
+            } else if (cmp > 0) {
                 high = mid - 1;
-            else {
+            } else {
                 if (result != null) result.update(true);
                 return mid; // key found
             }
@@ -295,7 +331,8 @@ public class ArrayUtil {
         return binarySearch(a, 0, a.length, key, result);
     }
 
-    public static int binarySearch(long[] a, int fromIndex, int toIndex, long key, WriteResult<Integer> result) {
+    public static int binarySearch(long[] a, int fromIndex, int toIndex, long key,
+            WriteResult<Integer> result) {
         int low = fromIndex;
         int high = toIndex - 1;
 
@@ -303,11 +340,11 @@ public class ArrayUtil {
             int mid = (low + high) >>> 1;
             long midVal = a[mid];
             long cmp = midVal - key;
-            if (cmp < 0)
+            if (cmp < 0) {
                 low = mid + 1;
-            else if (cmp > 0)
+            } else if (cmp > 0) {
                 high = mid - 1;
-            else {
+            } else {
                 if (result != null) result.update(true);
                 return mid; // key found
             }
@@ -321,11 +358,13 @@ public class ArrayUtil {
     }
 
     // Note that result.data = [0, a.length], a[i] <= key when i < a.length
-    public static <T> int binarySearch(T[] a, T key, Comparator<? super T> c, WriteResult<Integer> result) {
+    public static <T> int binarySearch(T[] a, T key, Comparator<? super T> c,
+            WriteResult<Integer> result) {
         return binarySearch(a, 0, a.length, key, c, result);
     }
 
-    public static <T> int binarySearch(T[] a, int fromIndex, int toIndex, T key, Comparator<? super T> c, WriteResult<Integer> result) {
+    public static <T> int binarySearch(T[] a, int fromIndex, int toIndex, T key,
+            Comparator<? super T> c, WriteResult<Integer> result) {
         int low = fromIndex;
         int high = toIndex - 1;
 
@@ -333,11 +372,11 @@ public class ArrayUtil {
             int mid = (low + high) >>> 1;
             T midVal = a[mid];
             int cmp = c.compare(midVal, key);
-            if (cmp < 0)
+            if (cmp < 0) {
                 low = mid + 1;
-            else if (cmp > 0)
+            } else if (cmp > 0) {
                 high = mid - 1;
-            else {
+            } else {
                 if (result != null) result.update(true);
                 return mid; // key found
             }
@@ -464,5 +503,45 @@ public class ArrayUtil {
         return result;
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    /**
+     * If the maximum subarray is a[s:e] for a[0:j],
+     * then the maximum subarray is a[s:e] or a[i:j+1] for a[0:j+1].
+     * Especially, a[0:1] is the maximum subarray for a[0:1],
+     * so the maximum subarray for a[0:2] is a[0:1] or a[i:2].
+     *
+     * @return {@code new int[]{start, end}}} or {@code null}
+     */
+    public static int[] maximumSubarray(int[] a) {
+        int size;
+        if (a == null || (size = a.length) == 0) return null;
+        if (size == 1) return new int[]{0, 1};
+
+        // a[s:e] is a[0:1] for a[0:1]
+        int start = 0, end = 1, sum = a[0], nextSum;
+        int nextStart = start;
+        boolean nextEnd = false;
+        for (int j = 1; j < size; j++) {
+            // skip if a[j] is not positive
+            if (a[j] <= 0) continue;
+            // foreach i from s to end, check the sum of the range a[i:j+1]
+            for (int i = start; i < j; i++) {
+                nextSum = sumInclusive(a, i, j);
+                if (nextSum > sum) {
+                    sum = nextSum;
+                    nextStart = i;
+                    nextEnd = true;
+                }
+            }
+            if (nextEnd) {
+                start = nextStart;
+                end = j + 1;
+                nextEnd = false;
+            }
+        }
+
+        return new int[]{start, end};
+    }
 
 }

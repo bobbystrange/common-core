@@ -8,6 +8,7 @@ import java.util.function.Consumer;
  * Create by tuke on 2020/3/29
  */
 public class ExchangeFilterChain<T> implements ExchangeFilter.Chain<T> {
+
     private final Consumer<T> service;
     private final List<ExchangeFilter<T>> filters = new ArrayList<>();
     private int pos = 0;

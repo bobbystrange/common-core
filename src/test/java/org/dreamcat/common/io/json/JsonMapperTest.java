@@ -1,10 +1,9 @@
 package org.dreamcat.common.io.json;
 
+import java.util.Map;
 import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.util.StringUtil;
 import org.junit.Test;
-
-import java.util.Map;
 
 /**
  * Create by tuke on 2020/5/10

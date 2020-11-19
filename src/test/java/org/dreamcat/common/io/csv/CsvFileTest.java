@@ -1,13 +1,12 @@
 package org.dreamcat.common.io.csv;
 
 import com.opencsv.CSVReader;
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.core.Timeit;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.core.Timeit;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2019-01-26

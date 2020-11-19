@@ -41,8 +41,7 @@ public class DateUtil {
     }
 
     public static String yyMMddHHmmssSSS(Date date) {
-        return new SimpleDateFormat("yyMMddHHmmssSSS")
-                .format(date);
+        return new SimpleDateFormat("yyMMddHHmmssSSS").format(date);
     }
 
     public static String yyMMddHHmmss() {
@@ -50,8 +49,7 @@ public class DateUtil {
     }
 
     public static String yyMMddHHmmss(Date date) {
-        return new SimpleDateFormat("yyMMddHHmmss")
-                .format(date);
+        return new SimpleDateFormat("yyMMddHHmmss").format(date);
     }
 
     public static String yyMMddHHmm() {
@@ -59,8 +57,7 @@ public class DateUtil {
     }
 
     public static String yyMMddHHmm(Date date) {
-        return new SimpleDateFormat("yyMMddHHmm")
-                .format(date);
+        return new SimpleDateFormat("yyMMddHHmm").format(date);
     }
 
     public static String yyMMdd() {
@@ -68,8 +65,7 @@ public class DateUtil {
     }
 
     public static String yyMMdd(Date date) {
-        return new SimpleDateFormat("yyMMdd")
-                .format(date);
+        return new SimpleDateFormat("yyMMdd").format(date);
     }
 
     private String format(LocalDate localDate, String pattern) {

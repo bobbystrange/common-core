@@ -1,11 +1,10 @@
 package org.dreamcat.common.core.forkjoin;
 
+import java.util.Arrays;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 /**
  * Create by tuke on 2020/8/14
@@ -14,7 +13,8 @@ public class ConcurrentVarianceTest {
 
     @Test
     public void test() {
-        double[] data = Arrays.stream(ArrayUtil.rangeOf(0, 100_000)).mapToDouble(it -> RandomUtil.rand()).toArray();
+        double[] data = Arrays.stream(ArrayUtil.rangeOf(0, 100_000))
+                .mapToDouble(it -> RandomUtil.rand()).toArray();
         int size = data.length;
         // mean
         double sum = 0;

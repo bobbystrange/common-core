@@ -1,11 +1,10 @@
 package org.dreamcat.java.lang;
 
-import org.junit.Test;
-import sun.misc.Launcher;
-
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import org.junit.Test;
+import sun.misc.Launcher;
 
 /**
  * Create by tuke on 2020/5/29
@@ -72,7 +71,8 @@ public class ClassLoaderTest {
         ClassLoader loader = clazz.getClassLoader();
         while (true) {
             if (loader instanceof URLClassLoader) {
-                System.out.printf("%s extends %s\n", loader.getClass(), URLClassLoader.class.getCanonicalName());
+                System.out.printf("%s extends %s\n", loader.getClass(),
+                        URLClassLoader.class.getCanonicalName());
             } else {
                 System.out.println(loader);
             }

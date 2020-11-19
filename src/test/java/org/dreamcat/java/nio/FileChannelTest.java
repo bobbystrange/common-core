@@ -1,6 +1,6 @@
 package org.dreamcat.java.nio;
 
-import org.junit.Test;
+import static org.dreamcat.common.util.FormatUtil.log;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -8,8 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static org.dreamcat.common.util.FormatUtil.log;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/8

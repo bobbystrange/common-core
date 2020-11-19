@@ -1,9 +1,8 @@
 package org.dreamcat.common.io;
 
-import org.dreamcat.common.core.Pair;
-
 import java.io.IOException;
 import java.io.Reader;
+import org.dreamcat.common.core.Pair;
 
 /**
  * Create by tuke on 2020/8/6
@@ -11,6 +10,7 @@ import java.io.Reader;
  * Note that this is a slower (almost 50%) implement than BufferedReader
  */
 public class LineTerminatedReader extends Reader {
+
     public static final int CR = '\r';
     public static final int LF = '\n';
     public static final int CRLF = ('\r' << 8) + '\n';
@@ -191,7 +191,8 @@ public class LineTerminatedReader extends Reader {
         }
     }
 
-    private void append1(Pair<StringBuilder, Integer> pair, StringBuilder sb, int i, int lineTerminated) {
+    private void append1(Pair<StringBuilder, Integer> pair, StringBuilder sb, int i,
+            int lineTerminated) {
         if (sb == null) sb = new StringBuilder(i - offset);
         sb.append(cb, offset, i - offset);
         offset = i + 1;

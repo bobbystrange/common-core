@@ -1,9 +1,5 @@
 package org.dreamcat.common.io.ini;
 
-import org.dreamcat.common.core.Pair;
-import org.dreamcat.common.util.ObjectUtil;
-import org.dreamcat.common.util.StringUtil;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,12 +19,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.util.ObjectUtil;
+import org.dreamcat.common.util.StringUtil;
 
 /**
  * Create by tuke on 2018-09-22
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class IniMapper {
+
     private final Map<String, Map<String, Object>> sections = new HashMap<>();
     private String defaultSection = "default";
     private boolean sectionIgnoreCase = true;
@@ -162,8 +162,10 @@ public class IniMapper {
                     Class<?> richClass = richValue.getClass();
                     if (!componentClass.equals(richClass)) {
                         if (failedIfInvalid) {
-                            String msg = String.format("incompatible type in line: `%s`, between %s and %s",
-                                    line, componentClass.getSimpleName(), richClass.getSimpleName());
+                            String msg = String
+                                    .format("incompatible type in line: `%s`, between %s and %s",
+                                            line, componentClass.getSimpleName(),
+                                            richClass.getSimpleName());
                             throw new IllegalArgumentException(msg);
                         } else {
                             continue;
@@ -375,7 +377,6 @@ public class IniMapper {
 
     public boolean rename(String oldSection, String newSection) {
         ObjectUtil.requireNonNull(oldSection, newSection);
-
 
         if (!contains(oldSection) || contains(newSection))
             return false;

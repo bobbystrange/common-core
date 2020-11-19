@@ -7,6 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public class ArgParseException extends Exception {
+
     String name;
     String key;
     String value;

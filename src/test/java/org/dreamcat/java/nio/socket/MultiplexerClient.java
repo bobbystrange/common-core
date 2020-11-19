@@ -1,7 +1,5 @@
 package org.dreamcat.java.nio.socket;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -10,12 +8,14 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Create by tuke on 2020/4/26
  */
 @Slf4j
 public class MultiplexerClient implements Runnable, Closeable {
+
     private final Selector selector;
     private final SocketChannel client;
     private volatile boolean stop;

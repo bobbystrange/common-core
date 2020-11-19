@@ -1,10 +1,9 @@
 package org.dreamcat.common.crypto;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 
 @Slf4j
 public class DigestAlgorithmTest {
@@ -14,7 +13,6 @@ public class DigestAlgorithmTest {
 
         DigestAlgorithm md5 = DigestAlgorithm.MD5;
         DigestAlgorithm sha256 = DigestAlgorithm.SHA_256;
-
 
         String msg = "0123456789abcdef";
         log.info("utf-8:\t{}", Arrays.toString(msg.getBytes()));

@@ -1,8 +1,5 @@
 package org.dreamcat.common.io.csv;
 
-import org.dreamcat.common.core.Pair;
-import org.dreamcat.common.util.ArrayUtil;
-
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
@@ -11,11 +8,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.util.ArrayUtil;
 
 /**
  * Create by tuke on 2020/8/3
  */
 public class CsvReader implements Closeable {
+
     private static final char DEFAULT_ESCAPE_CHAR = '"';
     private static final char DEFAULT_DELIMITER_CHAR = ',';
     private static final int DEFAULT_CHAR_BUFFER_SIZE = 8192;
@@ -229,7 +229,10 @@ public class CsvReader implements Closeable {
                                         }
                                     }
                                 } else {
-                                    throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt(nextChar), offset + 1, formatCRLF(new String(cb, 0, size))));
+                                    throw new IllegalArgumentException(
+                                            String.format("illegal char %s at pos %d of %s",
+                                                    fmt(nextChar), offset + 1,
+                                                    formatCRLF(new String(cb, 0, size))));
                                 }
                             }
                             // offset = size - 1
@@ -243,7 +246,10 @@ public class CsvReader implements Closeable {
                                     append(pair, c);
                                     fill();
                                     if (size == 0) {
-                                        throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt(c), offset + 1, formatCRLF(new String(cb, 0, size))));
+                                        throw new IllegalArgumentException(
+                                                String.format("illegal char %s at pos %d of %s",
+                                                        fmt(c), offset + 1,
+                                                        formatCRLF(new String(cb, 0, size))));
                                     }
                                     continue escape_loop;
                                 } else if (nextChar == delimiter) {
@@ -270,7 +276,10 @@ public class CsvReader implements Closeable {
                                         return;
                                     }
                                 } else {
-                                    throw new IllegalArgumentException(String.format("illegal char %s at pos %d of %s", fmt((char) nextChar), offset + 1, formatCRLF(new String(cb, 0, size))));
+                                    throw new IllegalArgumentException(
+                                            String.format("illegal char %s at pos %d of %s",
+                                                    fmt((char) nextChar), offset + 1,
+                                                    formatCRLF(new String(cb, 0, size))));
                                 }
                             }
                         }

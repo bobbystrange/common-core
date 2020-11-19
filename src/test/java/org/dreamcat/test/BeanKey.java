@@ -1,15 +1,14 @@
 package org.dreamcat.test;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Create by tuke on 2019-05-14
@@ -18,6 +17,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 public class BeanKey {
+
     @Anno
     private Date yearMonth;
     @Anno
@@ -40,7 +40,9 @@ public class BeanKey {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE})
+    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER,
+            ElementType.LOCAL_VARIABLE})
     public @interface Anno {
+
     }
 }

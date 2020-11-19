@@ -5,4 +5,5 @@ package org.dreamcat.common.function;
  */
 @FunctionalInterface
 public interface TripleOperator<T> extends TriFunction<T, T, T, T> {
+
 }

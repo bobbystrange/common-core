@@ -1,15 +1,14 @@
 package org.dreamcat.common.io.json;
 
-import org.dreamcat.common.core.Pair;
-import org.dreamcat.common.core.Triple;
-import org.dreamcat.common.util.StringUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.core.Triple;
+import org.dreamcat.common.util.StringUtil;
 
 /**
  * Create by tuke on 2020/5/10
@@ -90,7 +89,8 @@ public class JsonMapper {
             pair = parseString(expression, offset);
         } else if ((c >= '0' && c <= '9') || c == '-') {
             pair = StringUtil.extractNumber(expression, offset);
-            if (pair == null) throw new IllegalArgumentException("invalid token " + c + " at pos " + offset);
+            if (pair == null)
+                throw new IllegalArgumentException("invalid token " + c + " at pos " + offset);
         } else {
             pair = parseLiteral(expression, offset);
         }
@@ -124,7 +124,8 @@ public class JsonMapper {
             }
 
             if (map.containsKey(field)) {
-                throw new IllegalArgumentException("redundant field `" + field + "` at pos " + offset);
+                throw new IllegalArgumentException(
+                        "redundant field `" + field + "` at pos " + offset);
             }
 
             Triple<?, Integer, Boolean> valueTriple = parseHead(expression, colon + 1, '}', false);
@@ -133,7 +134,8 @@ public class JsonMapper {
             offset = valueTriple.second();
             closed = valueTriple.third();
             if (closed) {
-                throw new IllegalArgumentException("unmatch field `" + field + "` at pos " + offset);
+                throw new IllegalArgumentException(
+                        "unmatch field `" + field + "` at pos " + offset);
             }
 
             map.put(field, value);
@@ -203,7 +205,8 @@ public class JsonMapper {
         return Pair.of(bool, offset);
     }
 
-    private static Triple<?, Integer, Boolean> parseHead(String expression, int offset, char end, boolean trimComma) {
+    private static Triple<?, Integer, Boolean> parseHead(String expression, int offset, char end,
+            boolean trimComma) {
         int len = expression.length();
 
         char c;
@@ -237,14 +240,16 @@ public class JsonMapper {
             return parseString(expression, offset).join(false);
         } else if ((c >= '0' && c <= '9') || c == '-') {
             Pair<Number, Integer> pair = StringUtil.extractNumber(expression, offset);
-            if (pair == null) throw new IllegalArgumentException("invalid token " + c + " at pos " + offset);
+            if (pair == null)
+                throw new IllegalArgumentException("invalid token " + c + " at pos " + offset);
             return pair.join(false);
         } else {
             return parseLiteral(expression, offset).join(false);
         }
     }
 
-    private static Triple<String, Integer, Boolean> parseField(String expression, int offset, boolean trimComma) {
+    private static Triple<String, Integer, Boolean> parseField(String expression, int offset,
+            boolean trimComma) {
         int len = expression.length();
 
         boolean trimmed = false;
@@ -257,7 +262,8 @@ public class JsonMapper {
                 } else if (c == '}') {
                     return new Triple<>(null, offset + 1, true);
                 } else {
-                    throw new IllegalArgumentException("invalid token `" + c + "` at pos " + offset);
+                    throw new IllegalArgumentException(
+                            "invalid token `" + c + "` at pos " + offset);
                 }
             }
         }
@@ -304,7 +310,8 @@ public class JsonMapper {
                 } else if (c == 'u') {
                     // \u0000
                     if (offset >= len - 4) {
-                        throw new IllegalArgumentException("invalid token \\u at pos " + (offset - 1));
+                        throw new IllegalArgumentException(
+                                "invalid token \\u at pos " + (offset - 1));
                     }
                     String n = expression.substring(offset + 1, offset + 5);
                     char u = (char) Integer.parseInt(n, 16);

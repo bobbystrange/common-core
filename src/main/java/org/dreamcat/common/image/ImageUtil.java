@@ -1,6 +1,5 @@
 package org.dreamcat.common.image;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
@@ -9,6 +8,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import javax.imageio.ImageIO;
 
 /**
  * Create by tuke on 2019-06-19

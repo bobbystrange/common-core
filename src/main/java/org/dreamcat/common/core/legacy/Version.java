@@ -7,6 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public class Version {
+
     // 0.1.0.alpha-1
     private final int majorVersion;
     private final int minorVersion;
@@ -15,7 +16,8 @@ public class Version {
     private final Type type;
     private final String specialVersion;
 
-    public Version(int majorVersion, int minorVersion, int microVersion, Type type, int buildVersion) {
+    public Version(
+            int majorVersion, int minorVersion, int microVersion, Type type, int buildVersion) {
         this.majorVersion = majorVersion;
         this.minorVersion = minorVersion;
         this.microVersion = microVersion;

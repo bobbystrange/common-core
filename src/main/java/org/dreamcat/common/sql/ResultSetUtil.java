@@ -1,8 +1,5 @@
 package org.dreamcat.common.sql;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.ReflectUtil;
-
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ReflectUtil;
 
 /**
  * Create by tuke on 2019-01-23
@@ -59,7 +58,8 @@ public final class ResultSetUtil {
         return a;
     }
 
-    public static List<Object[]> batchGetAll(ResultSet rs, int columnSize, int batchNumber) throws SQLException {
+    public static List<Object[]> batchGetAll(ResultSet rs, int columnSize, int batchNumber)
+            throws SQLException {
         List<Object[]> a = new ArrayList<>(batchNumber);
         for (int i = 0; i < batchNumber; i++) {
             if (!rs.next()) break;
@@ -98,7 +98,8 @@ public final class ResultSetUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    private static Object getByClass(ResultSet rs, Class<?> clazz, int columnIndex) throws SQLException {
+    private static Object getByClass(ResultSet rs, Class<?> clazz, int columnIndex)
+            throws SQLException {
         if (clazz.equals(Long.class) || clazz.equals(long.class)) {
             return rs.getLong(columnIndex);
         }

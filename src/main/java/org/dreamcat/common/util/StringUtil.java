@@ -1,10 +1,9 @@
 package org.dreamcat.common.util;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.core.Pair;
-
 import java.io.IOException;
 import java.io.Reader;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.core.Pair;
 
 /**
  * Create by tuke on 2019-02-16
@@ -16,13 +15,13 @@ public class StringUtil {
     // +1023.2251799813685248
     private static final int EXPECT_MAX_NUMBER_SIZE = 22;
 
-    // {input}{filler}{input}{filler}{input}
-    public static String interval(String input, String filler, int size) {
-        StringBuilder sb = new StringBuilder(input.length() * size + filler.length() * (size - 1));
+    // {s}{filler}{s}{filler}{s}
+    public static String interval(String s, String filler, int size) {
+        StringBuilder sb = new StringBuilder(s.length() * size + filler.length() * (size - 1));
         for (int i = 0; i < size - 1; i++) {
-            sb.append(input).append(filler);
+            sb.append(s).append(filler);
         }
-        sb.append(input);
+        sb.append(s);
         return sb.toString();
     }
 
@@ -176,7 +175,7 @@ public class StringUtil {
         return s.toString();
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     // \a\b\c  --> abc
     public static String fromBackslash(String s) {
@@ -215,6 +214,32 @@ public class StringUtil {
             sb.append(backslash).append((char) c);
         });
         return sb.toString();
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static String trimEnd(String s) {
+        return trimEnd(s, ' ');
+    }
+
+    public static String trimEnd(String s, char c) {
+        int offset = 0, size = s.length();
+        for (int i = size - 1; i >= 0; i--) {
+            if (s.charAt(i) != c) break;
+            offset++;
+        }
+        if (offset == 0) return s;
+        return s.substring(0, size - offset);
+    }
+
+    public static String trimEnd(String s, String chars) {
+        int offset = 0, size = s.length();
+        for (int i = size - 1; i >= 0; i--) {
+            if (chars.indexOf(s.charAt(i)) == -1) break;
+            offset++;
+        }
+        if (offset == 0) return s;
+        return s.substring(0, size - offset);
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====

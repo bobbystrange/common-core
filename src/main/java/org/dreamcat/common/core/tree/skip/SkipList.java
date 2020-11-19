@@ -1,17 +1,17 @@
 package org.dreamcat.common.core.tree.skip;
 
-import org.dreamcat.common.util.StringUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.dreamcat.common.util.StringUtil;
 
 /**
  * Create by tuke on 2020/4/4
  */
 public class SkipList<K, V> {
+
     private final float prob;
     private final int maxLevel;
     private final SkipNode<K, V> headNode;

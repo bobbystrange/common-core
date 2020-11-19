@@ -1,9 +1,8 @@
 package org.dreamcat.java.lang;
 
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-
-import java.io.IOException;
 
 /**
  * Create by tuke on 2019-04-18

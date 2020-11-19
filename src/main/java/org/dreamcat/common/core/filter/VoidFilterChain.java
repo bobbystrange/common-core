@@ -1,14 +1,14 @@
 package org.dreamcat.common.core.filter;
 
-import org.dreamcat.common.function.VoidConsumer;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.dreamcat.common.function.VoidConsumer;
 
 /**
  * Create by tuke on 2020/3/29
  */
 public class VoidFilterChain implements VoidFilter.Chain {
+
     private final VoidConsumer service;
     private final List<VoidFilter> filters = new ArrayList<>();
     private int pos = 0;

@@ -1,8 +1,7 @@
 package org.dreamcat.common.io;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Create by tuke on 2019-03-31

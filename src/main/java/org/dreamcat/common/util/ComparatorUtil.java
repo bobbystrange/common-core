@@ -1,5 +1,7 @@
 package org.dreamcat.common.util;
 
+import java.util.Objects;
+
 /**
  * Create by tuke on 2020/4/19
  */
@@ -18,10 +20,9 @@ public final class ComparatorUtil {
      */
     @SuppressWarnings({"unchecked"})
     public static <A, B> int compare(A a, B b) {
-        if (a == null && b == null) return 0;
-        // null always less than not-null
-        if (a == null) return -1;
-        if (b == null) return 1;
+        if (a == null || b == null) {
+            return Objects.hashCode(a) - Objects.hashCode(b);
+        }
 
         if (a instanceof Comparable &&
                 a.getClass().isInstance(b)) {

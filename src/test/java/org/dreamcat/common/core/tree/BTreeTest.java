@@ -1,10 +1,9 @@
 package org.dreamcat.common.core.tree;
 
-import org.dreamcat.common.util.RandomUtil;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.dreamcat.common.util.RandomUtil;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/25

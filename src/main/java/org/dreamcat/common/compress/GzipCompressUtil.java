@@ -12,6 +12,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class GzipCompressUtil {
+
     private static final int BUFFER_SIZE = 4096;
 
     // compress

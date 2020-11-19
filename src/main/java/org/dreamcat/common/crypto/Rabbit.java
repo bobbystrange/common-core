@@ -4,6 +4,7 @@ package org.dreamcat.common.crypto;
  * Create by tuke on 2020/5/13
  */
 public class Rabbit {
+
     private final int[] x = new int[8];
     private final int[] c = new int[8];
     private int carry = 0;

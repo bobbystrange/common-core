@@ -1,12 +1,11 @@
 package org.dreamcat.common.crypto;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.ByteUtil;
-import org.junit.Test;
-
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ByteUtil;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2019-01-27

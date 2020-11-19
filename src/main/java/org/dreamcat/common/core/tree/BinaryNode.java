@@ -10,6 +10,7 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings("unchecked")
 public abstract class BinaryNode<Node extends BinaryNode<Node>> implements Iterable<Node> {
+
     protected Node left;
     protected Node right;
 
@@ -57,6 +58,7 @@ public abstract class BinaryNode<Node extends BinaryNode<Node>> implements Itera
     }
 
     protected static class Iter<Node extends BinaryNode<Node>> implements Iterator<Node> {
+
         private final LinkedList<Node> levelNodes;
 
         Iter(Node node) {

@@ -1,12 +1,11 @@
 package org.dreamcat.common.crypto;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2019-01-27

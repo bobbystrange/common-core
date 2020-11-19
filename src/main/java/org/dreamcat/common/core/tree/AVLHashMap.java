@@ -1,6 +1,9 @@
 package org.dreamcat.common.core.tree;
 
-import org.dreamcat.common.util.ComparatorUtil;
+import static org.dreamcat.common.core.tree.AVLHashNode.delete;
+import static org.dreamcat.common.core.tree.AVLHashNode.drop;
+import static org.dreamcat.common.core.tree.AVLHashNode.insert;
+import static org.dreamcat.common.core.tree.AVLHashNode.select;
 
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -9,8 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import static org.dreamcat.common.core.tree.AVLHashNode.*;
+import org.dreamcat.common.util.ComparatorUtil;
 
 /**
  * Create by tuke on 2020/4/18
@@ -304,6 +306,7 @@ public class AVLHashMap<K extends Comparable<K>, V> extends AbstractMap<K, V> {
     }
 
     static class Node<K, V> {
+
         int hash;
         K key;
         V value;
@@ -317,6 +320,7 @@ public class AVLHashMap<K extends Comparable<K>, V> extends AbstractMap<K, V> {
     }
 
     static class TreeNode<K, V> extends AVLHashNode<K, V> {
+
         int hash;
 
         TreeNode(int hash, K key, V value) {
@@ -326,6 +330,7 @@ public class AVLHashMap<K extends Comparable<K>, V> extends AbstractMap<K, V> {
     }
 
     static class Tree<K, V> {
+
         private TreeNode<K, V> root;
         private int size;
 
@@ -393,6 +398,7 @@ public class AVLHashMap<K extends Comparable<K>, V> extends AbstractMap<K, V> {
     }
 
     class Iter implements Iterator<Entry<K, V>> {
+
         int pos;
         Node<K, V> node;
         Iterator treeIter;

@@ -1,13 +1,5 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.Base64Util;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyAgreement;
-import javax.crypto.SecretKey;
-import javax.crypto.interfaces.DHPrivateKey;
-import javax.crypto.interfaces.DHPublicKey;
-import javax.crypto.spec.DHParameterSpec;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -21,6 +13,13 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import javax.crypto.Cipher;
+import javax.crypto.KeyAgreement;
+import javax.crypto.SecretKey;
+import javax.crypto.interfaces.DHPrivateKey;
+import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.DHParameterSpec;
+import org.dreamcat.common.util.Base64Util;
 
 /**
  * Create by tuke on 2019-02-17
@@ -51,11 +50,13 @@ public enum DHCryptoAlgorithm {
         System.setProperty("jdk.crypto.KeyAgreement.legacyKDF", "true");
     }
 
-    public byte[] encryptByBase64Key(byte[] data, String publicKey, String privateKey) throws Exception {
+    public byte[] encryptByBase64Key(byte[] data, String publicKey, String privateKey)
+            throws Exception {
         return encrypt(data, Base64Util.decode(publicKey), Base64Util.decode(privateKey));
     }
 
-    public byte[] decryptByBase64Key(byte[] data, String publicKey, String privateKey) throws Exception {
+    public byte[] decryptByBase64Key(byte[] data, String publicKey, String privateKey)
+            throws Exception {
         return decrypt(data, Base64Util.decode(publicKey), Base64Util.decode(privateKey));
     }
 
@@ -144,7 +145,8 @@ public enum DHCryptoAlgorithm {
         return keyMap;
     }
 
-    private byte[] crypto(byte[] data, byte[] publicKey, byte[] privateKey, int mode) throws Exception {
+    private byte[] crypto(byte[] data, byte[] publicKey, byte[] privateKey, int mode)
+            throws Exception {
         SecretKey secretKey = generateSecretKey(publicKey, privateKey);
         Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
         cipher.init(mode, secretKey);

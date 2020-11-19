@@ -1,16 +1,16 @@
 package org.dreamcat.common.core;
 
-import lombok.Getter;
-import org.dreamcat.common.util.ObjectUtil;
-
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import lombok.Getter;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * Create by tuke on 2020/4/13
  */
 public class Retry {
+
     private static final int DEFAULT_TIMES = 3;
     private int times;
     @Getter

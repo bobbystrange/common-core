@@ -1,8 +1,5 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.Base64Util;
-
-import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -15,6 +12,8 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import javax.crypto.Cipher;
+import org.dreamcat.common.util.Base64Util;
 
 /**
  * <strong>Ron Rivest, Adi Shamir and Leonard Adleman</strong>

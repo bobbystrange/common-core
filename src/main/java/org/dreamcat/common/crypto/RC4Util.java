@@ -1,8 +1,7 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.Base64Util;
-
 import java.nio.charset.StandardCharsets;
+import org.dreamcat.common.util.Base64Util;
 
 /**
  * Create by tuke on 2020/5/13

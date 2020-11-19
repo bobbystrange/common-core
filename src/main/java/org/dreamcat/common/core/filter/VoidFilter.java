@@ -8,6 +8,7 @@ public interface VoidFilter {
     void filter(Chain chain);
 
     interface Chain {
+
         void filter();
     }
 }

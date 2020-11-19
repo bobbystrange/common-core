@@ -7,7 +7,9 @@ import org.dreamcat.common.util.ComparatorUtil;
  * Create by tuke on 2020/4/19
  */
 @Getter
-public class RBHashNode<K, V> extends RBNode<RBHashNode<K, V>> implements Comparable<RBHashNode<K, V>>, HashNode<K, V> {
+public class RBHashNode<K, V> extends RBNode<RBHashNode<K, V>> implements
+        Comparable<RBHashNode<K, V>>, HashNode<K, V> {
+
     protected K key;
     protected V value;
 
@@ -22,7 +24,9 @@ public class RBHashNode<K, V> extends RBNode<RBHashNode<K, V>> implements Compar
         this.parent = parent;
     }
 
-    static <K, V> RBHashNode<K, V> insert(RBHashNode<K, V> root, K key, V value, boolean onlyIfAbsent, WriteResult<K, V> result) {
+    static <K, V> RBHashNode<K, V> insert(
+            RBHashNode<K, V> root, K key, V value,
+            boolean onlyIfAbsent, WriteResult<K, V> result) {
         RBHashNode<K, V> hitNode = search(root, key);
 
         if (compare(key, hitNode.key) == 0) {
@@ -52,7 +56,9 @@ public class RBHashNode<K, V> extends RBNode<RBHashNode<K, V>> implements Compar
         return delete(root, key, null, false, result);
     }
 
-    static <K, V> RBHashNode<K, V> delete(RBHashNode<K, V> root, K key, V value, boolean matchValue, WriteResult<K, V> result) {
+    static <K, V> RBHashNode<K, V> delete(
+            RBHashNode<K, V> root, K key, V value,
+            boolean matchValue, WriteResult<K, V> result) {
         RBHashNode<K, V> x = search(root, key);
         if (compare(key, x.key) != 0) {
             return root;
@@ -247,7 +253,6 @@ public class RBHashNode<K, V> extends RBNode<RBHashNode<K, V>> implements Compar
         value = null;
     }
 
-
     /// static class & methods
 
     @Override
@@ -256,6 +261,7 @@ public class RBHashNode<K, V> extends RBNode<RBHashNode<K, V>> implements Compar
     }
 
     static class WriteResult<K, V> {
+
         boolean applied;
         K key;
         V value;

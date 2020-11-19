@@ -1,7 +1,5 @@
 package org.dreamcat.common.util;
 
-import org.dreamcat.common.io.IOUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,6 +12,7 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.dreamcat.common.io.IOUtil;
 
 public class UrlUtil {
 
@@ -27,7 +26,8 @@ public class UrlUtil {
         return concatUrl(baseUrl, map, statement, true);
     }
 
-    public static String concatUrl(String baseUrl, Map<String, Object> map, String statement, boolean encode) {
+    public static String concatUrl(String baseUrl, Map<String, Object> map, String statement,
+            boolean encode) {
         StringBuilder sb = new StringBuilder(baseUrl);
         if (ObjectUtil.isNotEmpty(map)) {
             sb.append("?").append(toSortedQueryString(

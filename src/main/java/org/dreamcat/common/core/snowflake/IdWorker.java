@@ -4,6 +4,7 @@ package org.dreamcat.common.core.snowflake;
  * Create by tuke on 2020/5/30
  */
 public class IdWorker {
+
     // 1 unused bit, 41 timestamp bits, 5 worker bits, 5 data-center bits, 12 sequence bits
     private final long workerId;
     private final long datacenterId;
@@ -19,10 +20,12 @@ public class IdWorker {
 
     public IdWorker(long workerId, long datacenterId, long sequence, long initialEpochMillis) {
         if (workerId > 0b11111 || workerId < 0) {
-            throw new IllegalArgumentException("workerId can't be greater than 31 or less than 0");
+            throw new IllegalArgumentException(
+                    "workerId can't be greater than 31 or less than 0");
         }
         if (datacenterId > 0b11111 || datacenterId < 0) {
-            throw new IllegalArgumentException("datacenterId can't be greater than 31 or less than 0");
+            throw new IllegalArgumentException(
+                    "datacenterId cannot be greater than 31 or less than 0");
         }
 
         this.workerId = workerId;
@@ -34,8 +37,10 @@ public class IdWorker {
     public synchronized long nextId() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
-            System.err.printf("Clock is moving backwards. Rejecting requests until %d.", lastTimestamp);
-            throw new RuntimeException(String.format("Clock moved backwards. Refusing to generate id for %d milliseconds",
+            System.err.printf("Clock is moving backwards. Rejecting requests until %d.",
+                    lastTimestamp);
+            throw new RuntimeException(String.format(
+                    "Clock moved backwards. Refusing to generate id for %d milliseconds",
                     lastTimestamp - timestamp));
         }
 

@@ -1,18 +1,18 @@
 package org.dreamcat.common.util;
 
-import org.dreamcat.common.core.Timeit;
-import org.dreamcat.common.function.ThrowableSupplier;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
+import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.function.ThrowableSupplier;
+import org.junit.Test;
 
 
 /**
  * Create by tuke on 2020/4/4
  */
 public class BinSortSpeedTest {
+
     // binSort reached fastest when size grew to 64;
     @Test
     public void testBinSortSpeed() {

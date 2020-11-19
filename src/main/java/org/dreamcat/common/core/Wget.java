@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Map;
 
 public interface Wget<Req, Resp> {
+
     String APPLICATION_XML_UTF_8 = "application/xml; charset=UTF-8";
     String APPLICATION_JSON_UTF_8 = "application/json; charset=UTF-8";
     String APPLICATION_OCTET_STREAM = "application/octet-stream";
@@ -25,13 +26,17 @@ public interface Wget<Req, Resp> {
         return prepare(url, method, headers, body, TEXT_PLAIN_UTF_8);
     }
 
-    Req prepare(String url, String method, Map<String, String> headers, String body, String contentType);
+    Req prepare(
+            String url, String method, Map<String, String> headers,
+            String body, String contentType);
 
     default Req prepare(String url, String method, Map<String, String> headers, byte[] body) {
         return prepare(url, method, headers, body, APPLICATION_OCTET_STREAM);
     }
 
-    Req prepare(String url, String method, Map<String, String> headers, byte[] body, String contentType);
+    Req prepare(
+            String url, String method, Map<String, String> headers,
+            byte[] body, String contentType);
 
     Resp request(Req request) throws IOException;
 
@@ -92,7 +97,8 @@ public interface Wget<Req, Resp> {
         return download(url, file, null);
     }
 
-    default boolean download(String url, File file, Map<String, String> headers) throws IOException {
+    default boolean download(String url, File file, Map<String, String> headers)
+            throws IOException {
         Req req = prepare(url, "GET", headers);
         Resp res = request(req);
         return save(res, file);
@@ -106,7 +112,8 @@ public interface Wget<Req, Resp> {
         return downloadTo(url, dir, null);
     }
 
-    default boolean downloadTo(String url, File dir, Map<String, String> headers) throws IOException {
+    default boolean downloadTo(String url, File dir, Map<String, String> headers)
+            throws IOException {
         Req req = prepare(url, "GET", headers);
         Resp res = request(req);
         return saveTo(res, dir);
@@ -118,16 +125,20 @@ public interface Wget<Req, Resp> {
         return request(url, method, null);
     }
 
-    default Resp request(String url, String method, Map<String, String> headers) throws IOException {
+    default Resp request(String url, String method, Map<String, String> headers)
+            throws IOException {
         Req request = prepare(url, method, headers);
         return request(request);
     }
 
-    default Resp requestString(String url, String method, String body, String contentType) throws IOException {
+    default Resp requestString(String url, String method, String body, String contentType)
+            throws IOException {
         return requestString(url, method, null, body, contentType);
     }
 
-    default Resp requestString(String url, String method, Map<String, String> headers, String body, String contentType) throws IOException {
+    default Resp requestString(
+            String url, String method, Map<String, String> headers,
+            String body, String contentType) throws IOException {
         if (headers != null) {
             if (!headers.containsKey("Content-Type") && !headers.containsKey("content-type")) {
                 headers.put("Content-Type", contentType);
@@ -144,7 +155,8 @@ public interface Wget<Req, Resp> {
         return requestJSON(url, method, null, body);
     }
 
-    default Resp requestJSON(String url, String method, Map<String, String> headers, String body) throws IOException {
+    default Resp requestJSON(String url, String method, Map<String, String> headers, String body)
+            throws IOException {
         return requestString(url, method, headers, body, APPLICATION_JSON_UTF_8);
     }
 
@@ -152,7 +164,8 @@ public interface Wget<Req, Resp> {
         return requestXML(url, method, null, body);
     }
 
-    default Resp requestXML(String url, String method, Map<String, String> headers, String body) throws IOException {
+    default Resp requestXML(String url, String method, Map<String, String> headers, String body)
+            throws IOException {
         return requestString(url, method, headers, body, APPLICATION_XML_UTF_8);
     }
 
@@ -164,16 +177,22 @@ public interface Wget<Req, Resp> {
         requestAsync(url, method, null, callback);
     }
 
-    default void requestAsync(String url, String method, Map<String, String> headers, Callback<Req, Resp> callback) {
+    default void requestAsync(
+            String url, String method, Map<String, String> headers,
+            Callback<Req, Resp> callback) {
         Req request = prepare(url, method, headers);
         requestAsync(request, callback);
     }
 
-    default void requestStringAsync(String url, String method, String body, String contentType, Callback<Req, Resp> callback) {
+    default void requestStringAsync(
+            String url, String method, String body, String contentType,
+            Callback<Req, Resp> callback) {
         requestStringAsync(url, method, null, body, contentType, callback);
     }
 
-    default void requestStringAsync(String url, String method, Map<String, String> headers, String body, String contentType, Callback<Req, Resp> callback) {
+    default void requestStringAsync(
+            String url, String method, Map<String, String> headers,
+            String body, String contentType, Callback<Req, Resp> callback) {
         if (headers != null) {
             if (!headers.containsKey("Content-Type") && !headers.containsKey("content-type")) {
                 headers.put("Content-Type", contentType);
@@ -186,19 +205,25 @@ public interface Wget<Req, Resp> {
         requestAsync(request, callback);
     }
 
-    default void requestJSONAsync(String url, String method, String body, Callback<Req, Resp> callback) {
+    default void requestJSONAsync(
+            String url, String method, String body,
+            Callback<Req, Resp> callback) {
         requestJSONAsync(url, method, null, body, callback);
     }
 
-    default void requestJSONAsync(String url, String method, Map<String, String> headers, String body, Callback<Req, Resp> callback) {
+    default void requestJSONAsync(
+            String url, String method, Map<String, String> headers, String body,
+            Callback<Req, Resp> callback) {
         requestStringAsync(url, method, headers, body, APPLICATION_JSON_UTF_8, callback);
     }
 
-    default void requestXMLAsync(String url, String method, String body, Callback<Req, Resp> callback) {
+    default void requestXMLAsync(String url, String method, String body,
+            Callback<Req, Resp> callback) {
         requestXMLAsync(url, method, null, body, callback);
     }
 
-    default void requestXMLAsync(String url, String method, Map<String, String> headers, String body, Callback<Req, Resp> callback) {
+    default void requestXMLAsync(String url, String method, Map<String, String> headers,
+            String body, Callback<Req, Resp> callback) {
         requestStringAsync(url, method, headers, body, APPLICATION_XML_UTF_8, callback);
     }
 
@@ -250,7 +275,8 @@ public interface Wget<Req, Resp> {
         postJSONAsync(url, null, body, callback);
     }
 
-    default void postJSONAsync(String url, Map<String, String> headers, String body, Callback<Req, Resp> callback) {
+    default void postJSONAsync(String url, Map<String, String> headers, String body,
+            Callback<Req, Resp> callback) {
         requestJSONAsync(url, "POST", headers, body, callback);
     }
 
@@ -266,7 +292,8 @@ public interface Wget<Req, Resp> {
         postXMLAsync(url, null, body, callback);
     }
 
-    default void postXMLAsync(String url, Map<String, String> headers, String body, Callback<Req, Resp> callback) {
+    default void postXMLAsync(String url, Map<String, String> headers, String body,
+            Callback<Req, Resp> callback) {
         requestXMLAsync(url, "POST", headers, body, callback);
     }
 
@@ -277,14 +304,16 @@ public interface Wget<Req, Resp> {
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
-    Resp postForm(String url, Map<String, String> headers, Map<String, String> form) throws IOException;
+    Resp postForm(String url, Map<String, String> headers, Map<String, String> form)
+            throws IOException;
 
     // multipart/form-data
     default Resp postFormData(String url, Map<String, Object> formData) throws IOException {
         return postFormData(url, null, formData);
     }
 
-    Resp postFormData(String url, Map<String, String> headers, Map<String, Object> formData) throws IOException;
+    Resp postFormData(String url, Map<String, String> headers, Map<String, Object> formData)
+            throws IOException;
 
     default Resp put(String url) throws IOException {
         return put(url, null);
@@ -316,7 +345,8 @@ public interface Wget<Req, Resp> {
         putJSONAsync(url, null, body, callback);
     }
 
-    default void putJSONAsync(String url, Map<String, String> headers, String body, Callback<Req, Resp> callback) {
+    default void putJSONAsync(String url, Map<String, String> headers, String body,
+            Callback<Req, Resp> callback) {
         requestJSONAsync(url, "PUT", headers, body, callback);
     }
 
@@ -332,7 +362,8 @@ public interface Wget<Req, Resp> {
         putXMLAsync(url, null, body, callback);
     }
 
-    default void putXMLAsync(String url, Map<String, String> headers, String body, Callback<Req, Resp> callback) {
+    default void putXMLAsync(String url, Map<String, String> headers, String body,
+            Callback<Req, Resp> callback) {
         requestXMLAsync(url, "PUT", headers, body, callback);
     }
 
@@ -350,7 +381,8 @@ public interface Wget<Req, Resp> {
         deleteAsync(url, null, callback);
     }
 
-    default void deleteAsync(String url, Map<String, String> headers, Callback<Req, Resp> callback) {
+    default void deleteAsync(String url, Map<String, String> headers,
+            Callback<Req, Resp> callback) {
         requestAsync(url, "DELETE", headers, callback);
     }
 
@@ -358,7 +390,8 @@ public interface Wget<Req, Resp> {
         return deleteJSON(url, null, body);
     }
 
-    default Resp deleteJSON(String url, Map<String, String> headers, String body) throws IOException {
+    default Resp deleteJSON(String url, Map<String, String> headers, String body)
+            throws IOException {
         return requestJSON(url, "DELETE", headers, body);
     }
 
@@ -366,7 +399,8 @@ public interface Wget<Req, Resp> {
         deleteJSONAsync(url, null, body, callback);
     }
 
-    default void deleteJSONAsync(String url, Map<String, String> headers, String body, Callback<Req, Resp> callback) {
+    default void deleteJSONAsync(String url, Map<String, String> headers, String body,
+            Callback<Req, Resp> callback) {
         requestJSONAsync(url, "DELETE", headers, body, callback);
     }
 
@@ -374,7 +408,8 @@ public interface Wget<Req, Resp> {
         return deleteXML(url, null, body);
     }
 
-    default Resp deleteXML(String url, Map<String, String> headers, String body) throws IOException {
+    default Resp deleteXML(String url, Map<String, String> headers, String body)
+            throws IOException {
         return requestXML(url, "DELETE", headers, body);
     }
 
@@ -382,11 +417,13 @@ public interface Wget<Req, Resp> {
         deleteXMLAsync(url, null, body, callback);
     }
 
-    default void deleteXMLAsync(String url, Map<String, String> headers, String body, Callback<Req, Resp> callback) {
+    default void deleteXMLAsync(String url, Map<String, String> headers, String body,
+            Callback<Req, Resp> callback) {
         requestXMLAsync(url, "DELETE", headers, body, callback);
     }
 
     interface Callback<Req, Resp> {
+
         void onError(Req request, Exception e);
 
         void onComplete(Req request, Resp response);

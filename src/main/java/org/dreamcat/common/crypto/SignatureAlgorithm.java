@@ -1,7 +1,5 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.Base64Util;
-
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -16,6 +14,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.dreamcat.common.util.Base64Util;
 
 /**
  * Create by tuke on 2019-02-17

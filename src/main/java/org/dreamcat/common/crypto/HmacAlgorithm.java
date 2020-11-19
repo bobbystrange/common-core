@@ -1,17 +1,16 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.Base64Util;
-import org.dreamcat.common.util.ByteUtil;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import org.dreamcat.common.util.Base64Util;
+import org.dreamcat.common.util.ByteUtil;
 
 // Message Authentication Code
 public enum HmacAlgorithm {
@@ -175,12 +174,14 @@ public enum HmacAlgorithm {
         return digestAsBase64(input.getBytes(), key);
     }
 
-    public String digestAsBase64(InputStream input, OutputStream output, String key) throws Exception {
+    public String digestAsBase64(InputStream input, OutputStream output, String key)
+            throws Exception {
         return digestAsBase64(input, output, key.getBytes());
 
     }
 
-    public String digestAsBase64(InputStream input, OutputStream output, byte[] key) throws Exception {
+    public String digestAsBase64(InputStream input, OutputStream output, byte[] key)
+            throws Exception {
         return Base64Util.encodeAsString(digest(input, output, key));
     }
 

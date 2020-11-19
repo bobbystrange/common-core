@@ -1,16 +1,16 @@
 package org.dreamcat.common.crypto;
 
+import javax.crypto.BadPaddingException;
 import org.dreamcat.common.util.ByteUtil;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
-
-import javax.crypto.BadPaddingException;
 
 
 /**
  * Create by tuke on 2020/5/4
  */
 public class AESTest {
+
     @Test
     public void aes() throws Exception {
         String data = "a5e80b35cc8aadee";

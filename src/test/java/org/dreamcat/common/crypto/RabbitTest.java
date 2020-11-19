@@ -1,10 +1,9 @@
 package org.dreamcat.common.crypto;
 
+import java.util.Arrays;
 import org.dreamcat.common.util.ByteUtil;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 
 /**

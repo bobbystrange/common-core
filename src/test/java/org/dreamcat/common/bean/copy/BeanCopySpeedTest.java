@@ -1,5 +1,8 @@
 package org.dreamcat.common.bean.copy;
 
+import java.util.Arrays;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import net.sf.cglib.beans.BeanCopier;
 import org.dreamcat.common.bean.BeanUtil;
 import org.dreamcat.common.core.Timeit;
@@ -7,10 +10,6 @@ import org.dreamcat.common.function.ThrowableSupplier;
 import org.dreamcat.test.BeanData;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
-
-import java.util.Arrays;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Create by tuke on 2019-06-03

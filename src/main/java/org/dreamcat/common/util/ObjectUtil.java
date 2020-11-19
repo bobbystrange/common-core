@@ -285,7 +285,8 @@ public final class ObjectUtil {
     // [start, end)
     public static void requireRange(int index, int start, int end) {
         if (index < start || index >= end) {
-            throw new IllegalArgumentException(String.format("the first argument must belong [%d, %d)", start, end));
+            throw new IllegalArgumentException(
+                    String.format("the first argument must belong [%d, %d)", start, end));
         }
     }
 

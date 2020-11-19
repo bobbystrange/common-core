@@ -1,11 +1,10 @@
 package org.dreamcat.common.crypto;
 
-import org.dreamcat.common.util.ByteUtil;
-import org.junit.Test;
+import static org.dreamcat.common.util.FormatUtil.log;
 
 import java.nio.charset.StandardCharsets;
-
-import static org.dreamcat.common.util.FormatUtil.log;
+import org.dreamcat.common.util.ByteUtil;
+import org.junit.Test;
 
 
 /**

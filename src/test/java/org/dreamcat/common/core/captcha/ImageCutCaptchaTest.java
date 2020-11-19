@@ -1,11 +1,11 @@
 package org.dreamcat.common.core.captcha;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.image.ImageUtil;
 import org.junit.Test;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 /**
  * Create by tuke on 2020/5/12

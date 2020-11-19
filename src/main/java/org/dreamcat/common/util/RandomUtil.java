@@ -1,11 +1,12 @@
 package org.dreamcat.common.util;
 
-import java.awt.*;
+import java.awt.Color;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
 
 public class RandomUtil {
+
     private static final Random random = new Random();
 
     private static final String NUMBERS = "0123456789";

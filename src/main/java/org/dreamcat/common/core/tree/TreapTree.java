@@ -5,4 +5,5 @@ package org.dreamcat.common.core.tree;
  */
 // todo impl
 public class TreapTree {
+
 }

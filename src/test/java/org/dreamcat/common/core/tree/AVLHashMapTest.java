@@ -1,8 +1,7 @@
 package org.dreamcat.common.core.tree;
 
-import org.junit.Test;
-
 import java.util.HashMap;
+import org.junit.Test;
 
 
 /**

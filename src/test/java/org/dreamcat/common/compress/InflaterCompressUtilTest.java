@@ -1,10 +1,9 @@
 package org.dreamcat.common.compress;
 
+import java.util.function.IntFunction;
 import org.dreamcat.common.util.Base64Util;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
-
-import java.util.function.IntFunction;
 
 
 /**

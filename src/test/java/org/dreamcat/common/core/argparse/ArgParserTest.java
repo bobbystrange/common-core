@@ -1,10 +1,9 @@
 package org.dreamcat.common.core.argparse;
 
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2019-03-27

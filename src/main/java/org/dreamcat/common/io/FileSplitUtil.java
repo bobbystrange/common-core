@@ -1,8 +1,5 @@
 package org.dreamcat.common.io;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.util.ObjectUtil;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,12 +9,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntFunction;
+import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * Create by tuke on 2020/4/10
  */
 @Slf4j
 public class FileSplitUtil {
+
     private static final int BUFFER_SIZE = 4096;
 
     public static void split(String file, int splitCount) throws IOException {
@@ -45,11 +45,13 @@ public class FileSplitUtil {
         });
     }
 
-    public static void split(String file, int splitCount, String splitStr, IntFunction<String> filenameSupplier) throws IOException {
+    public static void split(String file, int splitCount, String splitStr,
+            IntFunction<String> filenameSupplier) throws IOException {
         split(new File(file), splitCount, splitStr, filenameSupplier);
     }
 
-    public static void split(File file, int splitCount, String splitStr, IntFunction<String> filenameSupplier) throws IOException {
+    public static void split(File file, int splitCount, String splitStr,
+            IntFunction<String> filenameSupplier) throws IOException {
         ObjectUtil.requireRange(splitCount, 2, 65537);
         ObjectUtil.requireNotEmpty(splitStr, "splitStr");
         List<long[]> positions = getPositions(file, splitCount, splitStr);
@@ -82,7 +84,8 @@ public class FileSplitUtil {
         });
     }
 
-    private static List<long[]> getPositions(File file, int splitCount, String splitStr) throws IOException {
+    private static List<long[]> getPositions(File file, int splitCount, String splitStr)
+            throws IOException {
         List<long[]> positions = new ArrayList<>();
         long lastPos = 0;
         int seq = 1;
@@ -128,7 +131,8 @@ public class FileSplitUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static void join(CharSequence delimiter, List<File> files, File destFile) throws IOException {
+    public static void join(CharSequence delimiter, List<File> files, File destFile)
+            throws IOException {
         ObjectUtil.requireNotNull(files, "files");
 
         try (FileOutputStream outs = new FileOutputStream(destFile)) {

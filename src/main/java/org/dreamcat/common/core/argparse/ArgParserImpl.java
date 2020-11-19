@@ -1,6 +1,8 @@
 package org.dreamcat.common.core.argparse;
 
-import org.dreamcat.common.core.Pair;
+import static org.dreamcat.common.core.argparse.Argument.flag_bool;
+import static org.dreamcat.common.core.argparse.Argument.flag_list;
+import static org.dreamcat.common.core.argparse.Argument.flag_string;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,14 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static org.dreamcat.common.core.argparse.Argument.*;
+import org.dreamcat.common.core.Pair;
 
 /**
  * Create by tuke on 2020/5/2
  */
 @SuppressWarnings("unchecked")
 class ArgParserImpl extends ArgParser {
+
     private static final List<String> TRUE_STRINGS = Arrays.asList("true", "t", "yes", "y", "1");
     private static final List<String> FALSE_STRINGS = Arrays.asList("false", "f", "no", "n", "0");
 
@@ -201,7 +203,8 @@ class ArgParserImpl extends ArgParser {
         }
     }
 
-    private void add_all_forward(String key, Argument argument, LinkedList<String> shift) throws ArgParseException {
+    private void add_all_forward(String key, Argument argument, LinkedList<String> shift)
+            throws ArgParseException {
         argument.assume_not_property(key);
 
         if (argument.flag == flag_bool) {

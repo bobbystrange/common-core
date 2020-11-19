@@ -1,13 +1,13 @@
 package org.dreamcat.java.spi;
 
-import org.junit.Test;
-
 import java.util.ServiceLoader;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/28
  */
 public class ServiceLoaderTest {
+
     @Test
     public void test() {
         ServiceLoader<Bootstrapper> loader = ServiceLoader.load(Bootstrapper.class);
@@ -21,6 +21,7 @@ public class ServiceLoaderTest {
     }
 
     interface Bootstrapper {
+
         void bootstrap();
     }
 }

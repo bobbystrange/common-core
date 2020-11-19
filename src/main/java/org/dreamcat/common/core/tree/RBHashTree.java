@@ -1,13 +1,17 @@
 package org.dreamcat.common.core.tree;
 
-import org.dreamcat.common.function.QuaConsumer;
+import static org.dreamcat.common.core.tree.RBHashNode.delete;
+import static org.dreamcat.common.core.tree.RBHashNode.drop;
+import static org.dreamcat.common.core.tree.RBHashNode.insert;
+import static org.dreamcat.common.core.tree.RBHashNode.select;
 
-import static org.dreamcat.common.core.tree.RBHashNode.*;
+import org.dreamcat.common.function.QuaConsumer;
 
 /**
  * Create by tuke on 2020/4/19
  */
 public class RBHashTree<K, V> implements HashTree<K, V, RBHashNode<K, V>> {
+
     private RBHashNode<K, V> root;
     private int size;
 

@@ -6,6 +6,7 @@ package org.dreamcat.common.core.tree;
  * @see java.util.HashMap
  */
 public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node> {
+
     /*
     root is black,
     each chain contains the same number of black nodes,

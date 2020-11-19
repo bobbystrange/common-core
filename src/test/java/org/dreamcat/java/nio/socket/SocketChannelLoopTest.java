@@ -1,7 +1,6 @@
 package org.dreamcat.java.nio.socket;
 
-import org.dreamcat.common.net.SocketUtil;
-import org.junit.Test;
+import static org.dreamcat.common.util.FormatUtil.log;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,14 +14,15 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import static org.dreamcat.common.util.FormatUtil.log;
+import org.dreamcat.common.net.SocketUtil;
+import org.junit.Test;
 
 
 /**
  * Create by tuke on 2020/4/7
  */
 public class SocketChannelLoopTest {
+
     private static final int bufferSize = 4 * 1024;
 
     @Test
@@ -67,7 +67,8 @@ public class SocketChannelLoopTest {
                                 buffer.put(String.valueOf(++num).getBytes());
                                 buffer.flip();
                                 socket.write(buffer);
-                                log("client sent {} to {}", num, SocketUtil.format(socket.getRemoteAddress()));
+                                log("client sent {} to {}", num,
+                                        SocketUtil.format(socket.getRemoteAddress()));
                                 socket.register(selector, SelectionKey.OP_READ);
                             }
                         } catch (IOException e) {
@@ -117,7 +118,8 @@ public class SocketChannelLoopTest {
                         SocketChannel socket = server.accept();
                         socket.configureBlocking(false);
 
-                        System.out.println("server accepted a connection from " + SocketUtil.format(socket.getRemoteAddress()));
+                        System.out.println("server accepted a connection from " + SocketUtil
+                                .format(socket.getRemoteAddress()));
                         socket.register(selector, SelectionKey.OP_READ);
                     } else if (key.isReadable()) {
                         SocketChannel socket = (SocketChannel) key.channel();
@@ -134,7 +136,8 @@ public class SocketChannelLoopTest {
                                 // read mode
                                 buffer.flip();
                                 socket.write(buffer);
-                                log("server sent {} to {}", num, SocketUtil.format(socket.getRemoteAddress()));
+                                log("server sent {} to {}", num,
+                                        SocketUtil.format(socket.getRemoteAddress()));
                                 socket.register(selector, SelectionKey.OP_READ);
                             }
                         } catch (IOException e) {

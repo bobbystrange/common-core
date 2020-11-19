@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 class Argument {
+
     static final int flag_string = 0;
     static final int flag_bool = 1;
     static final int flag_list = 2;

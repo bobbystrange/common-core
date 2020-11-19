@@ -1,14 +1,13 @@
 package org.dreamcat.test;
 
+import static org.dreamcat.common.util.RandomUtil.choose72;
+import static org.dreamcat.common.util.RandomUtil.randi;
+
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.dreamcat.common.util.ArrayUtil;
-
-import java.util.Date;
-
-import static org.dreamcat.common.util.RandomUtil.choose72;
-import static org.dreamcat.common.util.RandomUtil.randi;
 
 /**
  * Create by tuke on 2020/3/3
@@ -53,12 +52,14 @@ public class BeanData {
     }
 
     public @interface Ann {
+
     }
 
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
     public static class Pojo {
+
         private int i;
         @Ann
         private Long L;
@@ -71,6 +72,7 @@ public class BeanData {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PrivatePojo {
+
         @Ann
         private int i;
         private Long L;
@@ -84,6 +86,7 @@ public class BeanData {
     @AllArgsConstructor
     @Data
     public static class All {
+
         @Ann
         private int i;
         private Long L;
@@ -98,6 +101,7 @@ public class BeanData {
         @NoArgsConstructor
         @Data
         static class InnerStatic {
+
             long l;
             Integer[] ia;
         }
@@ -106,6 +110,7 @@ public class BeanData {
         @AllArgsConstructor
         @Data
         class Inner {
+
             long l;
             Integer[] ia;
         }

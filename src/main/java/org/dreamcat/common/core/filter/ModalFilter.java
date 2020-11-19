@@ -8,6 +8,7 @@ public interface ModalFilter<S, T> {
     void filter(S source, T target, Chain<S, T> chain);
 
     interface Chain<S, T> {
+
         void filter(S source, T target);
     }
 }

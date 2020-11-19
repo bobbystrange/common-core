@@ -49,7 +49,9 @@ public class YamlMapper {
             for (int len = line.length(); offset < len; offset++) {
                 char c = line.charAt(offset);
                 if (c < ' ') {
-                    throw new IllegalArgumentException(String.format("invalid char `0x%s` at pos %d, %d", Integer.toHexString(c), lineNo, offset));
+                    throw new IllegalArgumentException(
+                            String.format("invalid char `0x%s` at pos %d, %d",
+                                    Integer.toHexString(c), lineNo, offset));
                 } else if (c == ' ') {
                     currentWidth++;
                 } else break;

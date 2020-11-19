@@ -1,8 +1,5 @@
 package org.dreamcat.common.core;
 
-import lombok.Data;
-import org.dreamcat.common.util.ReflectUtil;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -11,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+import lombok.Data;
+import org.dreamcat.common.util.ReflectUtil;
 
 /**
  * A useful class for ORM framework
@@ -19,6 +18,7 @@ import java.util.function.Predicate;
  */
 @Data
 public class FieldColumn {
+
     public Field field;
     public List<Annotation> annotations;
     public List<FieldColumn> children;

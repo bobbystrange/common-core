@@ -1,8 +1,7 @@
 package org.dreamcat.java.concurrent.queue;
 
-import org.junit.Test;
-
 import java.util.concurrent.LinkedTransferQueue;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/7/8

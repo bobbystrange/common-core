@@ -10,6 +10,7 @@ import lombok.Getter;
 @EqualsAndHashCode
 @SuppressWarnings("rawtypes")
 public class Union {
+
     private Object value;
     private Class type;
 

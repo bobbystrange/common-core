@@ -1,11 +1,10 @@
 package org.dreamcat.java.io;
 
-import org.dreamcat.common.core.Timeit;
-import org.junit.Test;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import org.dreamcat.common.core.Timeit;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/7/30

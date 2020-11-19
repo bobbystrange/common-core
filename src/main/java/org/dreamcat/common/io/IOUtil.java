@@ -17,13 +17,15 @@ import java.nio.charset.Charset;
  * Create by tuke on 2018/11/25
  */
 public class IOUtil {
+
     private static final int BUFFER_SIZE = 1024 * 4;
 
     public static long copy(InputStream input, OutputStream output) throws IOException {
         return copy(input, output, BUFFER_SIZE);
     }
 
-    public static long copy(InputStream input, OutputStream output, int bufferSize) throws IOException {
+    public static long copy(InputStream input, OutputStream output, int bufferSize)
+            throws IOException {
         long count = 0;
         int readSize;
         byte[] buffer = new byte[bufferSize];
@@ -49,7 +51,8 @@ public class IOUtil {
         return count;
     }
 
-    public static void copy(ReadableByteChannel input, WritableByteChannel output) throws IOException {
+    public static void copy(ReadableByteChannel input, WritableByteChannel output)
+            throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
         while (input.read(buffer) > 0) {
             buffer.flip();

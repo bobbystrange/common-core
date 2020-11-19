@@ -9,6 +9,7 @@ import java.util.Set;
  * Create by tuke on 2020/3/29
  */
 public class RealEventEmitter implements EventEmitter {
+
     public final Set<ModalEventListener<?>> listeners = new LinkedHashSet<>();
 
     @Override
