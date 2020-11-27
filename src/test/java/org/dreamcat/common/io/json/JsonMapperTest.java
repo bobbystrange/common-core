@@ -2,7 +2,7 @@ package org.dreamcat.common.io.json;
 
 import java.util.Map;
 import org.dreamcat.common.core.Pair;
-import org.dreamcat.common.util.StringUtil;
+import org.dreamcat.common.text.NumericSearcher;
 import org.junit.Test;
 
 /**
@@ -14,7 +14,7 @@ public class JsonMapperTest {
     @Test
     public void testExtractNumber() {
         String expression = "6.02e-23";
-        Pair<Number, Integer> pair = StringUtil.extractNumber(expression, 0);
+        Pair<Number, Integer> pair = NumericSearcher.extractNumber(expression, 0);
         System.out.println(pair);
     }
 

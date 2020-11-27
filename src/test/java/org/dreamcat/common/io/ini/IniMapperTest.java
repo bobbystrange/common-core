@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.dreamcat.common.bean.BeanUtil;
 import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.util.BeanUtil;
 import org.junit.Test;
 
 /**

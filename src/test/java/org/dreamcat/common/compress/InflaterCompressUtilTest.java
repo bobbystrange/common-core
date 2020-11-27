@@ -1,6 +1,8 @@
 package org.dreamcat.common.compress;
 
 import java.util.function.IntFunction;
+import org.dreamcat.common.io.compress.DeflaterCompressUtil;
+import org.dreamcat.common.io.compress.InflaterCompressUtil;
 import org.dreamcat.common.util.Base64Util;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;

@@ -3,6 +3,7 @@ package org.dreamcat.common.core.tree;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.dreamcat.common.tree.RBHashTree;
 import org.junit.Test;
 
 /**

@@ -1,6 +1,6 @@
 package org.dreamcat.common.util.array;
 
-import static org.dreamcat.common.bean.BeanFormatUtil.pretty;
+import static org.dreamcat.common.core.legacy.BeanFormatUtil.pretty;
 
 import java.util.Arrays;
 import org.dreamcat.common.util.ArrayUtil;

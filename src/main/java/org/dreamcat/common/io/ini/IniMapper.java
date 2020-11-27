@@ -20,8 +20,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.text.NumericSearcher;
+import org.dreamcat.common.text.StringSearcher;
 import org.dreamcat.common.util.ObjectUtil;
-import org.dreamcat.common.util.StringUtil;
 
 /**
  * Create by tuke on 2018-09-22
@@ -135,9 +136,9 @@ public class IniMapper {
 
                 Object richValue;
 
-                Pair<Number, Integer> pair = StringUtil.extractNumber(value, 0);
+                Pair<Number, Integer> pair = NumericSearcher.extractNumber(value, 0);
                 if (pair == null) {
-                    Boolean b = StringUtil.extractBool(value, 0);
+                    Boolean b = StringSearcher.extractBool(value, 0);
                     if (b != null) {
                         richValue = b;
                     } else {

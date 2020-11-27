@@ -13,7 +13,8 @@ public class CreatorServiceMethod implements ServiceMethod {
     private final BiFunction<Method, Object[], Object> methodAdapter;
 
     public CreatorServiceMethod(
-            ModalCreator creator, Method method, BiFunction<Method, Object[], Object> methodAdapter) {
+            ModalCreator creator, Method method,
+            BiFunction<Method, Object[], Object> methodAdapter) {
         this.creator = creator;
         this.method = method;
         this.methodAdapter = methodAdapter;

@@ -1,6 +1,6 @@
 package org.dreamcat.common.core.tree;
 
-import org.dreamcat.common.core.tree.skip.SkipList;
+import org.dreamcat.common.tree.skip.SkipList;
 import org.junit.Test;
 
 /**

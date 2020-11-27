@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.core.Triple;
-import org.dreamcat.common.util.StringUtil;
+import org.dreamcat.common.text.NumericSearcher;
 
 /**
  * Create by tuke on 2020/5/10
@@ -88,7 +88,7 @@ public class JsonMapper {
         } else if (c == '"') {
             pair = parseString(expression, offset);
         } else if ((c >= '0' && c <= '9') || c == '-') {
-            pair = StringUtil.extractNumber(expression, offset);
+            pair = NumericSearcher.extractNumber(expression, offset);
             if (pair == null)
                 throw new IllegalArgumentException("invalid token " + c + " at pos " + offset);
         } else {
@@ -239,7 +239,7 @@ public class JsonMapper {
         } else if (c == '"') {
             return parseString(expression, offset).join(false);
         } else if ((c >= '0' && c <= '9') || c == '-') {
-            Pair<Number, Integer> pair = StringUtil.extractNumber(expression, offset);
+            Pair<Number, Integer> pair = NumericSearcher.extractNumber(expression, offset);
             if (pair == null)
                 throw new IllegalArgumentException("invalid token " + c + " at pos " + offset);
             return pair.join(false);

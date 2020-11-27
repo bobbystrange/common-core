@@ -1,5 +1,7 @@
 package org.dreamcat.common.util;
 
+import static org.dreamcat.common.core.legacy.BeanFormatUtil.pretty;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -62,6 +64,13 @@ public class ReflectUtilTest {
         System.out.println("\ngetFields");
         Arrays.stream(C.class.getFields()).forEach(System.out::println);
 
+    }
+
+    @Test
+    public void nullify() {
+        BeanData.Pojo obj = BeanData.ofPojo();
+        ReflectUtil.nullify(obj);
+        System.out.println(pretty(obj));
     }
 
     private static class A {

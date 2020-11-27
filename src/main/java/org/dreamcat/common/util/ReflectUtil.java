@@ -472,6 +472,70 @@ public class ReflectUtil {
         }
     }
 
+    // bean op
+    public static void nullify(Object bean) {
+        Class<?> clazz = bean.getClass();
+        List<Field> fields = ReflectUtil.retrieveNoStaticFields(clazz);
+        if (fields.isEmpty()) return;
+        for (Field field : fields) {
+            nullify(bean, field);
+        }
+    }
+
+    public static void nullify(Object bean, Field field) {
+        if (ReflectUtil.isFinalOrStatic(field)) {
+            return;
+        }
+
+        field.setAccessible(true);
+        Class<?> type = field.getType();
+        try {
+            if (!type.isPrimitive()) {
+                field.set(bean, null);
+            } else {
+                if (type.equals(boolean.class)) {
+                    field.setBoolean(bean, false);
+                } else if (type.equals(byte.class)) {
+                    field.setByte(bean, (byte) 0);
+                } else if (type.equals(short.class)) {
+                    field.setShort(bean, (short) 0);
+                } else if (type.equals(char.class)) {
+                    field.setChar(bean, (char) 0);
+                } else if (type.equals(int.class)) {
+                    field.setInt(bean, 0);
+                } else if (type.equals(long.class)) {
+                    field.setLong(bean, 0L);
+                } else if (type.equals(float.class)) {
+                    field.setFloat(bean, 0.F);
+                } else if (type.equals(double.class)) {
+                    field.setDouble(bean, 0.);
+                }
+            }
+        } catch (IllegalAccessException ignored) {
+        }
+    }
+
+    public static Class<?> getBoxedClass(Class<?> clazz) {
+        if (!clazz.isPrimitive()) return clazz;
+        if (clazz.equals(boolean.class)) {
+            return Boolean.class;
+        } else if (clazz.equals(char.class)) {
+            return Character.class;
+        } else if (clazz.equals(byte.class)) {
+            return Byte.class;
+        } else if (clazz.equals(short.class)) {
+            return Short.class;
+        } else if (clazz.equals(int.class)) {
+            return Integer.class;
+        } else if (clazz.equals(long.class)) {
+            return Long.class;
+        } else if (clazz.equals(float.class)) {
+            return Float.class;
+        } else {
+            return Double.class;
+        }
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     /**

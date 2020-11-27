@@ -2,6 +2,7 @@ package org.dreamcat.common.compress;
 
 import java.io.IOException;
 import java.util.function.IntFunction;
+import org.dreamcat.common.io.compress.GzipCompressUtil;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
 

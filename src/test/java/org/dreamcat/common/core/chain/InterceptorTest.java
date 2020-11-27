@@ -1,6 +1,6 @@
 package org.dreamcat.common.core.chain;
 
-import org.dreamcat.common.bean.BeanFormatUtil;
+import org.dreamcat.common.core.legacy.BeanFormatUtil;
 import org.junit.Test;
 
 public class InterceptorTest {

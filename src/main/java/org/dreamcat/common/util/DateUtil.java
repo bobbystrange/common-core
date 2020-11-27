@@ -2,11 +2,14 @@ package org.dreamcat.common.util;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 /**
  * Create by tuke on 2019-03-29
@@ -14,6 +17,34 @@ import java.util.TimeZone;
 public class DateUtil {
 
     private static final String gmt_pattern = "E, dd MMM yyyy HH:mm:ss 'GMT'";
+    private static final Pattern DATE_PATTERN = Pattern.compile(
+            "yy(yy)?[-/]?MM[-/]?dd([ ]?hh([:]?mm([:]?ss)?)?)?");
+
+    /**
+     * parse date from string
+     *
+     * @param formattedDate one of <strong>unix timestamp</strong> and {@link #DATE_PATTERN}
+     * @return {@link Date}
+     */
+    public static Date parseDate(String formattedDate) {
+        int size = formattedDate.length();
+
+        return null;
+    }
+
+    public static LocalDate parseLocalDate(String value) {
+        return null;
+    }
+
+    public static LocalTime parseLocalTime(String value) {
+        return null;
+    }
+
+    public static LocalDateTime parseLocalDateTime(String value) {
+        return null;
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static Date from(
             int year, int month, int date,

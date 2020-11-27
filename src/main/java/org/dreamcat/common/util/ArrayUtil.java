@@ -519,21 +519,23 @@ public class ArrayUtil {
         if (size == 1) return new int[]{0, 1};
 
         // a[s:e] is a[0:1] for a[0:1]
-        int start = 0, end = 1, sum = a[0], nextSum;
+        int start = 0, end = 1, sum = a[0], nextSum = 0;
         int nextStart = start;
         boolean nextEnd = false;
         for (int j = 1; j < size; j++) {
             // skip if a[j] is not positive
             if (a[j] <= 0) continue;
-            // foreach i from s to end, check the sum of the range a[i:j+1]
-            for (int i = start; i < j; i++) {
-                nextSum = sumInclusive(a, i, j);
+
+            for (int i = j; i >= start; i--) {
+                nextSum += a[i];
                 if (nextSum > sum) {
                     sum = nextSum;
                     nextStart = i;
                     nextEnd = true;
                 }
             }
+            nextSum = 0;
+            // a[i:j+1] is the maximum, change a[s:e] to a[i:j+1]
             if (nextEnd) {
                 start = nextStart;
                 end = j + 1;

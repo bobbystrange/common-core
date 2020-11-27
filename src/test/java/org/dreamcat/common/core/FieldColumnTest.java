@@ -1,7 +1,7 @@
 package org.dreamcat.common.core;
 
 import java.util.List;
-import org.dreamcat.common.bean.BeanFormatUtil;
+import org.dreamcat.common.core.legacy.BeanFormatUtil;
 import org.dreamcat.test.BeanData;
 import org.junit.Test;
 

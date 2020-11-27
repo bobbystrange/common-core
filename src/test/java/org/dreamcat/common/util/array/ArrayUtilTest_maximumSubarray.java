@@ -14,7 +14,7 @@ public class ArrayUtilTest_maximumSubarray {
         int[] a = new int[]{
                 13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7};
         int[] indices = ArrayUtil.maximumSubarray(a);
-        System.out.println(Arrays.toString(indices));
+        System.out.println(Arrays.toString(Arrays.copyOfRange(a, indices[0], indices[1])));
     }
 
 }

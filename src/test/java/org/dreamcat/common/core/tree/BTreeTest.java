@@ -2,6 +2,7 @@ package org.dreamcat.common.core.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.dreamcat.common.tree.BTree;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
 

@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.function.ThrowableSupplier;
+import org.dreamcat.common.tree.AVLHashMap;
+import org.dreamcat.common.tree.AVLHashTree;
+import org.dreamcat.common.tree.BTree;
+import org.dreamcat.common.tree.RBHashTree;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
 
