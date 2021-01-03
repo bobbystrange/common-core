@@ -289,56 +289,56 @@ public class IniMapper {
 
     public Double getAsDouble(String section, String name) {
         if (!richText) {
-            throw new UnsupportedOperationException("not in the rich-text mode");
+            throw new UnsupportedOperationException(NOT_RICH_TEXT);
         }
         return (Double) getAsRaw(section, name);
     }
 
     public Long getAsLong(String section, String name) {
         if (!richText) {
-            throw new UnsupportedOperationException("not in the rich-text mode");
+            throw new UnsupportedOperationException(NOT_RICH_TEXT);
         }
         return (Long) getAsRaw(section, name);
     }
 
     public Boolean getAsBoolean(String section, String name) {
         if (!richText) {
-            throw new UnsupportedOperationException("not in the rich-text mode");
+            throw new UnsupportedOperationException(NOT_RICH_TEXT);
         }
         return (Boolean) getAsRaw(section, name);
     }
 
     public String getAsString(String section, String name) {
         if (!richText) {
-            throw new UnsupportedOperationException("not in the rich-text mode");
+            throw new UnsupportedOperationException(NOT_RICH_TEXT);
         }
         return (String) getAsRaw(section, name);
     }
 
     public List<Double> getAsDoubleList(String section, String name) {
         if (!richText) {
-            throw new UnsupportedOperationException("not in the rich-text mode");
+            throw new UnsupportedOperationException(NOT_RICH_TEXT);
         }
         return (List<Double>) getAsRaw(section, name);
     }
 
     public List<Long> getAsLongList(String section, String name) {
         if (!richText) {
-            throw new UnsupportedOperationException("not in the rich-text mode");
+            throw new UnsupportedOperationException(NOT_RICH_TEXT);
         }
         return (List<Long>) getAsRaw(section, name);
     }
 
     public List<Boolean> getAsBooleanList(String section, String name) {
         if (!richText) {
-            throw new UnsupportedOperationException("not in the rich-text mode");
+            throw new UnsupportedOperationException(NOT_RICH_TEXT);
         }
         return (List<Boolean>) getAsRaw(section, name);
     }
 
     public List<String> getAsStringList(String section, String name) {
         if (!richText) {
-            throw new UnsupportedOperationException("not in the rich-text mode");
+            throw new UnsupportedOperationException(NOT_RICH_TEXT);
         }
         return (List<String>) getAsRaw(section, name);
     }
@@ -439,4 +439,5 @@ public class IniMapper {
         return (T) oldValue;
     }
 
+    private static final String NOT_RICH_TEXT = "not in the rich-text mode";
 }

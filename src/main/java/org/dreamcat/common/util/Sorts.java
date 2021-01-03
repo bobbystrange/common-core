@@ -195,7 +195,7 @@ public final class Sorts {
         //for (int k2 = 0; k2 < temp.length; k2++) {
         //    nums[k2 + low] = temp[k2];
         //}
-        if (temp.length >= 0) {
+        if (temp.length > 0) {
             System.arraycopy(temp, 0, nums, low, temp.length);
         }
     }

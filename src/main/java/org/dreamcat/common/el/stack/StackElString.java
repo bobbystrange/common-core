@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import org.dreamcat.common.el.ElContext;
 import org.dreamcat.common.el.ElEngine;
 import org.dreamcat.common.el.ElOperator;
+import org.dreamcat.common.el.ElOption;
 import org.dreamcat.common.el.ElString;
 import org.dreamcat.common.el.util.DALUtil;
 import org.dreamcat.common.el.util.RPNUtil;
@@ -35,6 +36,7 @@ public class StackElString implements ElString {
 
     @Override
     public BigDecimal evaluate(ElContext context) {
+        ElOption option = context.getOption();
         LinkedList<BigDecimal> stack = new LinkedList<>();
         BigDecimal evaluated;
         for (Object formula : formulas) {
@@ -54,12 +56,12 @@ public class StackElString implements ElString {
             ElOperator operator = (ElOperator) formula;
             BigDecimal right = stack.pop();
             if (operator.isUnary()) {
-                evaluated = operator.evaluate(right);
+                evaluated = operator.evaluate(right, option);
                 stack.push(evaluated);
                 continue;
             }
             BigDecimal left = stack.pop();
-            evaluated = operator.evaluate(left, right);
+            evaluated = operator.evaluate(left, right, option);
             stack.push(evaluated);
         }
         return stack.pop();

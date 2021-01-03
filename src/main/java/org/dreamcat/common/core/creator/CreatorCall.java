@@ -91,8 +91,8 @@ public class CreatorCall<T> implements ModalCreator.Call<T> {
 
     @Override
     public <R> ModalCreator.Call<R> to(ThrowableFunction<T, R> converter) {
-        ThrowableFunction<Object, R> newConverter = original -> converter.apply(
-                CreatorCall.this.converter.apply(original));
+        ThrowableFunction<Object, R> newConverter = it -> converter.apply(
+                CreatorCall.this.converter.apply(it));
         return newCall(original, newConverter);
     }
 

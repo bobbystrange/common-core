@@ -43,7 +43,7 @@ public class RealChain<I, O>
         calls++;
 
         if (calls > 1) {
-            throw new IllegalStateException("interceptor " + interceptors.get(index - 1)
+            throw new IllegalStateException(INTERCEPTOR + (index - 1)
                     + " must call proceed() exactly once");
         }
 
@@ -54,16 +54,17 @@ public class RealChain<I, O>
 
         // Confirm that the next interceptor made its required call to chain.proceed().
         if (index + 1 < interceptors.size() && next.calls != 1) {
-            throw new IllegalStateException("interceptor " + interceptor
+            throw new IllegalStateException(INTERCEPTOR + index
                     + " must call proceed() exactly once");
         }
 
         // Confirm that the intercepted response isn't null.
         if (o == null) {
-            throw new NullPointerException("interceptor " + interceptor + " returned null");
+            throw new NullPointerException(INTERCEPTOR + index + " returned null");
         }
 
         return o;
     }
 
+    private static final String INTERCEPTOR = "interceptor";
 }

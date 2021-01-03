@@ -88,7 +88,7 @@ public class GifCaptcha {
 
         int n = code.length();
         int size = font.getSize();
-        float dx = size + padding;
+        float dx = (float) size + padding;
         float x = (width - size * n - padding * (n - 1)) >> 1;
 
         for (int i = 0; i < n; i++) {

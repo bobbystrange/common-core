@@ -5,17 +5,15 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BinaryOperator;
-import java.util.function.UnaryOperator;
 import lombok.Getter;
 import org.dreamcat.common.util.ReflectUtil;
 
 /**
  * Create by tuke on 2020/11/16
  */
-public interface ElOperator {
+public interface ElOperator extends UnaryOp, BinaryOp {
 
-    Map<String, ElOperator> ALIASES = new HashMap<>();
+    Map<String, ElOperator> ALIASES_MAPPINGS = new HashMap<>();
 
     String getKeyword();
 
@@ -23,11 +21,11 @@ public interface ElOperator {
 
     String[] getAliases();
 
-    default UnaryOperator<BigDecimal> getUnaryOperator() {
+    default UnaryOp getUnaryOperator() {
         throw new UnsupportedOperationException("unary operation for " + getKeyword());
     }
 
-    default BinaryOperator<BigDecimal> getBinaryOperator() {
+    default BinaryOp getBinaryOperator() {
         throw new UnsupportedOperationException("binary operation for " + getKeyword());
     }
 
@@ -35,27 +33,14 @@ public interface ElOperator {
         return false;
     }
 
-    /**
-     * unary operation
-     *
-     * @param value value to be operated
-     * @return result of operation
-     * @throws UnsupportedOperationException when operation is not supported
-     */
-    default BigDecimal evaluate(BigDecimal value) {
-        return getUnaryOperator().apply(value);
+    @Override
+    default BigDecimal evaluate(BigDecimal value, ElOption option) {
+        return getUnaryOperator().evaluate(value, option);
     }
 
-    /**
-     * binary operation
-     *
-     * @param leftValue  left value to be operated
-     * @param rightValue right value to be operated
-     * @return result of operation
-     * @throws UnsupportedOperationException when operation is not supported
-     */
-    default BigDecimal evaluate(BigDecimal leftValue, BigDecimal rightValue) {
-        return getBinaryOperator().apply(leftValue, rightValue);
+    @Override
+    default BigDecimal evaluate(BigDecimal leftValue, BigDecimal rightValue, ElOption option) {
+        return getBinaryOperator().evaluate(leftValue, rightValue, option);
     }
 
     interface Unary extends ElOperator {
@@ -86,35 +71,29 @@ public interface ElOperator {
         }
     }
 
-    static void register(ElOperator... operators) {
-        for (ElOperator operator : operators) {
-            String[] aliases = operator.getAliases();
-            for (String alias : aliases) {
-                ALIASES.put(alias, operator);
-            }
-        }
-    }
-
     static ElOperator lookup(String alias) {
-        if (ALIASES.isEmpty()) {
-            synchronized (ALIASES) {
-                if (ALIASES.isEmpty()) {
+        if (ALIASES_MAPPINGS.isEmpty()) {
+            synchronized (ALIASES_MAPPINGS) {
+                if (ALIASES_MAPPINGS.isEmpty()) {
                     List<Class<? extends ElOperator>> subClasses = ReflectUtil.retrieveSubClasses(
                             ElOperator.class, ElOperator.class.getName());
                     for (Class<? extends ElOperator> subClass : subClasses) {
                         if (!subClass.isEnum()) continue;
-                        ElOperator[] operators = subClass.getEnumConstants();
-                        for (ElOperator operator : operators) {
-                            String[] operatorAliases = operator.getAliases();
-                            for (String operatorAlias : operatorAliases) {
-                                ALIASES.put(operatorAlias, operator);
-                            }
-                        }
+                        register(subClass.getEnumConstants());
                     }
                 }
             }
         }
-        return ALIASES.get(alias);
+        return ALIASES_MAPPINGS.get(alias);
+    }
+
+    static void register(ElOperator... operators) {
+        for (ElOperator operator : operators) {
+            String[] aliases = operator.getAliases();
+            for (String alias : aliases) {
+                ALIASES_MAPPINGS.put(alias, operator);
+            }
+        }
     }
 
     Comparator<ElOperator> COMPARATOR = Comparator.comparingInt(ElOperator::getPriority);

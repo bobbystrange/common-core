@@ -1,6 +1,6 @@
-package org.dreamcat.common.util;
+package org.dreamcat.common.util.bean;
 
-import static org.dreamcat.common.core.legacy.BeanFormatUtil.pretty;
+import static org.dreamcat.common.util.BeanUtil.pretty;
 import static org.dreamcat.common.util.FormatUtil.log;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,7 +13,8 @@ import java.util.Map;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.core.Timeit;
-import org.dreamcat.common.core.legacy.BeanFormatUtil;
+import org.dreamcat.common.util.BeanUtil;
+import org.dreamcat.common.util.ReflectUtil;
 import org.dreamcat.test.BeanData;
 import org.dreamcat.test.BeanUnion;
 import org.junit.Test;
@@ -81,8 +82,8 @@ public class BeanUtilTest {
     @Test
     public void toMap() {
         Query query = query();
-        log("{}", BeanFormatUtil.pretty(BeanUtil.toMap(query)));
-        log("{}", BeanFormatUtil.pretty(BeanUtil.toProps(query)));
+        log("{}", pretty(BeanUtil.toMap(query)));
+        log("{}", pretty(BeanUtil.toProps(query)));
     }
 
     @Test
@@ -106,7 +107,7 @@ public class BeanUtilTest {
         BeanData.Pojo obj = BeanData.ofPojo();
 
         list = BeanUtil.toList(obj);
-        log.info("\n{}", BeanFormatUtil.pretty(list));
+        log.info("\n{}", pretty(list));
         assert list.size() == 6;
     }
 
@@ -116,7 +117,7 @@ public class BeanUtilTest {
         BeanData.Pojo obj = BeanData.ofPojo();
 
         list = BeanUtil.toList(obj, BeanData.Ann.class);
-        log.info("\n{}", BeanFormatUtil.pretty(list));
+        log.info("\n{}", pretty(list));
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -128,7 +129,7 @@ public class BeanUtilTest {
 
         list = BeanUtil.toList(obj,
                 Modifier.PROTECTED | Modifier.VOLATILE, BeanData.Ann.class);
-        log.info("\n{}", BeanFormatUtil.pretty(list));
+        log.info("\n{}", pretty(list));
     }
 
     @Test
@@ -137,16 +138,16 @@ public class BeanUtilTest {
         BeanUnion obj = BeanUnion.newInstance();
         list = new ArrayList<>();
         BeanUtil.retrieveExpandedList(list, obj, null);
-        log.info("\n{}", BeanFormatUtil.pretty(list));
+        log.info("\n{}", pretty(list));
 
         list = new ArrayList<>();
         BeanUtil.retrieveExpandedList(list, obj, null, BeanUnion.BeanBlock1.class);
-        log.info("\n\n{}", BeanFormatUtil.pretty(list));
+        log.info("\n\n{}", pretty(list));
 
         list = new ArrayList<>();
         BeanUtil.retrieveExpandedList(list, obj, null,
                 BeanUnion.BeanBlock1.class, BeanUnion.BeanBlock2.class, BeanUnion.BeanBlock3.class);
-        log.info("\n\n{}", BeanFormatUtil.pretty(list));
+        log.info("\n\n{}", pretty(list));
     }
 
     private Query query() {

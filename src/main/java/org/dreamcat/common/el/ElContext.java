@@ -9,6 +9,10 @@ import java.util.Map;
  */
 public interface ElContext {
 
+    ElOption getOption();
+
+    void setOption(ElOption option);
+
     BigDecimal get(String name);
 
     void set(String name, BigDecimal value);
@@ -30,6 +34,17 @@ public interface ElContext {
     }
 
     ElContext EMPTY = new ElContext() {
+
+        @Override
+        public ElOption getOption() {
+            return null;
+        }
+
+        @Override
+        public void setOption(ElOption option) {
+            throw new UnsupportedOperationException();
+        }
+
         @Override
         public BigDecimal get(String name) {
             return null;
@@ -37,12 +52,24 @@ public interface ElContext {
 
         @Override
         public void set(String name, BigDecimal value) {
+            throw new UnsupportedOperationException();
         }
     };
 
     class Impl implements ElContext {
 
         private final Map<String, BigDecimal> map = new HashMap<>();
+        protected ElOption option;
+
+        @Override
+        public ElOption getOption() {
+            return option;
+        }
+
+        @Override
+        public void setOption(ElOption option) {
+            this.option = option;
+        }
 
         @Override
         public BigDecimal get(String name) {

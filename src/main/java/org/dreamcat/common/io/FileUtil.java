@@ -444,19 +444,15 @@ public final class FileUtil {
     @SuppressWarnings("unchecked")
     public static void watchPath(
             Path path, long interval, TimeUnit intervalUnit,
-            TriConsumer<WatchEvent.Kind<Path>, Integer, Path> consumer) throws Exception {
+            TriConsumer<WatchEvent.Kind<Path>, Integer, Path> consumer)
+            throws IOException, InterruptedException {
 
         WatchService watcher = FileSystems.getDefault().newWatchService();
         path.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 
         interval = intervalUnit.toMillis(interval);
-        boolean loop = true;
-        while (loop) {
-            try {
-                Thread.sleep(interval);
-            } catch (InterruptedException e) {
-                loop = false;
-            }
+        for (; ; ) {
+            Thread.sleep(interval);
 
             WatchKey key = watcher.take();
             for (WatchEvent<?> event : key.pollEvents()) {

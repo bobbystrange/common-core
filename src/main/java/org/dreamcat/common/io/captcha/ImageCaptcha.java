@@ -19,9 +19,6 @@ public class ImageCaptcha {
     private int rgbEnd = 256;
     private int padding = 5;
 
-    public ImageCaptcha() {
-    }
-
     public static Builder builder() {
         return new Builder(new ImageCaptcha());
     }
@@ -50,7 +47,7 @@ public class ImageCaptcha {
         int size = font.getSize();
         int x = (width - n * size) >> 1;
         int y = (height + size) >> 1;
-        float dx = size + padding;
+        float dx = (float) size + padding;
         float dy = (height - y);
 
         Color color;

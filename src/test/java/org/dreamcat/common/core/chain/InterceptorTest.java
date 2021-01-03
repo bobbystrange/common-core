@@ -1,6 +1,7 @@
 package org.dreamcat.common.core.chain;
 
-import org.dreamcat.common.core.legacy.BeanFormatUtil;
+import static org.dreamcat.common.util.BeanUtil.pretty;
+
 import org.junit.Test;
 
 public class InterceptorTest {
@@ -17,7 +18,7 @@ public class InterceptorTest {
                 new Interceptor.Callback<String, String>() {
                     @Override
                     public void onError(RealCall<String, String> call, Exception e) {
-                        System.out.printf("execute resp:\t%s\t\n\n", BeanFormatUtil.pretty(call));
+                        System.out.printf("execute resp:\t%s\t\n\n", pretty(call));
                         e.printStackTrace();
                     }
 

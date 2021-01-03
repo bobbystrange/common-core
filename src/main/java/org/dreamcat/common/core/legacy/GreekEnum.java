@@ -8,7 +8,7 @@ enum GreekEnum {
     Rho(17), Sigma(18), Tau(19), Upsilon(20),
     Phi(21), Chi(22), Psi(23), Omega(24);
 
-    private int value;
+    private final int value;
 
     GreekEnum(int v) {
         value = v;

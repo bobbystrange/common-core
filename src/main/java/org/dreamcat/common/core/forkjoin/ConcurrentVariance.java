@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * Create by tuke on 2019-05-24
  */
-public class ConcurrentVariance {
+public final class ConcurrentVariance {
 
     public static double mean(double[] data, int seq) {
         ForkJoinTask<Double> task = new MeanRecursiveTask(data, 0, data.length, seq);

@@ -17,7 +17,8 @@ public class Version {
     private final String specialVersion;
 
     public Version(
-            int majorVersion, int minorVersion, int microVersion, Type type, int buildVersion) {
+            int majorVersion, int minorVersion, int microVersion,
+            Type type, int buildVersion) {
         this.majorVersion = majorVersion;
         this.minorVersion = minorVersion;
         this.microVersion = microVersion;

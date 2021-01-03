@@ -78,7 +78,9 @@ public class SocketUtil {
 
     public static HostnameVerifier hostnameVerifier() {
         if (hostnameVerifier == null) {
-            hostnameVerifier = (s, sslSession) -> true;
+            // The certificate's hostname-specific data should match the server hostname.
+            hostnameVerifier = (requestedHost, remoteServerSession) ->
+                    requestedHost.equalsIgnoreCase(remoteServerSession.getPeerHost());
         }
         return hostnameVerifier;
     }
@@ -143,6 +145,9 @@ public class SocketUtil {
                 (!hostnameVerifier.verify(host, ((SSLSocket) socket).getSession()))) {
             String message = String.format(
                     "The connection to '%s:%d' failed ssl/tls hostname verification.", host, port);
+            if (!socket.isClosed()) {
+                socket.close();
+            }
             throw new RuntimeException(message);
         }
         return socket;

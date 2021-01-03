@@ -2,6 +2,7 @@ package org.dreamcat.common.tree;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -75,6 +76,8 @@ public abstract class BinaryNode<Node extends BinaryNode<Node>> implements Itera
 
         @Override
         public Node next() {
+            if (!hasNext()) throw new NoSuchElementException();
+
             Node node = levelNodes.removeFirst();
             if (node.left != null) levelNodes.addLast(node.left);
             if (node.right != null) levelNodes.addLast(node.right);

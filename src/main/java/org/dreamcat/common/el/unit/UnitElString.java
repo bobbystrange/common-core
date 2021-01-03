@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.dreamcat.common.el.ElContext;
 import org.dreamcat.common.el.ElEngine;
 import org.dreamcat.common.el.ElOperator;
+import org.dreamcat.common.el.ElOption;
 import org.dreamcat.common.el.ElString;
 import org.dreamcat.common.el.util.RPNUtil;
 
@@ -22,7 +23,7 @@ public class UnitElString implements ElString {
     List<ElOperator> operators;
     String name;
     BigDecimal value;
-    transient volatile List<Object> formulas;
+    List<Object> formulas;
 
     UnitElString() {
     }
@@ -78,6 +79,7 @@ public class UnitElString implements ElString {
         }
 
         calculateFormulas();
+        ElOption option = context.getOption();
         LinkedList<BigDecimal> stack = new LinkedList<>();
         BigDecimal evaluated;
         for (Object formula : formulas) {
@@ -90,12 +92,12 @@ public class UnitElString implements ElString {
             ElOperator operator = (ElOperator) formula;
             BigDecimal right = stack.pop();
             if (operator.isUnary()) {
-                evaluated = operator.evaluate(right);
+                evaluated = operator.evaluate(right, option);
                 stack.push(evaluated);
                 continue;
             }
             BigDecimal left = stack.pop();
-            evaluated = operator.evaluate(left, right);
+            evaluated = operator.evaluate(left, right, option);
             stack.push(evaluated);
         }
         return stack.pop();
@@ -111,13 +113,9 @@ public class UnitElString implements ElString {
         operators.add(operation);
     }
 
-    private void calculateFormulas() {
+    private synchronized void calculateFormulas() {
         if (formulas == null) {
-            synchronized (this) {
-                if (formulas == null) {
-                    formulas = RPNUtil.getRPN(arguments, operators);
-                }
-            }
+            formulas = RPNUtil.getRPN(arguments, operators);
         }
     }
 

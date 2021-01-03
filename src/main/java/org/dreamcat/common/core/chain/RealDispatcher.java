@@ -60,7 +60,7 @@ public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
 
     private <T> void finished(Deque<T> calls, T call, boolean promoteCalls) {
         int runningCallsCount;
-        Runnable idleCallback;
+        Runnable currentIdleCallback;
         synchronized (this) {
             if (!calls.remove(call))
                 throw new AssertionError("Call wasn't in-flight!");
@@ -68,11 +68,11 @@ public class RealDispatcher<I, O> implements Interceptor.Dispatcher<I, O> {
                 promoteCalls();
 
             runningCallsCount = runningCallsCount();
-            idleCallback = this.idleCallback;
+            currentIdleCallback = this.idleCallback;
         }
 
-        if (runningCallsCount == 0 && idleCallback != null) {
-            idleCallback.run();
+        if (runningCallsCount == 0 && currentIdleCallback != null) {
+            currentIdleCallback.run();
         }
     }
 

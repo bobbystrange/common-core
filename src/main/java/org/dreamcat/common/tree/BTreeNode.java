@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -457,6 +458,8 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
 
         @Override
         public BTreeNode<E> next() {
+            if (!hasNext()) throw new NoSuchElementException();
+
             BTreeNode<E> node = levelNodes.get(pos);
             if (node.nodes != null) {
                 nextLevelNodes.addAll(Arrays.asList(node.nodes));

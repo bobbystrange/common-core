@@ -1,51 +1,12 @@
 package org.dreamcat.common.util;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Consumer;
 
 public class ThreadUtil {
-
-    public static <V> void submitSync(
-            ExecutorService executorService,
-            Callable<V> task,
-            long timeout, TimeUnit unit,
-            Consumer<V> callback,
-            Consumer<TimeoutException> timeoutCallback) {
-        Future<V> future = executorService.submit(task);
-        try {
-            V result = future.get(timeout, unit);
-            callback.accept(result);
-        } catch (TimeoutException e) {
-            timeoutCallback.accept(e);
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void submitSync(
-            ExecutorService executorService,
-            Runnable task,
-            long timeout, TimeUnit unit,
-            Consumer<TimeoutException> callback) {
-        Future<?> future = executorService.submit(task);
-        try {
-            future.get(timeout, unit);
-        } catch (TimeoutException e) {
-            callback.accept(e);
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static ExecutorService newCallerRunsThreadPool(int nThreads) {
         return new ThreadPoolExecutor(

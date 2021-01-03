@@ -1,7 +1,7 @@
 package org.dreamcat.common.util.bean;
 
-import static org.dreamcat.common.core.legacy.BeanFormatUtil.inline;
-import static org.dreamcat.common.core.legacy.BeanFormatUtil.pretty;
+import static org.dreamcat.common.util.BeanUtil.inline;
+import static org.dreamcat.common.util.BeanUtil.pretty;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -83,7 +83,5 @@ public class BeanFormatUtilTest {
     public void testInlineObjArr() {
         log.info("inline for T[]:\n{}", inline(oa));
         log.info("deepToString for T[]:\n{}", Arrays.deepToString(oa));
-
-
     }
 }

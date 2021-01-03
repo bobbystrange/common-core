@@ -1,7 +1,8 @@
 package org.dreamcat.common.core;
 
+import static org.dreamcat.common.util.BeanUtil.pretty;
+
 import java.util.List;
-import org.dreamcat.common.core.legacy.BeanFormatUtil;
 import org.dreamcat.test.BeanData;
 import org.junit.Test;
 
@@ -13,6 +14,6 @@ public class FieldColumnTest {
     @Test
     public void test() {
         List<FieldColumn> columns = FieldColumn.parse(BeanData.All.class);
-        columns.forEach(it -> System.out.println(BeanFormatUtil.pretty(it)));
+        columns.forEach(it -> System.out.println(pretty(it)));
     }
 }

@@ -1,6 +1,6 @@
-package org.dreamcat.common.util.bean.copy;
+package org.dreamcat.common.util.bean;
 
-import static org.dreamcat.common.core.legacy.BeanFormatUtil.pretty;
+import static org.dreamcat.common.util.BeanUtil.pretty;
 
 import net.sf.cglib.beans.BeanCopier;
 import org.dreamcat.common.util.BeanUtil;

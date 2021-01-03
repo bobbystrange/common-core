@@ -27,7 +27,7 @@ public class BinaryNodesTest {
 
         ArrayList<Integer> list2 = new ArrayList<>();
         BinaryNodes.preOrder(tree.getRoot(), node -> {
-            list2.add(node.key);
+            list2.add(node.getKey());
         });
         System.out.println(list2);
         System.out.println("\n");
@@ -78,7 +78,7 @@ public class BinaryNodesTest {
 
         ArrayList<Integer> list2 = new ArrayList<>();
         BinaryNodes.levelOrder(tree.getRoot(), (node, level) -> {
-            list2.add(node.key);
+            list2.add(node.getKey());
         });
         System.out.println(list2);
         System.out.println("\n");

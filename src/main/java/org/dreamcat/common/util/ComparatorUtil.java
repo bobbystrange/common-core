@@ -29,7 +29,7 @@ public final class ComparatorUtil {
             return ((Comparable<A>) a).compareTo((A) b);
         } else if (b instanceof Comparable &&
                 b.getClass().isInstance(a)) {
-            return -((Comparable<B>) b).compareTo((B) a);
+            return Integer.compare(0, ((Comparable<B>) b).compareTo((B) a));
         }
 
         int offset = a.hashCode() - b.hashCode();

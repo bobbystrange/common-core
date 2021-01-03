@@ -1,6 +1,6 @@
 package org.dreamcat.common.util;
 
-import static org.dreamcat.common.core.legacy.BeanFormatUtil.pretty;
+import static org.dreamcat.common.util.BeanUtil.pretty;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.core.Triple;
 import org.dreamcat.common.el.ElOperator;
-import org.dreamcat.common.el.operation.ArithmeticUnaryOperator;
-import org.dreamcat.common.el.operation.LogicUnaryOperator;
+import org.dreamcat.common.el.operator.ArithmeticUnaryOperator;
+import org.dreamcat.common.el.operator.LogicUnaryOperator;
 import org.dreamcat.common.el.util.DALUtil;
 import org.dreamcat.common.text.NumericSearcher;
 import org.dreamcat.common.text.StringSearcher;
@@ -23,9 +23,9 @@ public final class UnitElStringSplitter {
         int offset = triple.second();
         int closed = triple.third();
         if (offset < size) {
-            throw new IllegalArgumentException("invalid character at pos " + offset);
+            throw new IllegalArgumentException(invalidChar(offset));
         } else if (closed != 0) {
-            throw new IllegalArgumentException("invalid character at pos " + (size - 1));
+            throw new IllegalArgumentException(invalidChar(size - 1));
         }
         return triple.first();
     }
@@ -57,9 +57,9 @@ public final class UnitElStringSplitter {
             } else if (c >= '0' && c <= '9') {
                 pair = searchValueArgument(expression, i, size, closed);
             } else if (StringUtil.isFirstVariableChar(c)) {
-                pair = searchVariableArgument(expression, i, size, closed);
+                pair = searchVariableArgument(expression, i);
             } else {
-                throw new IllegalArgumentException("invalid character at pos " + i);
+                throw new IllegalArgumentException(invalidChar(i));
             }
             UnitElString argument = pair.first();
             int nextOffset = pair.second();
@@ -90,26 +90,11 @@ public final class UnitElStringSplitter {
             } else if (c >= '0' && c <= '9') {
                 return searchValueArgument(expression, i, size, closed);
             } else if (StringUtil.isFirstVariableChar(c)) {
-                return searchVariableArgument(expression, i, size, closed);
+                return searchVariableArgument(expression, i);
             } else if (c == '-' || c == '+' || c == '!') {
-                boolean negative = c == '-';
-                boolean not = c == '!';
-                Pair<UnitElString, Integer> pair = searchArgument(expression, i + 1, size, closed);
-                UnitElString substring = pair.first();
-                i = pair.second();
-                if (!negative && !not) {
-                    return pair;
-                }
-                UnitElString string = new UnitElString();
-                string.addArgument(substring);
-                if (not) {
-                    string.addOperation(LogicUnaryOperator.NOT);
-                } else {
-                    string.addOperation(ArithmeticUnaryOperator.NEG);
-                }
-                return Pair.of(string, i);
+                return searchUnaryArgument(expression, i, size, c, closed);
             } else {
-                throw new IllegalArgumentException("invalid character at pos " + i);
+                throw new IllegalArgumentException(invalidChar(i));
             }
         }
         throw new RuntimeException("Assertion failure");
@@ -124,10 +109,30 @@ public final class UnitElStringSplitter {
     }
 
     private static Pair<UnitElString, Integer> searchVariableArgument(
-            String expression, int offset, int size, int closed) {
+            String expression, int offset) {
         String name = StringSearcher.extractVariable(expression, offset);
         int nextOffset = offset + name.length();
         return Pair.of(new UnitElString(name), nextOffset);
+    }
+
+    private static Pair<UnitElString, Integer> searchUnaryArgument(
+            String expression, int offset, int size, char c, int closed) {
+        boolean negative = c == '-';
+        boolean not = c == '!';
+        Pair<UnitElString, Integer> pair = searchArgument(expression, offset + 1, size, closed);
+        UnitElString substring = pair.first();
+        offset = pair.second();
+        if (!negative && !not) {
+            return pair;
+        }
+        UnitElString string = new UnitElString();
+        string.addArgument(substring);
+        if (not) {
+            string.addOperation(LogicUnaryOperator.NOT);
+        } else {
+            string.addOperation(ArithmeticUnaryOperator.NEG);
+        }
+        return Pair.of(string, offset);
     }
 
     private static Pair<Integer, Integer> searchRemainingString(
@@ -158,5 +163,9 @@ public final class UnitElStringSplitter {
         offset = pair.second();
         if (offset == size) return Pair.of(offset, closed);
         return searchRemainingString(string, expression, offset, size, closed);
+    }
+
+    private static String invalidChar(int offset) {
+        return "invalid character at pos " + offset;
     }
 }

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BreakException extends Exception {
 
-    private final Object data;
+    private transient final Object data;
 
     @SuppressWarnings("unchecked")
     public <T> T getData() {

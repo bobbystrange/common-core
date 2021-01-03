@@ -1,9 +1,9 @@
 package org.dreamcat.common.el.stack;
 
-import static org.dreamcat.common.el.operation.ArithmeticOperator.ADD;
-import static org.dreamcat.common.el.operation.ArithmeticOperator.DIVIDE;
-import static org.dreamcat.common.el.operation.ArithmeticOperator.MULTIPLY;
-import static org.dreamcat.common.el.operation.ArithmeticOperator.SUBTRACT;
+import static org.dreamcat.common.el.operator.ArithmeticOperator.ADD;
+import static org.dreamcat.common.el.operator.ArithmeticOperator.DIVIDE;
+import static org.dreamcat.common.el.operator.ArithmeticOperator.MULTIPLY;
+import static org.dreamcat.common.el.operator.ArithmeticOperator.SUBTRACT;
 import static org.dreamcat.common.util.RandomUtil.rand;
 import static org.dreamcat.common.util.RandomUtil.randi;
 

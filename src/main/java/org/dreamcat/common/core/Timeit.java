@@ -80,22 +80,20 @@ public class Timeit {
         IntStream seqs = Arrays.stream(ArrayUtil.rangeOf(size));
         if (parallel) seqs = seqs.parallel();
 
-        seqs.forEach(seq -> {
-            run(tss, seq);
-        });
+        seqs.forEach(seq -> run(tss, seq));
         return stat(tss, skip);
     }
 
     private void run(long[][] tss, int seq) {
         Object o = actions.get(seq);
-        if (o instanceof Action) {
-            Action action = (Action) o;
-            doAction(tss[seq], action);
-        } else if (o instanceof UnaryAction) {
-            UnaryAction action = (UnaryAction) o;
+        if (o instanceof Actor) {
+            Actor actor = (Actor) o;
+            doAction(tss[seq], actor);
+        } else if (o instanceof UnaryActor) {
+            UnaryActor action = (UnaryActor) o;
             doUnaryAction(tss[seq], action);
         } else {
-            VoidAction action = (VoidAction) o;
+            VoidActor action = (VoidActor) o;
             doVoidAction(tss[seq], action);
         }
     }
@@ -103,17 +101,17 @@ public class Timeit {
     public Timeit addAction(
             ThrowableSupplier<Object[]> supplier,
             ThrowableObjectArrayConsumer action) {
-        this.actions.add(new Action(supplier, action));
+        this.actions.add(new Actor(supplier, action));
         return this;
     }
 
-    public <T> Timeit addAction(ThrowableVoidConsumer action) {
-        this.actions.add(new VoidAction(action));
+    public Timeit addAction(ThrowableVoidConsumer action) {
+        this.actions.add(new VoidActor(action));
         return this;
     }
 
     public <T> Timeit addUnaryAction(ThrowableSupplier<T> supplier, ThrowableConsumer<T> action) {
-        this.actions.add(new UnaryAction(supplier, action));
+        this.actions.add(new UnaryActor(supplier, action));
         return this;
     }
 
@@ -142,15 +140,15 @@ public class Timeit {
         return this;
     }
 
-    private void doAction(long[] ts, Action action) {
+    private void doAction(long[] ts, Actor actor) {
         long t;
         for (int k = 0; k < count; k++) {
             t = 0;
             for (int i = 0; i < repeat; i++) {
                 try {
-                    Object[] args = action.supplier.get();
+                    Object[] args = actor.supplier.get();
                     long nanoTime = System.nanoTime();
-                    action.action.accept(args);
+                    actor.action.accept(args);
                     t += System.nanoTime() - nanoTime;
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -160,7 +158,7 @@ public class Timeit {
         }
     }
 
-    private void doUnaryAction(long[] ts, UnaryAction action) {
+    private void doUnaryAction(long[] ts, UnaryActor action) {
         long t;
         for (int k = 0; k < count; k++) {
             t = 0;
@@ -178,7 +176,7 @@ public class Timeit {
         }
     }
 
-    private void doVoidAction(long[] ts, VoidAction action) {
+    private void doVoidAction(long[] ts, VoidActor action) {
         long t;
         for (int k = 0; k < count; k++) {
             t = 0;
@@ -219,21 +217,21 @@ public class Timeit {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @AllArgsConstructor
-    private static class Action {
+    private static class Actor {
 
         ThrowableSupplier<Object[]> supplier;
         ThrowableObjectArrayConsumer action;
     }
 
     @AllArgsConstructor
-    private static class UnaryAction<T> {
+    private static class UnaryActor<T> {
 
         ThrowableSupplier<T> supplier;
         ThrowableConsumer<T> action;
     }
 
     @AllArgsConstructor
-    private static class VoidAction {
+    private static class VoidActor {
 
         ThrowableVoidConsumer action;
     }

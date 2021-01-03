@@ -3,10 +3,13 @@ package org.dreamcat.java.lang.reflect;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import lombok.Data;
+import org.junit.Test;
 
 /**
  * Create by tuke on 2020/8/17
  */
+@Data
 public class ParameterizedTypeTest<T, R> {
 
     T left;
@@ -21,10 +24,12 @@ public class ParameterizedTypeTest<T, R> {
         }
     }
 
-    public static void main(String[] args) {
+    @Test
+    public void test() {
         ParameterizedTypeTest<String, Double> bean = new ParameterizedTypeTest<>();
         bean.left = "";
         bean.right = 1.0;
+        System.out.println(bean);
     }
 
 }

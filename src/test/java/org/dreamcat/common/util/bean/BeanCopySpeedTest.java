@@ -1,4 +1,4 @@
-package org.dreamcat.common.util.bean.copy;
+package org.dreamcat.common.util.bean;
 
 import java.util.Arrays;
 import java.util.function.Supplier;

@@ -1,24 +1,17 @@
 package org.dreamcat.common.util.bean;
 
+import static org.dreamcat.common.util.BeanUtil.pretty;
+
 import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.core.legacy.BeanExpression;
-import org.dreamcat.common.core.legacy.BeanFormatUtil;
+import org.dreamcat.common.util.BeanUtil;
 import org.dreamcat.test.BeanData;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2019-02-01
  */
 @Slf4j
-public class BeanExpressionTest {
-
-    BeanExpression beanExpression;
-
-    @Before
-    public void init() {
-        beanExpression = new BeanExpression();
-    }
+public class BeanLessFieldTest {
 
     @Test
     public void t01() throws Exception {
@@ -32,7 +25,7 @@ public class BeanExpressionTest {
 
     private void test(String expr) throws Exception {
         BeanData.Pojo obj = BeanData.ofPojo();
-        beanExpression.lessFiled(obj, expr);
-        log.info("\n{}", BeanFormatUtil.pretty(obj));
+        BeanUtil.lessFiled(obj, expr);
+        log.info("\n{}", pretty(obj));
     }
 }

@@ -44,13 +44,13 @@ public class RealEventEmitter implements EventEmitter {
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public void emit(ModalEvent event) {
-        Collection<ModalEventListener<?>> listeners = this.getListentes();
-        for (ModalEventListener listener : listeners) {
+        Collection<ModalEventListener<?>> currentListeners = this.getListeners();
+        for (ModalEventListener listener : currentListeners) {
             listener.onModalEvent(event);
         }
     }
 
-    public Collection<ModalEventListener<?>> getListentes() {
+    public Collection<ModalEventListener<?>> getListeners() {
         synchronized (this.listeners) {
             return new ArrayList<>(this.listeners);
         }

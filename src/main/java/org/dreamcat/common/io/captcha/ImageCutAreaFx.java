@@ -74,7 +74,8 @@ public class ImageCutAreaFx {
         public int applyAsInt(int i, int j) {
             if (i < 0 || i > w + radius || j > h || j < -radius) {
                 return 1;
-            } else if ((i == 0 || i == w) && ((j >= 0 && j <= dy) || (j >= h - dy && j <= h))) {
+            } else if ((i == 0 || i == w) &&
+                    ((j >= 0 && j <= dy) || (j >= h - dy && j <= h))) {
                 return 0;
             } else if (j == 0 && ((i >= 0 && i <= dx) || (i >= w - dx && i <= w))) {
                 return 0;
@@ -84,7 +85,7 @@ public class ImageCutAreaFx {
                 if (i < dx || i > w - dx) {
                     return 1;
                 } else {
-                    double dist = Math.sqrt(Math.pow(i - (w >> 1), 2) + (j * j));
+                    double dist = Math.sqrt(Math.pow((double) i - (w >> 1), 2) + (j * j));
                     double sig = dist - radius;
                     return sig > dw ? 1 : (sig < -dw ? -1 : 0);
                 }
@@ -92,7 +93,8 @@ public class ImageCutAreaFx {
                 if (j < dy || j > h - dy) {
                     return 1;
                 } else {
-                    double dist = Math.sqrt(Math.pow(j - (h >> 1), 2) + Math.pow(i - w, 2));
+                    double dist = Math.sqrt(Math.pow((double) j - (h >> 1), 2) +
+                            Math.pow((double) i - w, 2));
                     double sig = dist - radius;
                     return sig > dh ? 1 : (sig < -dh ? -1 : 0);
                 }
@@ -100,7 +102,7 @@ public class ImageCutAreaFx {
                 if (j < dy || j > h - dy) {
                     return -1;
                 } else {
-                    double dist = Math.sqrt(Math.pow(j - (h >> 1), 2) + (i * i));
+                    double dist = Math.sqrt(Math.pow((double) j - (h >> 1), 2) + (i * i));
                     double sig = dist - radius;
                     return sig > dh ? -1 : (sig < -dh ? 1 : 0);
                 }

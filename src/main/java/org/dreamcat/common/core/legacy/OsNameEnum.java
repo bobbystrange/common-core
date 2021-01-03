@@ -26,7 +26,7 @@ enum OsNameEnum {
 
     // "line.separator"
     public static final String OS_NAME = System.getProperty("os.name");
-    private String description;
+    private final String description;
 
     OsNameEnum(String description) {
         this.description = description;

@@ -45,16 +45,20 @@ public class RandomUtil {
 
     public static char choose(String letters) {
         int len = letters.length();
-        int index = randi(len);
+        int index = (int) Math.floor(Math.random() * len);
         return letters.charAt(index);
     }
 
     public static String choose(int size, String letters) {
-        StringBuilder sb = new StringBuilder(size);
-        for (int i = 0; i < size; i++) {
-            sb.append(choose(letters));
+        int base = letters.length();
+        int rand = (int) Math.floor(Math.random() * Math.pow(base, size));
+        StringBuilder s = new StringBuilder(size);
+        while (size-- >= 1) {
+            int i = rand % base;
+            s.append(letters.charAt(i));
+            rand /= base;
         }
-        return sb.toString();
+        return s.toString();
     }
 
     public static String choose10(int size) {

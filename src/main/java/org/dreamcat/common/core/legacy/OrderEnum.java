@@ -14,7 +14,7 @@ enum OrderEnum {
     eleventh("eleventh"),
     twelfth("twelfth");
 
-    private String value;
+    private final String value;
 
     OrderEnum(String value) {
         this.value = value;
