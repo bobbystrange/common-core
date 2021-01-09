@@ -1,4 +1,4 @@
-package org.dreamcat.common.tree;
+package org.dreamcat.common.collection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.dreamcat.common.tree.BTreeNode.Result;
+import org.dreamcat.common.collection.BTreeNode.Result;
 
 /**
  * Create by tuke on 2020/4/25

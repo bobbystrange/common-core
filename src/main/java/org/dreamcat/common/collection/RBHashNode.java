@@ -1,4 +1,4 @@
-package org.dreamcat.common.tree;
+package org.dreamcat.common.collection;
 
 import lombok.Getter;
 import org.dreamcat.common.util.ComparatorUtil;

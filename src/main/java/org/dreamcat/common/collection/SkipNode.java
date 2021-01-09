@@ -1,4 +1,4 @@
-package org.dreamcat.common.tree.skip;
+package org.dreamcat.common.collection;
 
 import java.util.Objects;
 

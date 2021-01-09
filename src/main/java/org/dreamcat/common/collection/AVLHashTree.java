@@ -1,9 +1,9 @@
-package org.dreamcat.common.tree;
+package org.dreamcat.common.collection;
 
-import static org.dreamcat.common.tree.AVLHashNode.delete;
-import static org.dreamcat.common.tree.AVLHashNode.drop;
-import static org.dreamcat.common.tree.AVLHashNode.insert;
-import static org.dreamcat.common.tree.AVLHashNode.select;
+import static org.dreamcat.common.collection.AVLHashNode.delete;
+import static org.dreamcat.common.collection.AVLHashNode.drop;
+import static org.dreamcat.common.collection.AVLHashNode.insert;
+import static org.dreamcat.common.collection.AVLHashNode.select;
 
 /**
  * Create by tuke on 2020/4/19

@@ -1,4 +1,4 @@
-package org.dreamcat.common.core.tree;
+package org.dreamcat.common.core.collection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.function.ThrowableSupplier;
-import org.dreamcat.common.tree.AVLHashMap;
-import org.dreamcat.common.tree.AVLHashTree;
-import org.dreamcat.common.tree.BTree;
-import org.dreamcat.common.tree.RBHashTree;
+import org.dreamcat.common.collection.AVLHashMap;
+import org.dreamcat.common.collection.AVLHashTree;
+import org.dreamcat.common.collection.BTree;
+import org.dreamcat.common.collection.RBHashTree;
 import org.dreamcat.common.util.RandomUtil;
 import org.junit.Test;
 

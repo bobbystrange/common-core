@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -396,30 +397,37 @@ public class BeanUtil {
         try {
             target = clazz.newInstance();
             copy(source, target);
-        } catch (Throwable ignored) {
-        }
+        } catch (Exception ignored) { }
 
         return target;
     }
 
-    // slower than cglib, use it in field-based pojo (no getter/setter) only
+    /**
+     * <strong>slower than cglib</strong>, please use it in field-based pojo (no getter/setter) only
+     *
+     * @param source source object
+     * @param target target object
+     */
     public static void copy(Object source, Object target) {
         Map<String, Field> sourceFieldMap = ReflectUtil.retrieveFieldMap(source.getClass());
         Map<String, Field> targetFieldMap = ReflectUtil.retrieveFieldMap(target.getClass());
 
-        Set<String> targetFields = targetFieldMap.keySet();
-        for (String sourceFieldName : sourceFieldMap.keySet()) {
-            if (targetFields.contains(sourceFieldName)) {
+        Set<String> commonFieldNames = new HashSet<>(sourceFieldMap.keySet());
+        commonFieldNames.retainAll(targetFieldMap.keySet());
+        for (String commonFieldName : commonFieldNames) {
+            Field targetField = targetFieldMap.get(commonFieldName);
+            Field sourceField = sourceFieldMap.get(commonFieldName);
+            // must is assignable
+            if (!targetField.getType().isAssignableFrom(sourceField.getType())) continue;
 
-                Field targetField = targetFieldMap.get(sourceFieldName);
-                Field sourceField = sourceFieldMap.get(sourceFieldName);
-
+            try {
                 targetField.setAccessible(true);
                 sourceField.setAccessible(true);
-                try {
-                    targetField.set(target, sourceField.get(source));
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
+                targetField.set(target, sourceField.get(source));
+            } catch (Exception e) {
+                if (log.isDebugEnabled()) {
+                    log.debug("set {} to {}, error is: {}",
+                            sourceField, targetField, e.getMessage());
                 }
             }
         }

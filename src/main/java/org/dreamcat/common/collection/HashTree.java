@@ -1,4 +1,4 @@
-package org.dreamcat.common.tree;
+package org.dreamcat.common.collection;
 
 import java.util.Iterator;
 import java.util.function.BiConsumer;

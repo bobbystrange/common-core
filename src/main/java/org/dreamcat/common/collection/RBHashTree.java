@@ -1,9 +1,9 @@
-package org.dreamcat.common.tree;
+package org.dreamcat.common.collection;
 
-import static org.dreamcat.common.tree.RBHashNode.delete;
-import static org.dreamcat.common.tree.RBHashNode.drop;
-import static org.dreamcat.common.tree.RBHashNode.insert;
-import static org.dreamcat.common.tree.RBHashNode.select;
+import static org.dreamcat.common.collection.RBHashNode.delete;
+import static org.dreamcat.common.collection.RBHashNode.drop;
+import static org.dreamcat.common.collection.RBHashNode.insert;
+import static org.dreamcat.common.collection.RBHashNode.select;
 
 import org.dreamcat.common.function.QuaConsumer;
 

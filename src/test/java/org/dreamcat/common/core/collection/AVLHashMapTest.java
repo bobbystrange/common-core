@@ -1,7 +1,7 @@
-package org.dreamcat.common.core.tree;
+package org.dreamcat.common.core.collection;
 
 import java.util.HashMap;
-import org.dreamcat.common.tree.AVLHashMap;
+import org.dreamcat.common.collection.AVLHashMap;
 import org.junit.Test;
 
 
