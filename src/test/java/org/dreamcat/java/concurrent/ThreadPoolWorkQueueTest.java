@@ -7,12 +7,14 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2019-04-16
  */
 @Slf4j
+@Ignore
 public class ThreadPoolWorkQueueTest {
 
     @Test(expected = RejectedExecutionException.class)

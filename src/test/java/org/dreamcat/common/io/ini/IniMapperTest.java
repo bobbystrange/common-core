@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.util.BeanUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/5/5
  */
+@Ignore
 public class IniMapperTest {
 
     // ini is much faster then json

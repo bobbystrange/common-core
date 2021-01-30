@@ -3,11 +3,13 @@ package org.dreamcat.java.concurrent;
 import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/22
  */
+@Ignore
 public class PipedWriterTest {
 
     @Test

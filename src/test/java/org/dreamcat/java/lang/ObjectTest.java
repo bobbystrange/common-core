@@ -3,11 +3,13 @@ package org.dreamcat.java.lang;
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import org.dreamcat.common.core.Timeit;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/18
  */
+@Ignore
 public class ObjectTest {
 
     @Test

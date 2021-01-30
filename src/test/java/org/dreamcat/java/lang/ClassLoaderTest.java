@@ -22,9 +22,10 @@ public class ClassLoaderTest {
         String bootClassPath = System.getProperty("sun.boot.class.path");
         Arrays.stream(bootClassPath.split(":")).forEach(System.out::println);
 
-        ClassLoader bootstrapClassLoader = Launcher.getLauncher().getClassLoader();
-        // the bootstrap class loader
-        assert bootstrapClassLoader.getParent() == null;
+        ClassLoader appClassLoader = Launcher.getLauncher().getClassLoader();
+        // the app class loader
+        ClassLoader extClassLoader = appClassLoader.getParent();
+        assert extClassLoader.getParent() == null;
     }
 
     // -Djava.ext.dirs, jre/lib/ext/*.jar

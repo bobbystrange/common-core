@@ -8,12 +8,14 @@ import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.function.ThrowableSupplier;
 import org.dreamcat.common.util.BeanUtil;
 import org.dreamcat.test.BeanData;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 
 /**
  * Create by tuke on 2019-06-03
  */
+@Ignore
 public class BeanCopySpeedTest {
 
     private static void speed(

@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import org.dreamcat.common.core.Timeit;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/7/30
  */
+@Ignore
 public class InputStreamSpeedTest {
 
     @Test

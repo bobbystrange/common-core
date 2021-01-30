@@ -5,12 +5,14 @@ import org.dreamcat.common.io.compress.DeflaterCompressUtil;
 import org.dreamcat.common.io.compress.InflaterCompressUtil;
 import org.dreamcat.common.util.Base64Util;
 import org.dreamcat.common.util.RandomUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
 /**
  * Create by tuke on 2020/4/6
  */
+@Ignore
 public class InflaterCompressUtilTest {
 
     @Test

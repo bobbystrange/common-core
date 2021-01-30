@@ -5,11 +5,13 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.io.image.ImageUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/5/12
  */
+@Ignore
 public class ImageCutCaptchaTest {
 
     @Test

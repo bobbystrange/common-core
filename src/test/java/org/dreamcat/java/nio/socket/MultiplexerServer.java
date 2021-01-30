@@ -11,11 +11,13 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 
 /**
  * Create by tuke on 2020/4/26
  */
 @Slf4j
+@Ignore
 public class MultiplexerServer implements Runnable, Closeable {
 
     private final Selector selector;

@@ -4,11 +4,13 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2019-03-27
  */
+@Ignore
 public class ExecutorShutdownTest {
 
     private static final AtomicInteger lineno = new AtomicInteger(1);

@@ -12,11 +12,13 @@ import org.dreamcat.common.collection.AVLHashTree;
 import org.dreamcat.common.collection.BTree;
 import org.dreamcat.common.collection.RBHashTree;
 import org.dreamcat.common.util.RandomUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/19
  */
+@Ignore
 public class AVLHashTreeTest {
 
     @Test

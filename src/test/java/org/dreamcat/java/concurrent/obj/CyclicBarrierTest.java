@@ -2,11 +2,13 @@ package org.dreamcat.java.concurrent.obj;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/24
  */
+@Ignore
 public class CyclicBarrierTest {
 
     @Test

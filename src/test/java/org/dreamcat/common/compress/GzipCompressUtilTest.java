@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.function.IntFunction;
 import org.dreamcat.common.io.compress.GzipCompressUtil;
 import org.dreamcat.common.util.RandomUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/6
  */
+@Ignore
 public class GzipCompressUtilTest {
 
     @Test

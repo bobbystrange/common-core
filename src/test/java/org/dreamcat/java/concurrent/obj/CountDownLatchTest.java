@@ -1,11 +1,13 @@
 package org.dreamcat.java.concurrent.obj;
 
 import java.util.concurrent.CountDownLatch;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/24
  */
+@Ignore
 public class CountDownLatchTest {
 
     @Test

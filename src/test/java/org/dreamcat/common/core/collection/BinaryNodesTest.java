@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.collection.AVLHashTree;
 import org.dreamcat.common.collection.BinaryNodes;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/5/29
  */
+@Ignore
 public class BinaryNodesTest {
 
     @Test

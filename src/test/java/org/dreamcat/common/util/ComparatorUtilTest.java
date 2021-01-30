@@ -3,11 +3,13 @@ package org.dreamcat.common.util;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.dreamcat.common.core.Timeit;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/19
  */
+@Ignore
 public class ComparatorUtilTest {
 
     @SuppressWarnings({"unchecked"})

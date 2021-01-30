@@ -1,10 +1,12 @@
 package org.dreamcat.common.core.snowflake;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/5/31
  */
+@Ignore
 public class IdWorkerTest {
 
     @Test

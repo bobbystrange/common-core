@@ -7,11 +7,13 @@ import com.google.gson.JsonElement;
 import java.util.function.IntFunction;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.util.StringUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/5/7
  */
+@Ignore
 public class JsonParseSpeedTest {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();

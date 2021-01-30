@@ -18,12 +18,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.net.SocketUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/7
  */
 @Slf4j
+@Ignore
 public class SocketChannelPingPongTest {
 
     private static final int bufferSize = 4 * 1024;

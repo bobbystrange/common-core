@@ -9,11 +9,13 @@ import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.function.ThrowableConsumer;
 import org.dreamcat.common.io.csv.CsvReaderTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/8/6
  */
+@Ignore
 public class LineTerminatedReaderTest {
 
     @Test

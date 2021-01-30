@@ -8,11 +8,13 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2019-03-19
  */
+@Ignore
 public class DateFormatTest {
 
     @Test

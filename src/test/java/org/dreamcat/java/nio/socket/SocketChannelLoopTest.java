@@ -15,12 +15,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.dreamcat.common.net.SocketUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
 /**
  * Create by tuke on 2020/4/7
  */
+@Ignore
 public class SocketChannelLoopTest {
 
     private static final int bufferSize = 4 * 1024;

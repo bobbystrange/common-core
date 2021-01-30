@@ -5,11 +5,13 @@ import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.core.forkjoin.ConcurrentVariance;
 import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.RandomUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/8/14
  */
+@Ignore
 public class SteamReduceTest {
 
     @Test

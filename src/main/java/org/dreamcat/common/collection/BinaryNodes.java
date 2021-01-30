@@ -52,7 +52,7 @@ public class BinaryNodes {
     }
 
     public static <Node extends BinaryNode<Node>, E> Node ofLevelOrder(
-            Function<E, Node> constructor, Collection<E> elements) {
+            Function<E, Node> constructor, Iterable<E> elements) {
         Iterator<E> iter = elements.iterator();
         if (!iter.hasNext()) return null;
         Node root = constructor.apply(iter.next());

@@ -16,6 +16,7 @@ import org.dreamcat.common.el.ElOperator;
 import org.dreamcat.common.el.ElString;
 import org.dreamcat.common.el.unit.UnitElStringSplitter;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -81,6 +82,7 @@ public class StackElStringTest {
         System.out.println(randomExpression(3, 4, false));
     }
 
+    @Ignore
     @Test
     public void testSpeed() {
         System.out.println("depth \t width \t ");

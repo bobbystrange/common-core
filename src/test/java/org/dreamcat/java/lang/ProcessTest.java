@@ -2,11 +2,13 @@ package org.dreamcat.java.lang;
 
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2019-04-18
  */
+@Ignore
 @Slf4j
 public class ProcessTest {
 

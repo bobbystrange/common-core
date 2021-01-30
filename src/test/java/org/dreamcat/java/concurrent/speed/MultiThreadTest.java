@@ -2,10 +2,12 @@ package org.dreamcat.java.concurrent.speed;
 
 import org.dreamcat.common.core.Timeit;
 import org.junit.Test;
+import org.junit.Ignore;
 
 /**
  * Create by tuke on 2020/7/8
  */
+@Ignore
 public class MultiThreadTest {
 
     @Test
