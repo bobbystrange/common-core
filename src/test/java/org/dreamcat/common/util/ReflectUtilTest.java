@@ -46,7 +46,7 @@ public class ReflectUtilTest {
 
     @Test
     public void getParameterNames() {
-        Method[] methods = getClass().getDeclaredMethods();
+        Method[] methods = ReflectUtil.class.getDeclaredMethods();
         for (int i = 0, len = methods.length; i < len; i++) {
             Method method = methods[i];
             log.info("{}, {}, {}", i, method.getName(),

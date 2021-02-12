@@ -397,7 +397,8 @@ public class BeanUtil {
         try {
             target = clazz.newInstance();
             copy(source, target);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         return target;
     }

@@ -442,10 +442,28 @@ public class ReflectUtil {
     public static Object[] castToArray(Object a) {
         if (a == null) return null;
         Class<?> clazz = a.getClass();
-        if (!clazz.isArray()) {
-            throw new ClassCastException(clazz + " is not a Array");
+        if (Collection.class.isAssignableFrom(clazz)) {
+            return ((Collection<?>) a).toArray();
         }
+        if (!clazz.isArray()) {
+            throw new ClassCastException(clazz + " is neither a Array or a Collection");
+        }
+        return castArrayToArray(a, clazz);
+    }
 
+    public static List<?> castToList(Object a) {
+        if (a == null) return null;
+        Class<?> clazz = a.getClass();
+        if (Collection.class.isAssignableFrom(clazz)) {
+            return new ArrayList<>((Collection<?>) a);
+        }
+        if (!clazz.isArray()) {
+            throw new ClassCastException(clazz + " is neither a Array or a Collection");
+        }
+        return Arrays.asList(castArrayToArray(a, clazz));
+    }
+
+    private static Object[] castArrayToArray(Object a, Class<?> clazz) {
         Class<?> componentType = clazz.getComponentType();
         if (!componentType.isPrimitive()) {
             return (Object[]) a;

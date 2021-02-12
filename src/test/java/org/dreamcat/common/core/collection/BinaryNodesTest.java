@@ -1,9 +1,9 @@
 package org.dreamcat.common.core.collection;
 
 import java.util.ArrayList;
-import org.dreamcat.common.core.Timeit;
 import org.dreamcat.common.collection.AVLHashTree;
 import org.dreamcat.common.collection.BinaryNodes;
+import org.dreamcat.common.core.Timeit;
 import org.junit.Ignore;
 import org.junit.Test;
 
