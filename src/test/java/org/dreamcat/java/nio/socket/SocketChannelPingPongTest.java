@@ -1,7 +1,5 @@
 package org.dreamcat.java.nio.socket;
 
-import static org.dreamcat.common.util.FormatUtil.log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -42,13 +40,13 @@ public class SocketChannelPingPongTest {
     private void ping() {
         try (SocketChannel socket = SocketChannel.open()) {
             socket.connect(new InetSocketAddress("localhost", 8192));
-            log("client connected server {}", SocketUtil.format(socket.getRemoteAddress()));
+            log.info("client connected server {}", SocketUtil.format(socket.getRemoteAddress()));
 
             socket.write(ByteBuffer.wrap("PING".getBytes()));
-            log("client sent PING to {}", SocketUtil.format(socket.getRemoteAddress()));
+            log.info("client sent PING to {}", SocketUtil.format(socket.getRemoteAddress()));
             ByteBuffer buffer = ByteBuffer.allocate(1024 * 4);
             int readSize = socket.read(buffer);
-            log("client received: ({})", new String(buffer.array(), 0, readSize));
+            log.info("client received: ({})", new String(buffer.array(), 0, readSize));
         } catch (IOException e) {
             System.out.printf("%s, failed to connect to %s\n", e.getMessage(), "localhost:8192");
         } finally {
@@ -64,14 +62,14 @@ public class SocketChannelPingPongTest {
             return;
         }
         try (Socket socket = new Socket("localhost", 8192)) {
-            log("client2 connected server {}", SocketUtil.format(socket));
+            log.info("client2 connected server {}", SocketUtil.format(socket));
             try (InputStream ins = socket.getInputStream();
                     OutputStream outs = socket.getOutputStream()) {
                 outs.write("PING".getBytes());
-                log("client2 sent PING to {}", SocketUtil.format(socket));
+                log.info("client2 sent PING to {}", SocketUtil.format(socket));
                 byte[] buf = new byte[bufferSize];
                 int readSize = ins.read(buf);
-                log("client2 received: ({})", new String(buf, 0, readSize));
+                log.info("client2 received: ({})", new String(buf, 0, readSize));
             }
         } catch (IOException e) {
             System.out.printf("%s, failed to connect to %s\n", e.getMessage(), "localhost:8192");
@@ -129,7 +127,7 @@ public class SocketChannelPingPongTest {
                                 // read mode
                                 buffer.flip();
                                 socket.write(buffer);
-                                log("server sent PONG to {}",
+                                log.info("server sent PONG to {}",
                                         SocketUtil.format(socket.getRemoteAddress()));
                                 //socket.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(bufferSize));
                                 socket.register(selector, SelectionKey.OP_READ);

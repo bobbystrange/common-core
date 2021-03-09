@@ -1,12 +1,12 @@
 package org.dreamcat.common.core;
 
-import static org.dreamcat.common.util.FormatUtil.log;
-
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 /**
  * Create by tuke on 2020/4/13
  */
+@Slf4j
 public class RetryTest {
 
     @Test
@@ -15,6 +15,6 @@ public class RetryTest {
         boolean applied = retry.retry(() -> {
             return Math.random() > 0.9;
         });
-        log("Retried {} times, result is {}", retry.getRetried(), applied);
+        log.info("Retried {} times, result is {}", retry.getRetried(), applied);
     }
 }

@@ -20,7 +20,7 @@ public class DeflaterCompressUtil {
     }
 
     /**
-     * use deflater to compress  & inflater to uncompress
+     * use deflater to compress and inflater to uncompress
      *
      * @param data  input data
      * @param level the compression level (0-9)

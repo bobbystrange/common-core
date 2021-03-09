@@ -1,7 +1,6 @@
 package org.dreamcat.common.util.bean;
 
 import static org.dreamcat.common.util.BeanUtil.pretty;
-import static org.dreamcat.common.util.FormatUtil.log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -82,8 +81,8 @@ public class BeanUtilTest {
     @Test
     public void toMap() {
         Query query = query();
-        log("{}", pretty(BeanUtil.toMap(query)));
-        log("{}", pretty(BeanUtil.toProps(query)));
+        log.info("{}", pretty(BeanUtil.toMap(query)));
+        log.info("{}", pretty(BeanUtil.toProps(query)));
     }
 
     @Test

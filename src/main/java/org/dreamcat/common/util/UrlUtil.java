@@ -11,10 +11,14 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import org.dreamcat.common.io.IOUtil;
 
-public class UrlUtil {
+public final class UrlUtil {
+
+    private UrlUtil() {
+    }
 
     private static final int TIMEOUT = 5_000;
 
@@ -77,7 +81,7 @@ public class UrlUtil {
 
     public static String toSortedQueryString(
             Map<String, Object> queryMap,
-            Function<String, String> paramKey,
+            UnaryOperator<String> paramKey,
             Function<Object, String> paramValue) {
         return toSortedQueryString(
                 queryMap,
@@ -88,7 +92,7 @@ public class UrlUtil {
     public static String toSortedQueryString(
             Map<String, Object> queryMap,
             BiPredicate<String, Object> filterKeyValue,
-            Function<String, String> paramKey,
+            UnaryOperator<String> paramKey,
             Function<Object, String> paramValue) {
         return queryMap.entrySet().stream()
                 .filter(entry -> filterKeyValue.test(entry.getKey(), entry.getValue()))

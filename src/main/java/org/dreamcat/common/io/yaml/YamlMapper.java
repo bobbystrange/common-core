@@ -11,13 +11,16 @@ import java.util.Map;
 /**
  * Create by tuke on 2020/7/6
  */
-public class YamlMapper {
+public final class YamlMapper {
+
+    private YamlMapper() {
+    }
 
     /**
      * parse yaml string to object
      *
      * @param expression yaml string
-     * @return Map<String, Object>
+     * @return Map&lt;String, Object&gt;
      */
     public static Map<String, Object> parse(String expression) {
         if (expression == null) {

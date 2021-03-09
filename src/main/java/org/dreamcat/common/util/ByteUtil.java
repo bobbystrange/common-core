@@ -4,7 +4,10 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
-public class ByteUtil {
+public final class ByteUtil {
+
+    private ByteUtil() {
+    }
 
     public static String hex(byte input) {
         // substring(1) remove the prefix "1"
@@ -113,6 +116,8 @@ public class ByteUtil {
                 ((w & 0b0011_1111) << 18) +
                 ((x & 0b0011_1111) << 12) + ((y & 0b0011_1111) << 6) + (z & 0b0011_1111));
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
 
 }

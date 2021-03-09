@@ -13,7 +13,10 @@ import javax.imageio.ImageIO;
 /**
  * Create by tuke on 2019-06-19
  */
-public class ImageUtil {
+public final class ImageUtil {
+
+    private ImageUtil() {
+    }
 
     public static String base64(RenderedImage image, String formatName) {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {

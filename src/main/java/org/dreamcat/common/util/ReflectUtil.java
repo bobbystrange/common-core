@@ -266,11 +266,11 @@ public class ReflectUtil {
         return false;
     }
 
-    private static boolean hasAnyModifiers(Field field, int... modifiersSet) {
+    public static boolean hasAnyModifiers(Field field, int... modifiersSet) {
         return hasAnyModifiers(field.getModifiers(), modifiersSet);
     }
 
-    private static boolean hasAnyModifiers(int modifiers, int... modifiersSet) {
+    public static boolean hasAnyModifiers(int modifiers, int... modifiersSet) {
         if (ObjectUtil.isEmpty(modifiersSet)) return false;
         for (int m : modifiersSet) {
             boolean hasModifiers = (m & modifiers) != 0;
@@ -633,9 +633,9 @@ public class ReflectUtil {
         } else if (targetClass.equals(Date.class)) {
             return new Date(n);
         } else if (targetClass.equals(LocalDateTime.class)) {
-            return TimeUtil.ofEpochMilli(n, zoneId);
+            return DateUtil.ofEpochMilli(n, zoneId);
         } else if (targetClass.equals(LocalDate.class)) {
-            return TimeUtil.ofEpochMilli(n, zoneId).toLocalDate();
+            return DateUtil.ofEpochMilli(n, zoneId).toLocalDate();
         } else if (targetClass.equals(byte.class) || targetClass.equals(Byte.class)) {
             return (byte) n;
         } else if (targetClass.equals(short.class) || targetClass.equals(Short.class)) {
@@ -766,6 +766,29 @@ public class ReflectUtil {
             return "boolean";
         } else {
             throw new AssertionError("Primitive types are not enumerated completely");
+        }
+    }
+
+    public static Method getGetter(Class<?> clazz, Field field) {
+        String name = field.getName();
+        String suffix = StringUtil.toCapitalCase(name);
+        Class<?> fieldType = field.getType();
+        String prefix = fieldType.equals(boolean.class) ? "is" : "get";
+        try {
+            return clazz.getDeclaredMethod(prefix + suffix);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
+    public static Method getSetter(Class<?> clazz, Field field) {
+        String name = field.getName();
+        String suffix = StringUtil.toCapitalCase(name);
+        Class<?> fieldType = field.getType();
+        try {
+            return clazz.getDeclaredMethod("set" + suffix, fieldType);
+        } catch (NoSuchMethodException e) {
+            return null;
         }
     }
 

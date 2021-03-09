@@ -5,7 +5,10 @@ import java.util.Map;
 
 public final class ObjectUtil {
 
-    public static <T> boolean isEmpty(String o) {
+    private ObjectUtil() {
+    }
+
+    public static boolean isEmpty(String o) {
         return !isNotEmpty(o);
     }
 
@@ -86,7 +89,7 @@ public final class ObjectUtil {
         return o;
     }
 
-    public static <T> String requireNotEmpty(String o, String name) {
+    public static String requireNotEmpty(String o, String name) {
         if (isEmpty(o)) {
             throw new IllegalArgumentException(name + " is empty");
         }
@@ -114,21 +117,21 @@ public final class ObjectUtil {
         return o;
     }
 
-    public static <T> int[] requireNotEmpty(int[] o, String name) {
+    public static int[] requireNotEmpty(int[] o, String name) {
         if (isEmpty(o)) {
             throw new IllegalArgumentException(name + " is empty");
         }
         return o;
     }
 
-    public static <T> long[] requireNotEmpty(long[] o, String name) {
+    public static long[] requireNotEmpty(long[] o, String name) {
         if (isEmpty(o)) {
             throw new IllegalArgumentException(name + " is empty");
         }
         return o;
     }
 
-    public static <T> double[] requireNotEmpty(double[] o, String name) {
+    public static double[] requireNotEmpty(double[] o, String name) {
         if (isEmpty(o)) {
             throw new IllegalArgumentException(name + " is empty");
         }

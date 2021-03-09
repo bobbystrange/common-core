@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomUtil {
+public final class RandomUtil {
 
-    private static final Random random = new Random();
+    private RandomUtil() {
+    }
 
     private static final String NUMBERS = "0123456789";
     private static final String NUMBERS_HEX = "0123456789abcdef";
@@ -24,7 +26,7 @@ public class RandomUtil {
 
     // (0, 1)
     public static double rand() {
-        return random.nextDouble();
+        return ThreadLocalRandom.current().nextDouble();
     }
 
     public static double rand(double start, double end) {
@@ -33,25 +35,26 @@ public class RandomUtil {
 
     // [0, bound]
     public static int randi(int bound) {
-        return random.nextInt(bound);
+        return ThreadLocalRandom.current().nextInt(bound);
     }
 
     // [start, end -1]
     public static int randi(int start, int end) {
-        return random.nextInt(end - start) + start;
+        return ThreadLocalRandom.current().nextInt(end - start) + start;
     }
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static char choose(String letters) {
         int len = letters.length();
-        int index = (int) Math.floor(Math.random() * len);
+        int index = ThreadLocalRandom.current().nextInt(len);
         return letters.charAt(index);
     }
 
     public static String choose(int size, String letters) {
         int base = letters.length();
-        int rand = (int) Math.floor(Math.random() * Math.pow(base, size));
+        int bound = (int) Math.pow(base, size);
+        int rand = ThreadLocalRandom.current().nextInt(bound);
         StringBuilder s = new StringBuilder(size);
         while (size-- >= 1) {
             int i = rand % base;
@@ -92,7 +95,7 @@ public class RandomUtil {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static String uuid32() {
-        return uuid().replaceAll("-", "");
+        return uuid().replace("-", "");
     }
 
     public static String uuid36() {

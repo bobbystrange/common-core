@@ -37,7 +37,7 @@ public class ShellUtil {
      * execute shell and return output
      *
      * @param timeout timeout to wait the process
-     * @param verbose print to stdout & stderr
+     * @param verbose print to stdout and stderr
      * @param cmd     sh -c 'cmd' when cmd.length == 1,
      *                or cmd array when cmd is like
      *                {@code new String[]{"/bin/sh", "-c", "/usr/bin/env ls -lah"}}
@@ -102,7 +102,7 @@ public class ShellUtil {
      * not return output
      *
      * @param timeout timeout to wait the process
-     * @param verbose print to stdout & stderr
+     * @param verbose print to stdout and stderr
      * @param cmd     some shell like: ['bash', '-c', 'top -l 1 | grep -E "^CPU|^Phys"]
      * @return exit code
      * @throws IOException          IO error

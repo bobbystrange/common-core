@@ -41,7 +41,7 @@ public interface Wget<Req, Resp> {
     Resp request(Req request) throws IOException;
 
     /**
-     * expect to override it using <strong>Content-Length & Content-Type</strong>
+     * expect to override it using <strong>Content-Length and Content-Type</strong>
      *
      * @param response http response
      * @return response body

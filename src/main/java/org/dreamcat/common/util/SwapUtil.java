@@ -5,7 +5,10 @@ import java.util.List;
 /**
  * Create by tuke on 2020/4/4
  */
-public class SwapUtil {
+public final class SwapUtil {
+
+    private SwapUtil() {
+    }
 
     public static void swap(int[] data, int i, int j) {
         int tmp = data[i];

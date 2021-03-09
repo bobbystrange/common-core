@@ -7,6 +7,9 @@ import java.util.Objects;
  */
 public final class ComparatorUtil {
 
+    private ComparatorUtil() {
+    }
+
     /**
      * use Comparable and hashCode to compare two objects
      *

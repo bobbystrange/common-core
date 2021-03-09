@@ -14,6 +14,7 @@ interface BinaryOp {
      *
      * @param leftValue  left value to be operated
      * @param rightValue right value to be operated
+     * @param option     options
      * @return result of operation
      * @throws UnsupportedOperationException when operation is not supported
      */

@@ -10,7 +10,10 @@ import java.util.function.Function;
  * Create by tuke on 2020/4/4
  */
 
-public class SortUtil {
+public final class SortUtil {
+
+    private SortUtil() {
+    }
 
     // bubble sort
     public static void bubbleSort(int[] a) {

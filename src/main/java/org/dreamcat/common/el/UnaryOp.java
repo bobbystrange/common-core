@@ -12,7 +12,8 @@ interface UnaryOp {
     /**
      * unary operation
      *
-     * @param value value to be operated
+     * @param value  value to be operated
+     * @param option options
      * @return result of operation
      * @throws UnsupportedOperationException when operation is not supported
      */

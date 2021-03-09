@@ -18,7 +18,7 @@ public class JsonMapper {
     /**
      * convert object to json string, same as JSON.stringify
      *
-     * @param raw one of String, Integer/Long/Double, Boolean, List<Object>, Map<String, Object>
+     * @param raw one of String, Integer/Long/Double, Boolean, List&lt;Object&gt;, Map&lt;String, Object&gt;
      * @return json string
      * @deprecated as it is a very slow implement
      * only use it with {@code @SuppressWarnings("deprecation")} for test purpose
@@ -57,7 +57,7 @@ public class JsonMapper {
      * parse json string to object, same as JSON.parse
      *
      * @param expression json string
-     * @return one of String, Double/Long/Integer, Boolean, List<Object>, Map<String, Object>
+     * @return one of String, Double/Long/Integer, Boolean, List&lt;Object&gt;, Map&lt;String, Object&gt;
      */
     public static Object parse(String expression) {
         if (expression == null) {

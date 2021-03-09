@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class StringUtil {
 
+    private StringUtil() {
+    }
+
     /**
      * repeat a string and fill gaps
      *
@@ -64,6 +67,11 @@ public final class StringUtil {
 
     /**
      * never throws ArrayIndexOutOfBoundsException
+     *
+     * @param s          string to extract
+     * @param beginIndex begin index
+     * @param endIndex   end index exclusive
+     * @return extracted string
      */
     public static String substring(String s, int beginIndex, int endIndex) {
         if (s == null) return null;
@@ -76,7 +84,8 @@ public final class StringUtil {
     }
 
     public static String trimEnd(String s, char c) {
-        int offset = 0, size = s.length();
+        int offset = 0;
+        int size = s.length();
         for (int i = size - 1; i >= 0; i--) {
             if (s.charAt(i) != c) break;
             offset++;
@@ -86,7 +95,8 @@ public final class StringUtil {
     }
 
     public static String trimEnd(String s, String chars) {
-        int offset = 0, size = s.length();
+        int offset = 0;
+        int size = s.length();
         for (int i = size - 1; i >= 0; i--) {
             if (chars.indexOf(s.charAt(i)) == -1) break;
             offset++;
@@ -97,16 +107,17 @@ public final class StringUtil {
 
     /**
      * just return null, not the 'null' literal when o in null
+     *
+     * @param o object
+     * @return a string representation of the object
      */
-    public static String toString(Object o) {
+    public static String string(Object o) {
         return o == null ? null : o.toString();
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
-    /**
-     * only upper case first letter, and keep others
-     */
+    // only upper case first letter, and keep others
     public static String toCapitalCase(String s) {
         if (ObjectUtil.isBlank(s)) return s;
         char firstChar = s.charAt(0);
@@ -137,15 +148,13 @@ public final class StringUtil {
         StringBuilder s = new StringBuilder(len);
         for (int i = 0; i < len; i++) {
             char c = snake.charAt(i);
-            if (c == '_') {
-                if (i < len - 1 && i > 0 &&
-                        snake.charAt(i - 1) >= 'a' && snake.charAt(i - 1) <= 'z') {
-                    char nextChar = snake.charAt(i + 1);
-                    if (nextChar >= 'a' && nextChar <= 'z') {
-                        s.append((char) (nextChar - 32));
-                        i++;
-                        continue;
-                    }
+            if (c == '_' && i < len - 1 && i > 0 &&
+                    snake.charAt(i - 1) >= 'a' && snake.charAt(i - 1) <= 'z') {
+                char nextChar = snake.charAt(i + 1);
+                if (nextChar >= 'a' && nextChar <= 'z') {
+                    s.append((char) (nextChar - 32));
+                    i++;
+                    continue;
                 }
             }
             s.append(c);
@@ -164,15 +173,13 @@ public final class StringUtil {
         }
         for (int i = 1; i < len; i++) {
             char c = snake.charAt(i);
-            if (c == '_') {
-                if (i < len - 1 && i > 0 &&
-                        snake.charAt(i - 1) >= 'a' && snake.charAt(i - 1) <= 'z') {
-                    char nextChar = snake.charAt(i + 1);
-                    if (nextChar >= 'a' && nextChar <= 'z') {
-                        s.append((char) (nextChar - 32));
-                        i++;
-                        continue;
-                    }
+            if (c == '_' && i < len - 1 && i > 0 &&
+                    snake.charAt(i - 1) >= 'a' && snake.charAt(i - 1) <= 'z') {
+                char nextChar = snake.charAt(i + 1);
+                if (nextChar >= 'a' && nextChar <= 'z') {
+                    s.append((char) (nextChar - 32));
+                    i++;
+                    continue;
                 }
             }
             s.append(c);
@@ -231,9 +238,7 @@ public final class StringUtil {
         if (ObjectUtil.isEmpty(s)) return "";
         int len = s.length();
         StringBuilder sb = new StringBuilder(len * 2);
-        s.chars().forEach(c -> {
-            sb.append(backslash).append((char) c);
-        });
+        s.chars().forEach(c -> sb.append(backslash).append((char) c));
         return sb.toString();
     }
 
@@ -243,7 +248,7 @@ public final class StringUtil {
      * only a-zA-Z0-9_ is considered, 97-122, 65-90, 48-57, 95
      *
      * @param c variable char
-     * @return valid character if {@link true}
+     * @return valid character if {@code true}
      */
     public static boolean isVariableChar(char c) {
         return isFirstVariableChar(c) ||

@@ -40,8 +40,6 @@ import org.dreamcat.common.util.ObjectUtil;
 @Slf4j
 public final class FileUtil {
 
-    private static final int BUFFER_SIZE = 4096;
-
     /**
      * no verification, the prefix of basename, apart by last dot position
      *
@@ -419,27 +417,41 @@ public final class FileUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    // make parent dir for file
-    public static boolean makeParentDir(File file) {
-        if (file.exists()) return false;
-        return file.getParentFile().mkdirs();
+    public static boolean tryDelete(File file) {
+        return delete(file, true);
     }
 
-    public static boolean deleteForcibly(File file) {
+    public static boolean delete(File file) {
+        return delete(file, false);
+    }
+
+    /**
+     * delete file or directory
+     *
+     * @param file file or dir to delete
+     * @return true if any error
+     */
+    private static boolean delete(File file, boolean fastFailed) {
         if (!file.exists()) return true;
 
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            if (ObjectUtil.isEmpty(files)) {
-                return file.delete() || !file.exists();
-            }
-
-            for (File i : files) {
-                if (!deleteForcibly(i)) break;
-            }
+        if (!file.isDirectory()) {
+            return file.delete() || !file.exists();
         }
-        return file.delete() || !file.exists();
+
+        File[] files = file.listFiles();
+        if (ObjectUtil.isEmpty(files)) {
+            return file.delete() || !file.exists();
+        }
+
+        boolean hasError = false;
+        for (File i : files) {
+            hasError = hasError || !delete(i, fastFailed);
+            if (fastFailed && hasError) return false;
+        }
+        return true;
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     @SuppressWarnings("unchecked")
     public static void watchPath(

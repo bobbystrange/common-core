@@ -7,7 +7,10 @@ import java.util.Base64;
 /**
  * Create by tuke on 2019-02-15
  */
-public class Base64Util {
+public final class Base64Util {
+
+    private Base64Util() {
+    }
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.ISO_8859_1;
 

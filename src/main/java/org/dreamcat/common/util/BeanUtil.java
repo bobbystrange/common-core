@@ -29,7 +29,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 @Slf4j
-public class BeanUtil {
+public final class BeanUtil {
+
+    private BeanUtil() {
+    }
 
     @SuppressWarnings({"unchecked"})
     public static <T> T parse(String value, Class<?> targetClass) {
@@ -439,7 +442,6 @@ public class BeanUtil {
 
     /**
      * Create by tuke on 2018-12-27
-     * <p/>
      * set the value of some fields to null
      * it maybe useful on xml or json formatting situation
      *

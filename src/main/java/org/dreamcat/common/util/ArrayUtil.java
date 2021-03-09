@@ -10,8 +10,6 @@ import java.util.function.IntFunction;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntToLongFunction;
 import java.util.function.IntUnaryOperator;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.dreamcat.common.core.WriteResult;
 import org.dreamcat.common.function.IntToByteFunction;
 
@@ -20,8 +18,10 @@ import org.dreamcat.common.function.IntToByteFunction;
  * <p>
  * Note that end is endIndexExclusive since We follow the common rules or JDK
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ArrayUtil {
+public final class ArrayUtil {
+
+    private ArrayUtil() {
+    }
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
@@ -45,9 +45,9 @@ public class ArrayUtil {
         return a;
     }
 
-    public static ArrayList<Integer> listRangeOf(int start, int end, int step) {
+    public static List<Integer> listRangeOf(int start, int end, int step) {
         int size = (end - start) / step + (end - start) % step;
-        ArrayList<Integer> a = new ArrayList<>(size);
+        List<Integer> a = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             a.add(start + i * step);
         }
@@ -63,7 +63,7 @@ public class ArrayUtil {
     }
 
     public static int[] randomRangeOf(int start, int end, int step) {
-        ArrayList<Integer> list = listRangeOf(start, end, step);
+        List<Integer> list = listRangeOf(start, end, step);
         int size = list.size();
         int[] a = new int[size];
 
@@ -511,6 +511,7 @@ public class ArrayUtil {
      * Especially, a[0:1] is the maximum subarray for a[0:1],
      * so the maximum subarray for a[0:2] is a[0:1] or a[i:2].
      *
+     * @param a int array
      * @return {@code new int[]{start, end}}} or {@code null}
      */
     public static int[] maximumSubarray(int[] a) {

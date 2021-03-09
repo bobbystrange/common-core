@@ -2,11 +2,15 @@ package org.dreamcat.common.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class NumericUtil {
+public final class NumericUtil {
+
+    private NumericUtil() {
+    }
 
     // n=4321, pos=1,2,3,4 then return 1,2,3,4
     public static int digitAt(int n, int index) {
@@ -185,19 +189,9 @@ public class NumericUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    // public static Number add(Number a, Number b) {
-    //
-    // }
-    //
-    // public static Number subtract(Number a, Number b) {
-    // }
-    //
-    // public static Number multiply(Number a, Number b) {
-    // }
-    //
-    // public static Number divide(Number a, Number b) {
-    // }
-    //
-    // public static Number remainder(Number a, Number b) {
-    // }
+    public static String format(BigDecimal n, int scale) {
+        if (n == null) return null;
+        n = n.setScale(scale, RoundingMode.HALF_EVEN);
+        return n.stripTrailingZeros().toPlainString();
+    }
 }

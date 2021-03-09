@@ -23,6 +23,4 @@ public interface ElOption {
             return RoundingMode.HALF_EVEN;
         }
     }
-
-    ;
 }

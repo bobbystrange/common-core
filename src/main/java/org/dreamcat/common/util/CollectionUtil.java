@@ -12,7 +12,10 @@ import java.util.function.Function;
 /**
  * Create by tuke on 2020/4/24
  */
-public class CollectionUtil {
+public final class CollectionUtil {
+
+    private CollectionUtil() {
+    }
 
     @SuppressWarnings("unchecked")
     public static <K, V> HashMap<K, V> mapOf(Object... input) {
@@ -43,9 +46,7 @@ public class CollectionUtil {
     public static Map<String, String> toProps(Map<String, Object> map) {
         if (map == null) return null;
         Map<String, String> props = new HashMap<>(map.size());
-        map.forEach((k, v) -> {
-            props.put(k, v == null ? null : v.toString());
-        });
+        map.forEach((k, v) -> props.put(k, v == null ? null : v.toString()));
         return props;
     }
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
@@ -98,9 +99,12 @@ public class CollectionUtil {
     }
 
     /**
-     * <code>
-     * new ArrayList<T>(list.stream().collect(Collectors.toMap(keyGetter, a -> a, (a, b) -> b)).values());
-     * </code>
+     * {@code new ArrayList<T>(list.stream().collect(Collectors.toMap(keyGetter, a -> a, (a, b) -> b)).values()); }
+     *
+     * @param list      list to remove duplicated elements
+     * @param keyGetter key getter
+     * @param <T>       element type
+     * @param <K>       key type
      */
     public static <T, K> void remainLastDuplicatedKey(List<T> list, Function<T, K> keyGetter) {
         if (ObjectUtil.isEmpty(list) || keyGetter == null) return;

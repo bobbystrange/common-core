@@ -41,6 +41,7 @@ public final class NumericSearcher {
      *
      * @param reader which support mark/reset
      * @return one of int, long or double
+     * @throws IOException I/O error
      * @see #extractNumber(String, int)
      */
     public static Number extractNumber(Reader reader) throws IOException {

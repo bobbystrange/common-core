@@ -19,7 +19,12 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
      * balance for new <strong>red</strong> node
      * <p>
      * all unbalance cases, LLb, LLr, LRb, LRr, RRb, RRr, RLb, RLr
-     * XYr just change color, XYb need ratate
+     * XYr just change color, XYb need rotate
+     *
+     * @param root   node to rotate
+     * @param x      x node
+     * @param <Node> node type
+     * @return the new root node
      */
     protected static <Node extends RBNode<Node>> Node balanceInsertion(Node root, Node x) {
         Node p = x.parent;
@@ -219,9 +224,7 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
         return p;
     }
 
-    /**
-     * balance for delete <strong>black</strong> node
-     */
+    // balance for delete <strong>black</strong> node
     protected static <Node extends RBNode<Node>> Node balanceDeletion(Node root, Node x) {
         for (Node xp, xpl, xpr; ; ) {
             if (x == null || x == root)

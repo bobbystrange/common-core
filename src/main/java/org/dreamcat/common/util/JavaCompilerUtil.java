@@ -12,7 +12,10 @@ import javax.tools.ToolProvider;
 /**
  * Create by tuke on 2019-05-09
  */
-public class JavaCompilerUtil {
+public final class JavaCompilerUtil {
+
+    private JavaCompilerUtil() {
+    }
 
     public static Class<?> fromSourceCode(String className, String sourceCode)
             throws ClassNotFoundException {
