@@ -1,5 +1,8 @@
 package org.dreamcat.common.util;
 
+import java.math.BigInteger;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -80,7 +83,7 @@ public final class StringUtil {
 
 
     public static String trimEnd(String s) {
-        return trimEnd(s, ' ');
+        return trimEnd(s, " \t\r\n");
     }
 
     public static String trimEnd(String s, char c) {
@@ -113,6 +116,28 @@ public final class StringUtil {
      */
     public static String string(Object o) {
         return o == null ? null : o.toString();
+    }
+
+    public static String padding(String s, int width, char c) {
+        int size = s.length();
+        if (size == width) return s;
+        if (size > width) return s.substring(size - width);
+        StringBuilder sb = new StringBuilder(width);
+        for (int i = 0; i < width - size; i++) {
+            sb.append(c);
+        }
+        return sb.append(s).toString();
+    }
+
+    public static String paddingRight(String s, int width, char c) {
+        int size = s.length();
+        if (size == width) return s;
+        if (size > width) return s.substring(0, width);
+        StringBuilder sb = new StringBuilder(width).append(s);
+        for (int i = 0; i < width - size; i++) {
+            sb.append(c);
+        }
+        return sb.toString();
     }
 
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
@@ -258,5 +283,59 @@ public final class StringUtil {
     public static boolean isFirstVariableChar(char c) {
         return c == '_' || (c >= 'A' && c <= 'Z') ||
                 (c >= 'a' && c <= 'z');
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    private static final Map<Integer, Map<Integer, BigInteger>> MAPPING_TO_CACHE = new ConcurrentHashMap<>();
+
+    private static final char[] toWord62 = {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+    };
+
+    private static final char[] toBase64 = {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
+    };
+
+    private static final char[] toBase64URL = {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'
+    };
+
+    public static String mappingTo62(BigInteger n, int width) {
+        return mappingTo(n, width, toWord62);
+    }
+
+    public static String mappingToBase64(BigInteger n, int width) {
+        return mappingTo(n, width, toBase64);
+    }
+
+    public static String mappingToBase64URL(BigInteger n, int width) {
+        return mappingTo(n, width, toBase64URL);
+    }
+
+    public static String mappingTo(BigInteger n, int width, char[] letters) {
+        int size = letters.length;
+        BigInteger bound = MAPPING_TO_CACHE.computeIfAbsent(size, ConcurrentHashMap::new)
+                .computeIfAbsent(width, it -> BigInteger.valueOf(size).pow(width));
+        long rem = n.remainder(bound).longValue();
+        int[] digits = NumericUtil.digit(rem, size);
+        int len = digits.length;
+        StringBuilder s = new StringBuilder(len);
+        for (int i = len - 1; i >= 0; i--) {
+            s.append(letters[digits[i]]);
+        }
+        return s.toString();
     }
 }

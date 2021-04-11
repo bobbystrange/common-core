@@ -11,11 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.OptionalLong;
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * Create by tuke on 2019-03-26
@@ -25,13 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class ArgParser {
 
     // key, argument
-    Map<String, Argument> key_argument_map = new HashMap<>();
+    final Map<String, Argument> key_argument_map = new HashMap<>();
     // key, value
-    Map<String, Object> key_value_map = new HashMap<>();
+    final Map<String, Object> key_value_map = new HashMap<>();
     // many names to one key
-    Map<String, String> names_key_map = new HashMap<>();
+    final Map<String, String> names_key_map = new HashMap<>();
     // values
-    List<String> values = new ArrayList<>();
+    final List<String> values = new ArrayList<>();
 
     public static ArgParser newInstance() {
         return new ArgParserImpl();
@@ -45,28 +42,28 @@ public abstract class ArgParser {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public Optional<String> get(String key) {
+    public String get(String key) {
         Object o = key_value_map.get(key);
-        return Optional.of((String) o);
+        return (String) o;
     }
 
     public boolean getBool(String key) {
         return Objects.equals(key_value_map.get(key), true);
     }
 
-    public OptionalInt getInt(String key) {
-        return get(key).map(value -> OptionalInt.of(Integer.parseInt(value)))
-                .orElseGet(OptionalInt::empty);
+    public Integer getInt(String key) {
+        String s = get(key);
+        return s == null ? null : Integer.valueOf(s);
     }
 
-    public OptionalLong getLong(String key) {
-        return get(key).map(value -> OptionalLong.of(Long.parseLong(value)))
-                .orElseGet(OptionalLong::empty);
+    public Long getLong(String key) {
+        String s = get(key);
+        return s == null ? null : Long.valueOf(s);
     }
 
-    public OptionalDouble getDouble(String key) {
-        return get(key).map(value -> OptionalDouble.of(Double.parseDouble(value)))
-                .orElseGet(OptionalDouble::empty);
+    public Double getDouble(String key) {
+        String s = get(key);
+        return s == null ? null : Double.valueOf(s);
     }
 
     public List<String> getList(String key) {
@@ -113,7 +110,7 @@ public abstract class ArgParser {
     }
 
     private ArgParser addByFlag(String key, int flag, String... names) {
-
+        if (ObjectUtil.isEmpty(names)) names = new String[]{key};
         this.key_argument_map.put(key, new Argument(names, flag));
         return this;
     }

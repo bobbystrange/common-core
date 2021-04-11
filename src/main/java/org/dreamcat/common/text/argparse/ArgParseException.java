@@ -1,11 +1,13 @@
 package org.dreamcat.common.text.argparse;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Create by tuke on 2019-03-27
  */
 @Getter
+@ToString
 public class ArgParseException extends Exception {
 
     String name;

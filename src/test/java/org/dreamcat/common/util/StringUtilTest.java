@@ -21,4 +21,17 @@ public class StringUtilTest {
         System.out.println(StringUtil.toSnakeCase("WHY_SO_CONFUSED"));
         System.out.println(StringUtil.toSnakeCase("WH_a_sO_con_fUs_eD"));
     }
+
+    @Test
+    public void padding() {
+        System.out.println(StringUtil.padding("123", 6, '0'));
+        System.out.println(StringUtil.padding("123", 4, '0'));
+        System.out.println(StringUtil.padding("123", 3, '0'));
+        System.out.println(StringUtil.padding("123", 2, '0'));
+
+        System.out.println(StringUtil.paddingRight("123", 6, '0'));
+        System.out.println(StringUtil.paddingRight("123", 4, '0'));
+        System.out.println(StringUtil.paddingRight("123", 3, '0'));
+        System.out.println(StringUtil.paddingRight("123", 2, '0'));
+    }
 }

@@ -1,5 +1,6 @@
 package org.dreamcat.common.util;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,8 +18,13 @@ public final class CollectionUtil {
     private CollectionUtil() {
     }
 
+    @SafeVarargs
+    public static <E> Set<E> setOf(E... elements) {
+        return new HashSet<>(Arrays.asList(elements));
+    }
+
     @SuppressWarnings("unchecked")
-    public static <K, V> HashMap<K, V> mapOf(Object... input) {
+    public static <K, V> Map<K, V> mapOf(Object... input) {
         if (ObjectUtil.isEmpty(input)) return new HashMap<>();
 
         int size = input.length;
@@ -31,7 +37,7 @@ public final class CollectionUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> ConcurrentHashMap<K, V> concurrentMapOf(Object... input) {
+    public static <K, V> Map<K, V> concurrentMapOf(Object... input) {
         if (ObjectUtil.isEmpty(input)) return new ConcurrentHashMap<>();
 
         int size = input.length;
@@ -43,12 +49,6 @@ public final class CollectionUtil {
         return map;
     }
 
-    public static Map<String, String> toProps(Map<String, Object> map) {
-        if (map == null) return null;
-        Map<String, String> props = new HashMap<>(map.size());
-        map.forEach((k, v) -> props.put(k, v == null ? null : v.toString()));
-        return props;
-    }
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <T> T firstElement(List<T> o) {

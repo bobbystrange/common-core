@@ -34,7 +34,7 @@ public class ArgParserTest {
             System.out.printf("%s => %s\n", k, v);
         });
 
-        assert parser.getInt("p").orElseThrow(AssertionError::new) == 6379;
+        assert parser.getInt("p") == 6379;
         assert parser.getBool("a");
 
         List<String> R = parser.getList("R");
@@ -50,7 +50,7 @@ public class ArgParserTest {
         assert vs.get(0).equals("aux");
         assert vs.toString().equals("[aux, nowarn, noredirect]");
         assert !parser.getBool("a");
-        assert !parser.get("u").isPresent();
+        assert parser.get("u") != null;
 
         ///
 

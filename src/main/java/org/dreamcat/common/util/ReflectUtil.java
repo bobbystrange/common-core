@@ -24,13 +24,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class ReflectUtil {
+public final class ReflectUtil {
+
+    private ReflectUtil() {
+    }
 
     public static List<Class<?>> retrieveSuperClasses(Class<?> clazz) {
         List<Class<?>> classList = new ArrayList<>();
@@ -323,6 +327,57 @@ public class ReflectUtil {
                 Enum.class.isAssignableFrom(clazz);
     }
 
+    /**
+     * following the jackson's rules
+     *
+     * @param bean java bean
+     * @return is a json type or not
+     */
+    public static boolean isJsonType(Object bean) {
+        // null
+        if (bean == null) return true;
+        Class<?> clazz = bean.getClass();
+        // boolean
+        if (clazz.equals(Boolean.class) ||
+                // number
+                clazz.equals(Integer.class) || clazz.equals(Long.class) || clazz
+                .equals(Double.class) ||
+                // string
+                clazz.equals(String.class) || Enum.class.isAssignableFrom(clazz)) {
+            return true;
+        }
+        // array
+        if (List.class.isAssignableFrom(clazz)) {
+            return isJsonType((List<?>) bean);
+        }
+        // object
+        if (Map.class.isAssignableFrom(clazz)) {
+            return isJsonType((Map<?, ?>) bean);
+        }
+        return false;
+    }
+
+    public static boolean isJsonType(List<?> list) {
+        // array, empty case
+        if (list.isEmpty()) return true;
+        for (Object bean : list) {
+            if (!isJsonType(bean)) return false;
+        }
+        return true;
+    }
+
+    public static boolean isJsonType(Map<?, ?> map) {
+        // object, empty case
+        if (map.isEmpty()) return true;
+        for (Entry<?, ?> entry : map.entrySet()) {
+            Object key = entry.getKey();
+            Object value = entry.getValue();
+            if (!(key instanceof String)) return false;
+            if (!isJsonType(value)) return false;
+        }
+        return true;
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <T> T newInstance(Class<T> clazz) {
@@ -379,7 +434,7 @@ public class ReflectUtil {
                 if (Number.class.isAssignableFrom(sourceClass)) {
                     return ((Number) source).byteValue();
                 } else if (sourceClass.equals(Boolean.class)) {
-                    return (Boolean) source ? 0b1 : 0b0;
+                    return (boolean) source ? 0b1 : 0b0;
                 } else {
                     return 0b0;
                 }
@@ -387,7 +442,7 @@ public class ReflectUtil {
                 if (Number.class.isAssignableFrom(sourceClass)) {
                     return ((Number) source).shortValue();
                 } else if (sourceClass.equals(Boolean.class)) {
-                    return (Boolean) source ? (short) 1 : (short) 0;
+                    return (boolean) source ? (short) 1 : (short) 0;
                 } else {
                     return (short) 0;
                 }
@@ -398,7 +453,7 @@ public class ReflectUtil {
                 if (Number.class.isAssignableFrom(sourceClass)) {
                     return ((Number) source).intValue();
                 } else if (sourceClass.equals(Boolean.class)) {
-                    return (Boolean) source ? 1 : 0;
+                    return (boolean) source ? 1 : 0;
                 } else {
                     return 0;
                 }
@@ -406,7 +461,7 @@ public class ReflectUtil {
                 if (Number.class.isAssignableFrom(sourceClass)) {
                     return ((Number) source).longValue();
                 } else if (sourceClass.equals(Boolean.class)) {
-                    return (Boolean) source ? 1L : 0L;
+                    return (boolean) source ? 1L : 0L;
                 } else {
                     return 0L;
                 }
@@ -414,7 +469,7 @@ public class ReflectUtil {
                 if (Number.class.isAssignableFrom(sourceClass)) {
                     return ((Number) source).floatValue();
                 } else if (sourceClass.equals(Boolean.class)) {
-                    return (Boolean) source ? (float) 1 : (float) 0;
+                    return (boolean) source ? (float) 1 : (float) 0;
                 } else {
                     return (float) 0;
                 }
@@ -422,7 +477,7 @@ public class ReflectUtil {
                 if (Number.class.isAssignableFrom(sourceClass)) {
                     return ((Number) source).doubleValue();
                 } else if (sourceClass.equals(Boolean.class)) {
-                    return (Boolean) source ? (double) 1 : (double) 0;
+                    return (boolean) source ? (double) 1 : (double) 0;
                 } else {
                     return (double) 0;
                 }
@@ -690,6 +745,27 @@ public class ReflectUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    public static <T> Object getFirstFieldValue(T bean) {
+        if (bean == null) return null;
+        Class<?> clazz = bean.getClass();
+        Field[] fields = clazz.getFields();
+        if (ObjectUtil.isEmpty(fields)) return null;
+        Field field = fields[0];
+        return getFieldValue(field, bean);
+    }
+
+    public static Object getFieldValue(Field field, Object bean) {
+        if (bean == null) return null;
+        field.setAccessible(true);
+        try {
+            return field.get(bean);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
     public static String[] getParameterNames(Method method) {
         Parameter[] parameters = method.getParameters();
         int len = parameters.length;
@@ -701,19 +777,6 @@ public class ReflectUtil {
             }
         }
         return parameterNames;
-    }
-
-    public static <T> Object getFirstFieldValue(T bean) {
-        Class<?> clazz = bean.getClass();
-        Field[] fields = clazz.getFields();
-        if (ObjectUtil.isEmpty(fields)) return null;
-        Field field = fields[0];
-        field.setAccessible(true);
-        try {
-            return field.get(bean);
-        } catch (IllegalAccessException e) {
-            return null;
-        }
     }
 
     public static Class<?> getTypeArgument(Field field) {

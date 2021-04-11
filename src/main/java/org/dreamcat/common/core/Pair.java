@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.dreamcat.common.util.StringUtil;
 
 @Getter
 @Setter
@@ -14,9 +15,9 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class Pair<T1, T2> implements Map.Entry<T1, T2> {
 
-    private T1 first;
+    protected T1 first;
 
-    private T2 second;
+    protected T2 second;
 
     public static <T1, T2> Pair<T1, T2> of(T1 first, T2 second) {
         return new Pair<>(first, second);
@@ -48,7 +49,7 @@ public class Pair<T1, T2> implements Map.Entry<T1, T2> {
 
     @Override
     public String toString() {
-        return String.format("(%s, %s)", first().toString(), second().toString());
+        return String.format("(%s, %s)", StringUtil.string(first), StringUtil.string(second));
     }
 
     /// impl for Entry

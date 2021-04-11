@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.dreamcat.common.util.StringUtil;
 
 @Getter
 @Setter
@@ -45,6 +46,8 @@ public class Triple<T1, T2, T3> extends Pair<T1, T2> {
     @Override
     public String toString() {
         return String.format("(%s, %s, %s)",
-                first().toString(), second().toString(), third().toString());
+                StringUtil.string(first),
+                StringUtil.string(second),
+                StringUtil.string(third));
     }
 }

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.util.CollectionUtil;
 
 /**
  * Create by tuke on 2020/5/2
@@ -15,9 +16,10 @@ import org.dreamcat.common.core.Pair;
 @SuppressWarnings("unchecked")
 class ArgParserImpl extends ArgParser {
 
-    private static final List<String> TRUE_STRINGS = Arrays.asList("true", "t", "yes", "y", "1");
-    private static final List<String> FALSE_STRINGS = Arrays.asList("false", "f", "no", "n", "0");
-
+    private static final Set<String> TRUE_STRINGS = CollectionUtil
+            .setOf("true", "t", "yes", "y", "1");
+    private static final Set<String> FALSE_STRINGS = CollectionUtil
+            .setOf("false", "f", "no", "n", "0");
 
     @Override
     public void parse(String[] args, boolean bsd) throws ArgParseException {

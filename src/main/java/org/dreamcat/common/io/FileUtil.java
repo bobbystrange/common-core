@@ -417,6 +417,12 @@ public final class FileUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    public static boolean makeParent(File file) {
+        File parentFile = file.getParentFile();
+        // null when file is /, else try: mkdir -p
+        return parentFile != null && parentFile.mkdirs();
+    }
+
     public static boolean tryDelete(File file) {
         return delete(file, true);
     }

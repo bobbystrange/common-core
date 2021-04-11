@@ -18,7 +18,10 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import org.dreamcat.common.util.Base64Util;
 
-public class CertificateUtil {
+public final class CertificateUtil {
+
+    private CertificateUtil() {
+    }
 
     private static final String KEY_STORE = "JKS";
     private static final String X509 = "X.509";
@@ -31,8 +34,7 @@ public class CertificateUtil {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static SSLSocketFactory getSSLSocketFactory(
-            String password, String keyStorePath, String trustKeyStorePath
-    ) throws Exception {
+            String password, String keyStorePath, String trustKeyStorePath) throws Exception {
         KeyManagerFactory keyManagerFactory = KeyManagerFactory
                 .getInstance(SunX509);
         KeyStore keyStore = getKeyStore(keyStorePath, password);
@@ -58,8 +60,7 @@ public class CertificateUtil {
     }
 
     public static String sign(
-            byte[] sign, String keyStorePath, String alias, String password
-    ) throws Exception {
+            byte[] sign, String keyStorePath, String alias, String password) throws Exception {
         X509Certificate x509Certificate = (X509Certificate) getCertificate(
                 keyStorePath, alias, password);
         KeyStore ks = getKeyStore(keyStorePath, password);
@@ -88,8 +89,7 @@ public class CertificateUtil {
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     public static byte[] encryptByPrivateKey(
-            byte[] data, String keyStorePath, String alias, String password
-    ) throws Exception {
+            byte[] data, String keyStorePath, String alias, String password) throws Exception {
         PrivateKey privateKey = getPrivateKey(keyStorePath, alias, password);
         return encrypt(data, privateKey);
 
@@ -97,8 +97,7 @@ public class CertificateUtil {
     }
 
     public static byte[] decryptByPrivateKey(
-            byte[] data, String keyStorePath, String alias, String password
-    ) throws Exception {
+            byte[] data, String keyStorePath, String alias, String password) throws Exception {
         PrivateKey privateKey = getPrivateKey(keyStorePath, alias, password);
         return decrypt(data, privateKey);
 
@@ -139,7 +138,7 @@ public class CertificateUtil {
     // private cert verify
     public static boolean verifyCertificate(
             Date date, String keyStorePath, String alias, String password) {
-        boolean status = true;
+        boolean status;
         try {
             Certificate certificate = getCertificate(keyStorePath, alias, password);
             status = verifyCertificate(date, certificate);
