@@ -10,7 +10,7 @@ import java.util.function.IntFunction;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntToLongFunction;
 import java.util.function.IntUnaryOperator;
-import org.dreamcat.common.core.WriteResult;
+import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.function.IntToByteFunction;
 
 /**
@@ -297,12 +297,12 @@ public final class ArrayUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    public static int binarySearch(int[] a, int key, WriteResult<Integer> result) {
+    public static int binarySearch(int[] a, int key, Pair<Boolean, Integer> result) {
         return binarySearch(a, 0, a.length, key, result);
     }
 
     public static int binarySearch(int[] a, int fromIndex, int toIndex, int key,
-            WriteResult<Integer> result) {
+            Pair<Boolean, Integer> result) {
         int low = fromIndex;
         int high = toIndex - 1;
 
@@ -315,7 +315,7 @@ public final class ArrayUtil {
             } else if (cmp > 0) {
                 high = mid - 1;
             } else {
-                if (result != null) result.update(true);
+                if (result != null) result.updateFirst(true);
                 return mid; // key found
             }
         }
@@ -327,12 +327,12 @@ public final class ArrayUtil {
         return -1; // key not found
     }
 
-    public static int binarySearch(long[] a, long key, WriteResult<Integer> result) {
+    public static int binarySearch(long[] a, long key, Pair<Boolean, Integer> result) {
         return binarySearch(a, 0, a.length, key, result);
     }
 
     public static int binarySearch(long[] a, int fromIndex, int toIndex, long key,
-            WriteResult<Integer> result) {
+            Pair<Boolean, Integer> result) {
         int low = fromIndex;
         int high = toIndex - 1;
 
@@ -345,7 +345,7 @@ public final class ArrayUtil {
             } else if (cmp > 0) {
                 high = mid - 1;
             } else {
-                if (result != null) result.update(true);
+                if (result != null) result.updateFirst(true);
                 return mid; // key found
             }
         }
@@ -359,12 +359,12 @@ public final class ArrayUtil {
 
     // Note that result.data = [0, a.length], a[i] <= key when i < a.length
     public static <T> int binarySearch(T[] a, T key, Comparator<? super T> c,
-            WriteResult<Integer> result) {
+            Pair<Boolean, Integer> result) {
         return binarySearch(a, 0, a.length, key, c, result);
     }
 
     public static <T> int binarySearch(T[] a, int fromIndex, int toIndex, T key,
-            Comparator<? super T> c, WriteResult<Integer> result) {
+            Comparator<? super T> c, Pair<Boolean, Integer> result) {
         int low = fromIndex;
         int high = toIndex - 1;
 
@@ -377,7 +377,7 @@ public final class ArrayUtil {
             } else if (cmp > 0) {
                 high = mid - 1;
             } else {
-                if (result != null) result.update(true);
+                if (result != null) result.updateFirst(true);
                 return mid; // key found
             }
 

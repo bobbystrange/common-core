@@ -40,6 +40,9 @@ import org.dreamcat.common.util.ObjectUtil;
 @Slf4j
 public final class FileUtil {
 
+    private FileUtil(){
+    }
+
     /**
      * no verification, the prefix of basename, apart by last dot position
      *

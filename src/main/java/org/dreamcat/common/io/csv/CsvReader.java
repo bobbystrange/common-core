@@ -22,7 +22,7 @@ public class CsvReader implements Closeable {
     private final char delimiter;
     private final char escape;
     // note that makes sure mark/reset is supported
-    private Reader in;
+    private final Reader in;
     private char[] cb;
     private int offset;
     // size = cb.length typical, if not, then it means `in` has no more data to read
@@ -229,10 +229,7 @@ public class CsvReader implements Closeable {
                                         }
                                     }
                                 } else {
-                                    throw new IllegalArgumentException(
-                                            String.format("illegal char %s at pos %d of %s",
-                                                    fmt(nextChar), offset + 1,
-                                                    formatCRLF(new String(cb, 0, size))));
+                                    throw illegalChar(nextChar);
                                 }
                             }
                             // offset = size - 1
@@ -246,10 +243,7 @@ public class CsvReader implements Closeable {
                                     append(pair, c);
                                     fill();
                                     if (size == 0) {
-                                        throw new IllegalArgumentException(
-                                                String.format("illegal char %s at pos %d of %s",
-                                                        fmt(c), offset + 1,
-                                                        formatCRLF(new String(cb, 0, size))));
+                                        throw illegalChar(c);
                                     }
                                     continue escape_loop;
                                 } else if (nextChar == delimiter) {
@@ -276,10 +270,7 @@ public class CsvReader implements Closeable {
                                         return;
                                     }
                                 } else {
-                                    throw new IllegalArgumentException(
-                                            String.format("illegal char %s at pos %d of %s",
-                                                    fmt((char) nextChar), offset + 1,
-                                                    formatCRLF(new String(cb, 0, size))));
+                                    throw illegalChar((char) nextChar);
                                 }
                             }
                         }
@@ -347,7 +338,6 @@ public class CsvReader implements Closeable {
         try {
             in.close();
         } finally {
-            in = null;
             cb = null;
         }
     }
@@ -407,15 +397,15 @@ public class CsvReader implements Closeable {
         }).collect(Collectors.joining());
     }
 
-    private static String formatCRLF(int lineTerminated) {
-        if (lineTerminated == '\r') return "\\r";
-        if (lineTerminated == '\n') return "\\n";
-        else return "\\r\\n";
-    }
-
-    public static String fmt(char c) {
+    private static String fmt(char c) {
         if (c == '\r') return "\\r";
         if (c == '\n') return "\\n";
         return String.valueOf(c);
+    }
+
+    private IllegalArgumentException illegalChar(char c) {
+        return new IllegalArgumentException(
+                String.format("illegal char %s at pos %d of %s",
+                        fmt(c), offset + 1, formatCRLF(new String(cb, 0, size))));
     }
 }

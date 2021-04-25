@@ -1,6 +1,6 @@
 package org.dreamcat.common.util.array;
 
-import org.dreamcat.common.core.WriteResult;
+import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.util.ArrayUtil;
 import org.junit.Test;
 
@@ -15,44 +15,44 @@ public class ArrayUtilTest_binarySearch {
         // 14
         long[] a = new long[]{0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130};
 
-        WriteResult<Integer> result = WriteResult.empty();
+        Pair<Boolean, Integer> result = Pair.empty();
         i = ArrayUtil.binarySearch(a, 14, result);
-        assert i < 0 && result.data == 2 && 14 <= a[2];
+        assert i < 0 && result.second() == 2 && 14 <= a[2];
 
-        result = WriteResult.empty();
+        result = Pair.empty();
         i = ArrayUtil.binarySearch(a, 20, result);
         assert i == 2 && 14 <= a[2];
 
-        result = WriteResult.empty();
+        result = Pair.empty();
         ArrayUtil.binarySearch(a, 21, result);
-        assert result.data == 3 && 21 <= a[3];
+        assert result.second() == 3 && 21 <= a[3];
 
-        result = WriteResult.empty();
+        result = Pair.empty();
         i = ArrayUtil.binarySearch(a, 130, result);
         assert i == 13 && 130 <= a[13];
 
-        result = WriteResult.empty();
+        result = Pair.empty();
         ArrayUtil.binarySearch(a, 131, result);
         // 14
-        assert result.data == a.length;
+        assert result.second() == a.length;
 
         int[] b = new int[]{0, 1};
-        result = WriteResult.empty();
+        result = Pair.empty();
         i = ArrayUtil.binarySearch(b, 2, result);
-        assert i < 0 && result.data == b.length;
+        assert i < 0 && result.second() == b.length;
 
-        result = WriteResult.empty();
+        result = Pair.empty();
         i = ArrayUtil.binarySearch(b, -1, result);
-        assert i < 0 && result.data == 0;
+        assert i < 0 && result.second() == 0;
 
         b = new int[]{0};
-        result = WriteResult.empty();
+        result = Pair.empty();
         i = ArrayUtil.binarySearch(b, 1, result);
-        assert i < 0 && result.data == b.length;
+        assert i < 0 && result.second() == b.length;
 
-        result = WriteResult.empty();
+        result = Pair.empty();
         i = ArrayUtil.binarySearch(b, -1, result);
-        assert i < 0 && result.data == 0;
+        assert i < 0 && result.second() == 0;
     }
 
 }

@@ -81,7 +81,6 @@ public final class StringUtil {
         return s.substring(Math.max(beginIndex, 0), Math.min(endIndex, s.length()));
     }
 
-
     public static String trimEnd(String s) {
         return trimEnd(s, " \t\r\n");
     }
@@ -140,6 +139,15 @@ public final class StringUtil {
         return sb.toString();
     }
 
+    public static String reverse(String s) {
+        int size = s.length();
+        if (size <= 1) return s;
+        StringBuilder sb = new StringBuilder(size);
+        for (int i = size - 1; i >= 0; i--) {
+            sb.append(s.charAt(i));
+        }
+        return sb.toString();
+    }
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     // only upper case first letter, and keep others

@@ -4,18 +4,18 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 /**
  * Create by tuke on 2020/4/4
  */
-
+@SuppressWarnings("unchecked")
 public final class SortUtil {
 
     private SortUtil() {
     }
 
-    // bubble sort
+    // bubble sort, swap the max value to the tail
     public static void bubbleSort(int[] a) {
         int size = a.length;
         for (int i = 0; i < size - 1; i++) {
@@ -404,7 +404,7 @@ public final class SortUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
-    // insert sort
+    // insert sort, insert unsorted elements to the sorted head
     public static void insertSort(int[] a) {
         int size = a.length;
         // sorted slice [0, k-1], unsorted slice [k, size-1]
@@ -588,9 +588,7 @@ public final class SortUtil {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     // bin sort, box
-    public static <E> void binSort(LinkedList<E> list, Function<E, Integer> scorer, int bound) {
-        int size = list.size();
-        @SuppressWarnings("unchecked")
+    public static <E> void binSort(LinkedList<E> list, ToIntFunction<E> scorer, int bound) {
         LinkedList<E>[] bin = new LinkedList[bound];
         for (int j = bound - 1; j >= 0; j--) {
             bin[j] = new LinkedList<>();
@@ -598,7 +596,7 @@ public final class SortUtil {
 
         while (!list.isEmpty()) {
             E e = list.removeFirst();
-            bin[scorer.apply(e)].addFirst(e);
+            bin[scorer.applyAsInt(e)].addFirst(e);
         }
 
         for (int j = bound - 1; j >= 0; j--) {
@@ -621,26 +619,28 @@ public final class SortUtil {
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
+    // split A[p..r] to A[p..q-1] and A[q+1..r]
+    // all elements in A[p..q-1] is less than or equals to A[q]
+    // and all elements in A[q+1..r] is greater than or equals to A[q]
     public static void quickSort(int[] a) {
-        if (a.length > 0) {
-            quickSort1(a, 0, a.length - 1);
-        }
+        int length = a.length;
+        if (length <= 1) return;
+
+        quickSort(a, 0, a.length - 1);
     }
 
-    public static void quickSort(int[] a, int offset, int size) {
-        if (a.length > 0) {
-            quickSort1(a, offset, offset + size - 1);
-        }
-    }
-
-    private static void quickSort1(int[] a, int low, int high) {
+    private static void quickSort(int[] a, int low, int high) {
         if (low < high) {
             int middle = getMiddle(a, low, high);
-            quickSort1(a, low, middle - 1);
-            quickSort1(a, middle + 1, high);
+            quickSort(a, low, middle - 1);
+            quickSort(a, middle + 1, high);
         }
     }
 
+    // low, new_low, new_high, high
+    // low+1..new_low-1 < temp, new_high+1..high > temp
+    // a[low] = a[new_high], a[new_high] = a[new_low]
+    // then low..new_low-1 < temp, new_high..high > temp
     private static int getMiddle(int[] a, int low, int high) {
         int temp = a[low];
         while (low < high) {
@@ -661,22 +661,17 @@ public final class SortUtil {
     }
 
     public static void quickSort(long[] a) {
-        if (a.length > 0) {
-            quickSort1(a, 0, a.length - 1);
-        }
+        int length = a.length;
+        if (length <= 1) return;
+
+        quickSort(a, 0, a.length - 1);
     }
 
-    public static void quickSort(long[] a, int offset, int size) {
-        if (a.length > 0) {
-            quickSort1(a, offset, offset + size - 1);
-        }
-    }
-
-    private static void quickSort1(long[] a, int low, int high) {
+    private static void quickSort(long[] a, int low, int high) {
         if (low < high) {
             int middle = getMiddle(a, low, high);
-            quickSort1(a, low, middle - 1);
-            quickSort1(a, middle + 1, high);
+            quickSort(a, low, middle - 1);
+            quickSort(a, middle + 1, high);
         }
     }
 
@@ -700,22 +695,17 @@ public final class SortUtil {
     }
 
     public static void quickSort(double[] a) {
-        if (a.length > 0) {
-            quickSort1(a, 0, a.length - 1);
-        }
+        int length = a.length;
+        if (length <= 1) return;
+
+        quickSort(a, 0, a.length - 1);
     }
 
-    public static void quickSort(double[] a, int offset, int size) {
-        if (a.length > 0) {
-            quickSort1(a, offset, offset + size - 1);
-        }
-    }
-
-    private static void quickSort1(double[] a, int low, int high) {
+    private static void quickSort(double[] a, int low, int high) {
         if (low < high) {
             int middle = getMiddle(a, low, high);
-            quickSort1(a, low, middle - 1);
-            quickSort1(a, middle + 1, high);
+            quickSort(a, low, middle - 1);
+            quickSort(a, middle + 1, high);
         }
     }
 
@@ -739,22 +729,17 @@ public final class SortUtil {
     }
 
     public static <T extends Comparable<T>> void quickSort(T[] a) {
-        if (a.length > 0) {
-            quickSort1(a, 0, a.length - 1);
-        }
+        int length = a.length;
+        if (length <= 1) return;
+
+        quickSort(a, 0, a.length - 1);
     }
 
-    public static <T extends Comparable<T>> void quickSort(T[] a, int offset, int size) {
-        if (a.length > 0) {
-            quickSort1(a, offset, offset + size - 1);
-        }
-    }
-
-    private static <T extends Comparable<T>> void quickSort1(T[] a, int low, int high) {
+    private static <T extends Comparable<T>> void quickSort(T[] a, int low, int high) {
         if (low < high) {
             int middle = getMiddle(a, low, high);
-            quickSort1(a, low, middle - 1);
-            quickSort1(a, middle + 1, high);
+            quickSort(a, low, middle - 1);
+            quickSort(a, middle + 1, high);
         }
     }
 
@@ -778,22 +763,17 @@ public final class SortUtil {
     }
 
     public static <T> void quickSort(T[] a, Comparator<T> c) {
-        if (a.length > 0) {
-            quickSort1(a, 0, a.length - 1, c);
-        }
+        int length = a.length;
+        if (length <= 1) return;
+
+        quickSort(a, 0, a.length - 1, c);
     }
 
-    public static <T> void quickSort(T[] a, int offset, int size, Comparator<T> c) {
-        if (a.length > 0) {
-            quickSort1(a, offset, offset + size - 1, c);
-        }
-    }
-
-    private static <T> void quickSort1(T[] a, int low, int high, Comparator<T> c) {
+    private static <T> void quickSort(T[] a, int low, int high, Comparator<T> c) {
         if (low < high) {
             int middle = getMiddle(a, low, high, c);
-            quickSort1(a, low, middle - 1, c);
-            quickSort1(a, middle + 1, high, c);
+            quickSort(a, low, middle - 1, c);
+            quickSort(a, middle + 1, high, c);
         }
     }
 
@@ -818,22 +798,16 @@ public final class SortUtil {
 
     public static <T extends Comparable<T>> void quickSort(List<T> a) {
         int size = a.size();
-        if (size > 0) {
-            quickSort1(a, 0, size - 1);
-        }
+        if (size <= 1) return;
+
+        quickSort(a, 0, size - 1);
     }
 
-    public static <T extends Comparable<T>> void quickSort(List<T> a, int offset, int size) {
-        if (size > 0) {
-            quickSort1(a, offset, offset + size - 1);
-        }
-    }
-
-    private static <T extends Comparable<T>> void quickSort1(List<T> a, int low, int high) {
+    private static <T extends Comparable<T>> void quickSort(List<T> a, int low, int high) {
         if (low < high) {
             int middle = getMiddle(a, low, high);
-            quickSort1(a, low, middle - 1);
-            quickSort1(a, middle + 1, high);
+            quickSort(a, low, middle - 1);
+            quickSort(a, middle + 1, high);
         }
     }
 
@@ -856,22 +830,16 @@ public final class SortUtil {
 
     public static <T> void quickSort(List<T> a, Comparator<T> c) {
         int size = a.size();
-        if (size > 0) {
-            quickSort1(a, 0, size - 1, c);
-        }
+        if (size <= 1) return;
+
+        quickSort(a, 0, size - 1, c);
     }
 
-    public static <T> void quickSort(List<T> a, int offset, int size, Comparator<T> c) {
-        if (size > 0) {
-            quickSort1(a, offset, offset + size - 1, c);
-        }
-    }
-
-    private static <T> void quickSort1(List<T> a, int low, int high, Comparator<T> c) {
+    private static <T> void quickSort(List<T> a, int low, int high, Comparator<T> c) {
         if (low < high) {
             int middle = getMiddle(a, low, high, c);
-            quickSort1(a, low, middle - 1, c);
-            quickSort1(a, middle + 1, high, c);
+            quickSort(a, low, middle - 1, c);
+            quickSort(a, middle + 1, high, c);
         }
     }
 

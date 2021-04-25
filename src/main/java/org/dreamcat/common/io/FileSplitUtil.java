@@ -16,7 +16,10 @@ import org.dreamcat.common.util.ObjectUtil;
  * Create by tuke on 2020/4/10
  */
 @Slf4j
-public class FileSplitUtil {
+public final class FileSplitUtil {
+
+    private FileSplitUtil(){
+    }
 
     private static final int BUFFER_SIZE = 4096;
 

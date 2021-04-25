@@ -609,6 +609,44 @@ public final class ReflectUtil {
         }
     }
 
+    public static Class<?> getArrayClass(Class<?> componentType) {
+        String name;
+        if(componentType.isArray()){
+            // just add a leading "["
+            name = "["+componentType.getName();
+        }else if(componentType == boolean.class){
+            name = "[Z";
+        }else if(componentType == byte.class){
+            name = "[B";
+        }else if(componentType == char.class){
+            name = "[C";
+        }else if(componentType == double.class){
+            name = "[D";
+        }else if(componentType == float.class){
+            name = "[F";
+        }else if(componentType == int.class){
+            name = "[I";
+        }else if(componentType == long.class){
+            name = "[J";
+        }else if(componentType == short.class){
+            name = "[S";
+        }else{
+            // must be an object non-array class
+            name = "[L"+componentType.getName()+";";
+        }
+
+        try {
+            ClassLoader classLoader = componentType.getClassLoader();
+            if (classLoader != null) {
+                return classLoader.loadClass(name);
+            } else {
+                return  Class.forName(name);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     /**

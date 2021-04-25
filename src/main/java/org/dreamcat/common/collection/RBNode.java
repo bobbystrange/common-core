@@ -5,14 +5,14 @@ package org.dreamcat.common.collection;
  *
  * @see java.util.HashMap
  */
-public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node> {
+public abstract class RBNode<N extends RBNode<N>> extends BinaryNode<N> {
 
     /*
     root is black,
     each chain contains the same number of black nodes,
     no continual red chain
      */
-    protected Node parent;
+    protected N parent;
     protected boolean red;
 
     /**
@@ -23,18 +23,18 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
      *
      * @param root   node to rotate
      * @param x      x node
-     * @param <Node> node type
+     * @param <N> node type
      * @return the new root node
      */
-    protected static <Node extends RBNode<Node>> Node balanceInsertion(Node root, Node x) {
-        Node p = x.parent;
+    protected static <N extends RBNode<N>> N balanceInsertion(N root, N x) {
+        N p = x.parent;
         if (root == p || !p.red) return root;
-        Node g = p.parent;
+        N g = p.parent;
 
         if (root == g) {
             return fixInsertion(x, p, g);
         } else {
-            Node gp = g.parent;
+            N gp = g.parent;
             if (gp.left == g) {
                 g = fixInsertion(x, p, g);
                 gp.left = g;
@@ -46,12 +46,11 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
                 if (!g.red || !gp.red) return root;
                 return balanceInsertion(root, g);
             }
-            //return root;
         }
     }
 
-    private static <Node extends RBNode<Node>> Node fixInsertion(Node x, Node p, Node g) {
-        Node gl, gr;
+    private static <N extends RBNode<N>> N fixInsertion(N x, N p, N g) {
+        N gl, gr;
         if (p.left == x && g.left == p) {
             // LLb
             if ((gr = g.right) == null || !gr.red) {
@@ -120,8 +119,8 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
     l     r     pr    gr
     ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
      */
-    private static <Node extends RBNode<Node>> Node rotateLLb(Node p, Node g) {
-        Node pr = p.right;
+    private static <N extends RBNode<N>> N rotateLLb(N p, N g) {
+        N pr = p.right;
 
         p.parent = g.parent;
         p.right = g;
@@ -147,8 +146,8 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
     gl    xl   xr  pr
     ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
      */
-    private static <Node extends RBNode<Node>> Node rotateRLb(Node x, Node p, Node g) {
-        Node xl = x.left, xr = x.right;
+    private static <N extends RBNode<N>> N rotateRLb(N x, N p, N g) {
+        N xl = x.left, xr = x.right;
 
         x.parent = g.parent;
         x.left = g;
@@ -179,8 +178,8 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
     pl    xl   xr  gr
     ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
      */
-    private static <Node extends RBNode<Node>> Node rotateLRb(Node x, Node p, Node g) {
-        Node xl = x.left, xr = x.right;
+    private static <N extends RBNode<N>> N rotateLRb(N x, N p, N g) {
+        N xl = x.left, xr = x.right;
 
         x.parent = g.parent;
         x.left = p;
@@ -210,8 +209,8 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
     gl     pl
     ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
      */
-    private static <Node extends RBNode<Node>> Node rotateRRb(Node p, Node g) {
-        Node pl = p.left;
+    private static <N extends RBNode<N>> N rotateRRb(N p, N g) {
+        N pl = p.left;
 
         p.parent = g.parent;
         p.left = g;
@@ -225,8 +224,8 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
     }
 
     // balance for delete <strong>black</strong> node
-    protected static <Node extends RBNode<Node>> Node balanceDeletion(Node root, Node x) {
-        for (Node xp, xpl, xpr; ; ) {
+    protected static <N extends RBNode<N>> N balanceDeletion(N root, N x) {
+        for (N xp, xpl, xpr; ; ) {
             if (x == null || x == root)
                 return root;
             else if ((xp = x.parent) == null) {
@@ -273,7 +272,7 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
                 if (xpr == null)
                     x = xp;
                 else {
-                    Node sl = xpr.left, sr = xpr.right;
+                    N sl = xpr.left, sr = xpr.right;
                     if ((sr == null || !sr.red) &&
                             (sl == null || !sl.red)) {
                         xpr.red = true;
@@ -308,7 +307,7 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
                 if (xpl == null)
                     x = xp;
                 else {
-                    Node sl = xpl.left, sr = xpl.right;
+                    N sl = xpl.left, sr = xpl.right;
                     if ((sl == null || !sl.red) &&
                             (sr == null || !sr.red)) {
                         xpl.red = true;
@@ -352,8 +351,8 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
       rl
     ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
      */
-    private static <Node extends RBNode<Node>> Node rotateLeft(Node root, Node p) {
-        Node r, pp, rl;
+    private static <N extends RBNode<N>> N rotateLeft(N root, N p) {
+        N r, pp, rl;
         if (p != null && (r = p.right) != null) {
             if ((rl = p.right = r.left) != null)
                 rl.parent = p;
@@ -382,8 +381,8 @@ public abstract class RBNode<Node extends RBNode<Node>> extends BinaryNode<Node>
        lr
     ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
      */
-    private static <Node extends RBNode<Node>> Node rotateRight(Node root, Node p) {
-        Node l, pp, lr;
+    private static <N extends RBNode<N>> N rotateRight(N root, N p) {
+        N l, pp, lr;
         if (p != null && (l = p.left) != null) {
             if ((lr = p.left = l.right) != null)
                 lr.parent = p;

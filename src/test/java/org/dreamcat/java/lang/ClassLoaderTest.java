@@ -4,17 +4,21 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import org.junit.Test;
-import sun.misc.Launcher;
 
 /**
  * Create by tuke on 2020/5/29
  */
+@SuppressWarnings({"unchecked"})
 public class ClassLoaderTest {
 
     // -Xbootclasspath, jre/lib/*.jar, jre/classes/*.class
     @Test
     public void testBootStrapClassLoader() {
-        URL[] urls = Launcher.getBootstrapClassPath().getURLs();
+        // URL[] urls = Launcher.getBootstrapClassPath().getURLs();
+        Object aURLClassPath = invoke(null, "sun.misc.Launcher", "getBootstrapClassPath");
+        assert  aURLClassPath != null;
+        URL[] urls = invoke(aURLClassPath, aURLClassPath.getClass().getName(), "getURLs");
+        assert  urls != null;
         for (URL url : urls) {
             System.out.println(url.toExternalForm());
         }
@@ -22,7 +26,12 @@ public class ClassLoaderTest {
         String bootClassPath = System.getProperty("sun.boot.class.path");
         Arrays.stream(bootClassPath.split(":")).forEach(System.out::println);
 
-        ClassLoader appClassLoader = Launcher.getLauncher().getClassLoader();
+        // ClassLoader appClassLoader = Launcher.getLauncher().getClassLoader();
+        Object aLauncher = invoke(null, "sun.misc.Launcher", "getLauncher");
+        assert aLauncher != null;
+        ClassLoader appClassLoader = invoke(aLauncher, aLauncher.getClass().getName(), "getClassLoader");
+        assert appClassLoader != null;
+
         // the app class loader
         ClassLoader extClassLoader = appClassLoader.getParent();
         assert extClassLoader.getParent() == null;
@@ -52,7 +61,7 @@ public class ClassLoaderTest {
 
     // extends ClassLoader
     @Test
-    public void testCustomClassLoader() {
+    public void testCustomClassLoader() throws Exception {
         // sun.misc.Launcher$AppClassLoader
         // sun.misc.Launcher$ExtClassLoader
         // null
@@ -60,7 +69,7 @@ public class ClassLoaderTest {
 
         // sun.misc.Launcher$ExtClassLoader
         // null
-        printClassLoader(jdk.internal.dynalink.DynamicLinker.class);
+        printClassLoader(Class.forName("jdk.internal.dynalink.DynamicLinker.class"));
 
         // null
         printClassLoader(javax.tools.JavaCompiler.class);
@@ -81,6 +90,17 @@ public class ClassLoaderTest {
             loader = loader.getParent();
         }
         System.out.println();
+    }
+
+    private static <T> T invoke(
+            Object object,
+            String className, String methodName, Class<?>... parameterTypes) {
+        try {
+            return (T) Class.forName(className).getDeclaredMethod(methodName, parameterTypes).invoke(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

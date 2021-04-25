@@ -26,7 +26,7 @@ public class FileLineSplitUtil {
             String line;
             while ((line = br.readLine()) != null) {
                 if (ObjectUtil.isBlank(line)) continue;
-                ;
+
                 Matcher matcher = pat.matcher(line);
                 if (matcher.matches()) {
 

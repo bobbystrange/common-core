@@ -3,22 +3,22 @@ package org.dreamcat.common.collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.ObjIntConsumer;
 
 /**
  * Create by tuke on 2020/4/18
  */
 @SuppressWarnings("unchecked")
-public abstract class BinaryNode<Node extends BinaryNode<Node>> implements Iterable<Node> {
+public abstract class BinaryNode<N extends BinaryNode<N>> implements Iterable<N> {
 
-    protected Node left;
-    protected Node right;
+    protected N left;
+    protected N right;
 
     /// for-each methods
 
-    public void preOrder(Consumer<? super Node> action) {
-        action.accept((Node) this);
+    public void preOrder(Consumer<? super N> action) {
+        action.accept((N) this);
         if (left != null) {
             left.preOrder(action);
         }
@@ -27,42 +27,42 @@ public abstract class BinaryNode<Node extends BinaryNode<Node>> implements Itera
         }
     }
 
-    public void inOrder(Consumer<? super Node> action) {
+    public void inOrder(Consumer<? super N> action) {
         if (left != null) {
             left.inOrder(action);
         }
-        action.accept((Node) this);
+        action.accept((N) this);
         if (right != null) {
             right.inOrder(action);
         }
     }
 
-    public void postOrder(Consumer<? super Node> action) {
+    public void postOrder(Consumer<? super N> action) {
         if (left != null) {
             left.postOrder(action);
         }
         if (right != null) {
             right.postOrder(action);
         }
-        action.accept((Node) this);
+        action.accept((N) this);
     }
 
-    public void levelOrder(BiConsumer<? super Node, Integer> action) {
-        BinaryNodes.levelOrder((Node) this, action);
+    public void levelOrder(ObjIntConsumer<? super N> action) {
+        BinaryNodes.levelOrder((N) this, action);
     }
 
     // level order iterator
 
     @Override
-    public Iterator<Node> iterator() {
-        return new Iter<>((Node) this);
+    public Iterator<N> iterator() {
+        return new Iter<>((N) this);
     }
 
-    protected static class Iter<Node extends BinaryNode<Node>> implements Iterator<Node> {
+    protected static class Iter<N extends BinaryNode<N>> implements Iterator<N> {
 
-        private final LinkedList<Node> levelNodes;
+        private final LinkedList<N> levelNodes;
 
-        Iter(Node node) {
+        Iter(N node) {
             levelNodes = new LinkedList<>();
             if (node != null) {
                 levelNodes.addLast(node);
@@ -75,10 +75,10 @@ public abstract class BinaryNode<Node extends BinaryNode<Node>> implements Itera
         }
 
         @Override
-        public Node next() {
+        public N next() {
             if (!hasNext()) throw new NoSuchElementException();
 
-            Node node = levelNodes.removeFirst();
+            N node = levelNodes.removeFirst();
             if (node.left != null) levelNodes.addLast(node.left);
             if (node.right != null) levelNodes.addLast(node.right);
             return node;

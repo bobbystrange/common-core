@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
-import org.dreamcat.common.core.WriteResult;
+import org.dreamcat.common.core.Pair;
 import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.ComparatorUtil;
 import org.dreamcat.common.util.ObjectUtil;
@@ -35,9 +35,9 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
             boolean onlyIfAbsent, Result<E> result) {
         E[] elements = x.elements;
 
-        WriteResult<Integer> writeResult = WriteResult.empty();
+        Pair<Boolean, Integer> writeResult = Pair.empty();
         int i = ArrayUtil.binarySearch(elements, element, ComparatorUtil::compare, writeResult);
-        if (writeResult.wasApplied()) {
+        if (writeResult.hasFirst()) {
             // save hit element to result
             if (result != null) result.update(false, elements[i], i);
 
@@ -47,7 +47,7 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
             elements[i] = element;
             return root;
         } else {
-            i = writeResult.getData();
+            i = writeResult.second();
         }
 
         BTreeNode<E>[] nodes = x.nodes;
@@ -75,9 +75,9 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
             Result<E> result) {
         E[] elements = x.elements;
 
-        WriteResult<Integer> writeResult = WriteResult.empty();
+        Pair<Boolean, Integer> writeResult = Pair.empty();
         int i = ArrayUtil.binarySearch(elements, element, ComparatorUtil::compare, writeResult);
-        if (writeResult.wasApplied()) {
+        if (writeResult.hasFirst()) {
             if (!match.test(element)) {
                 if (result != null) result.update(false, elements[i], i);
                 return root;
@@ -86,7 +86,7 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
             if (result != null) result.update(true, elements[i], i);
             return delete(root, x, i);
         } else {
-            i = writeResult.getData();
+            i = writeResult.second();
         }
 
         BTreeNode<E>[] nodes = x.nodes;
@@ -101,14 +101,14 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
         if (root == null) return null;
         E[] elements = root.elements;
 
-        WriteResult<Integer> writeResult = WriteResult.empty();
+        Pair<Boolean, Integer> writeResult = Pair.empty();
         int i = ArrayUtil.binarySearch(elements, element, ComparatorUtil::compare, writeResult);
-        if (writeResult.wasApplied()) {
+        if (writeResult.hasFirst()) {
             // save hit element to result
             if (result != null) result.update(true, elements[i], i);
             return root;
         } else {
-            i = writeResult.getData();
+            i = writeResult.second();
         }
         BTreeNode<E> node = root.nodes[i];
         if (node == null) {
@@ -178,9 +178,9 @@ public class BTreeNode<E> implements Iterable<BTreeNode<E>> {
         E[] newParentElements = Arrays.copyOf(parentElements, parentElements.length + 1);
         BTreeNode<E>[] newParentNodes = Arrays.copyOf(parentNodes, parentNodes.length + 1);
 
-        WriteResult<Integer> writeResult = WriteResult.empty();
+        Pair<Boolean, Integer> writeResult = Pair.empty();
         ArrayUtil.binarySearch(parentElements, middleElement, ComparatorUtil::compare, writeResult);
-        int ind = writeResult.getData();
+        int ind = writeResult.second();
         newParentElements[ind] = middleElement;
         if (ind < parentElements.length) {
             System.arraycopy(parentElements, ind, newParentElements, ind + 1,
