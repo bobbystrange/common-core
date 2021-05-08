@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  */
 final class ConcurrentVariance {
 
-    private ConcurrentVariance(){
+    private ConcurrentVariance() {
     }
 
     public static double mean(double[] data, int seq) {

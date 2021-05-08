@@ -84,6 +84,9 @@ public final class ThreadUtil {
         } catch (TimeoutException e) {
             timeoutCallback.accept(e);
             return null;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupted state...
+            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -100,9 +103,14 @@ public final class ThreadUtil {
         } catch (TimeoutException e) {
             timeoutCallback.accept(e);
             exception = e;
+        } catch (InterruptedException e) {
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
+            exception = e;
         } catch (Exception e) {
             exception = e;
         }
+
         if (exception != null) throw new RuntimeException(exception);
     }
 }

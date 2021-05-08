@@ -15,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.dreamcat.common.util.ObjectUtil;
 
 @Slf4j
-public class ZipCompressUtil {
+public final class ZipCompressUtil {
+
+    private ZipCompressUtil() {
+    }
 
     private static final int BUFFER_SIZE = 4096;
 
@@ -84,6 +87,9 @@ public class ZipCompressUtil {
         ZipEntry entry;
         while ((entry = ins.getNextEntry()) != null) {
             File file = new File(destFile.getPath() + File.separator + entry.getName());
+            if (!file.getCanonicalPath().startsWith(destFile.getCanonicalPath())) {
+                throw new IOException("Entry is outside of the target directory");
+            }
             if (entry.isDirectory()) {
                 if (!file.mkdirs() && !file.exists()) {
                     if (log.isDebugEnabled()) {

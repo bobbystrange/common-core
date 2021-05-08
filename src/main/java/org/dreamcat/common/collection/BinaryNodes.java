@@ -12,7 +12,7 @@ import org.dreamcat.common.core.Pair;
  */
 public final class BinaryNodes {
 
-    private BinaryNodes(){
+    private BinaryNodes() {
     }
 
     public static <N extends BinaryNode<N>> void preOrder(

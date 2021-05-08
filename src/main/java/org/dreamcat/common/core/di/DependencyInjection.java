@@ -79,7 +79,7 @@ public class DependencyInjection {
 
     private static Class<? extends Annotation> findAnnotationClass(String className) {
         try {
-            Class<?> clazz  = Class.forName(className);
+            Class<?> clazz = Class.forName(className);
             if (Annotation.class.isAssignableFrom(clazz)) {
                 return (Class<? extends Annotation>) clazz;
             }

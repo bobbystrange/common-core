@@ -12,6 +12,7 @@ import org.dreamcat.common.function.ThrowableSupplier;
 import org.dreamcat.common.function.ThrowableVoidConsumer;
 import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.ObjectUtil;
+import org.dreamcat.common.util.StringUtil;
 
 /**
  * Create by tuke on 2019-06-06
@@ -31,12 +32,31 @@ public class Timeit {
     // use parallel stream to execute
     private boolean parallel = false;
 
-    private Timeit() {
-    }
-
     public static Timeit ofActions() {
         return new Timeit();
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public String runAndFormatUs(int paddingWidth) {
+        return runAndFormat("us", 1000., paddingWidth);
+    }
+
+    public String runAndFormatMs(int paddingWidth) {
+        return runAndFormat("ms", 1000_000., paddingWidth);
+    }
+
+    public String runAndFormatSec(int paddingWidth) {
+        return runAndFormat("s", 1000_000_000., paddingWidth);
+    }
+
+    public String runAndFormat(String unit, double unitBase, int paddingWidth) {
+        return Arrays.stream(run()).mapToObj(it -> String.format("%6.3f%s", it / unitBase, unit))
+                .map(it -> StringUtil.padding(it, paddingWidth))
+                .collect(Collectors.joining());
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     public String runAndFormatUs() {
         return runAndFormatUs("\t");
@@ -66,6 +86,8 @@ public class Timeit {
         return Arrays.stream(run()).mapToObj(it -> String.format("%6.3f%s", it / unitBase, unit))
                 .collect(Collectors.joining(delimiter));
     }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     /**
      * run actions and stat its elapsed time

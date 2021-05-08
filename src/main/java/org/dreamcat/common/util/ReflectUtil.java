@@ -611,28 +611,28 @@ public final class ReflectUtil {
 
     public static Class<?> getArrayClass(Class<?> componentType) {
         String name;
-        if(componentType.isArray()){
+        if (componentType.isArray()) {
             // just add a leading "["
-            name = "["+componentType.getName();
-        }else if(componentType == boolean.class){
+            name = "[" + componentType.getName();
+        } else if (componentType == boolean.class) {
             name = "[Z";
-        }else if(componentType == byte.class){
+        } else if (componentType == byte.class) {
             name = "[B";
-        }else if(componentType == char.class){
+        } else if (componentType == char.class) {
             name = "[C";
-        }else if(componentType == double.class){
+        } else if (componentType == double.class) {
             name = "[D";
-        }else if(componentType == float.class){
+        } else if (componentType == float.class) {
             name = "[F";
-        }else if(componentType == int.class){
+        } else if (componentType == int.class) {
             name = "[I";
-        }else if(componentType == long.class){
+        } else if (componentType == long.class) {
             name = "[J";
-        }else if(componentType == short.class){
+        } else if (componentType == short.class) {
             name = "[S";
-        }else{
+        } else {
             // must be an object non-array class
-            name = "[L"+componentType.getName()+";";
+            name = "[L" + componentType.getName() + ";";
         }
 
         try {
@@ -640,7 +640,7 @@ public final class ReflectUtil {
             if (classLoader != null) {
                 return classLoader.loadClass(name);
             } else {
-                return  Class.forName(name);
+                return Class.forName(name);
             }
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(e);
@@ -657,6 +657,7 @@ public final class ReflectUtil {
      * @return object
      * @throws NumberFormatException           not a number
      * @throws StringIndexOutOfBoundsException empty string to char
+     * @throws IllegalArgumentException        the enum is not found by name
      */
     public static Object parse(String s, Class<?> targetClass)
             throws NumberFormatException, StringIndexOutOfBoundsException {
@@ -666,6 +667,10 @@ public final class ReflectUtil {
         // target is same or a super class of String
         if (targetClass.isAssignableFrom(String.class)) {
             return s;
+        }
+        // target is same or a sub class of Enum
+        if (Enum.class.isAssignableFrom(targetClass)) {
+            return Enum.valueOf((Class<? extends Enum>) targetClass, s);
         }
         if (targetClass.equals(byte.class) || targetClass.equals(Byte.class)) {
             return Byte.valueOf(s);

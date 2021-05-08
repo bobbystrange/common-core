@@ -13,18 +13,22 @@ import org.dreamcat.common.text.NumericSearcher;
 /**
  * Create by tuke on 2020/5/10
  */
-public class JsonMapper {
+public final class JsonMapper {
+
+    private JsonMapper() {
+    }
 
     /**
      * convert object to json string, same as JSON.stringify
+     * <p>
+     * note that as it is a very slow implement
+     * only use it for test purpose
      *
      * @param raw one of String, Integer/Long/Double, Boolean, List&lt;Object&gt;, Map&lt;String, Object&gt;
      * @return json string
-     * @deprecated as it is a very slow implement
-     * only use it with {@code @SuppressWarnings("deprecation")} for test purpose
      */
-    @SuppressWarnings("unchecked")
-    public static String stringify(Object raw) {
+    @SuppressWarnings({"unchecked"})
+    static String stringify(Object raw) {
         if (raw == null) {
             return "null";
         } else if (raw instanceof String) {

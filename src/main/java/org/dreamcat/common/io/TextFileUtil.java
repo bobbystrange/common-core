@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class TextFileUtil {
 
-    private TextFileUtil(){
+    private TextFileUtil() {
     }
 
     public static Set<String> readLines(String file, String excludeFile) {

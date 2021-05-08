@@ -16,9 +16,9 @@ public class ClassLoaderTest {
     public void testBootStrapClassLoader() {
         // URL[] urls = Launcher.getBootstrapClassPath().getURLs();
         Object aURLClassPath = invoke(null, "sun.misc.Launcher", "getBootstrapClassPath");
-        assert  aURLClassPath != null;
+        assert aURLClassPath != null;
         URL[] urls = invoke(aURLClassPath, aURLClassPath.getClass().getName(), "getURLs");
-        assert  urls != null;
+        assert urls != null;
         for (URL url : urls) {
             System.out.println(url.toExternalForm());
         }

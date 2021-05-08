@@ -117,6 +117,10 @@ public final class StringUtil {
         return o == null ? null : o.toString();
     }
 
+    public static String padding(String s, int width) {
+        return padding(s, width, ' ');
+    }
+
     public static String padding(String s, int width, char c) {
         int size = s.length();
         if (size == width) return s;
@@ -126,6 +130,10 @@ public final class StringUtil {
             sb.append(c);
         }
         return sb.append(s).toString();
+    }
+
+    public static String paddingRight(String s, int width) {
+        return paddingRight(s, width, ' ');
     }
 
     public static String paddingRight(String s, int width, char c) {

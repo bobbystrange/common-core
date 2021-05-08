@@ -52,6 +52,15 @@ public class ArrayUtilTest {
         System.out.println(Arrays.toString(ArrayUtil.randomRangeOf(6)));
     }
 
+    @Test(expected = ArrayStoreException.class)
+    public void boxedTest() {
+        char[] a = new char[]{'A', 'B', 'C'};
+        System.out.println(Arrays.toString(ArrayUtil.boxed(a)));
+
+        Character[] b = new Character[a.length];
+        System.arraycopy(a, 0, b, 0, 3);
+        System.out.println(Arrays.toString(b));
+    }
 
 }
 

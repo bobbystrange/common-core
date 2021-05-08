@@ -21,9 +21,9 @@ public abstract class RBNode<N extends RBNode<N>> extends BinaryNode<N> {
      * all unbalance cases, LLb, LLr, LRb, LRr, RRb, RRr, RLb, RLr
      * XYr just change color, XYb need rotate
      *
-     * @param root   node to rotate
-     * @param x      x node
-     * @param <N> node type
+     * @param root node to rotate
+     * @param x    x node
+     * @param <N>  node type
      * @return the new root node
      */
     protected static <N extends RBNode<N>> N balanceInsertion(N root, N x) {

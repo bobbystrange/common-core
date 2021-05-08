@@ -28,10 +28,12 @@ public class DataTypeTest {
     }
 
     private static class Some<V> {
+
         V value;
     }
 
     private static class Result<Ok, Err> {
+
         Ok ok;
         Err error;
     }

@@ -26,7 +26,7 @@ public class JsonParseSpeedTest {
 
     @Test
     public void testParse() {
-        parse(this::jsonGen, 10, 10, 10);
+        parse(this::jsonGen, 1, 1, 16);
     }
 
     @Test
@@ -45,15 +45,24 @@ public class JsonParseSpeedTest {
     }
 
     public void parse(IntFunction<String> jsonGen, int bound, int levelStart, int levelEnd) {
-        System.out.println("\t\t\t for-each \t jackson\t\t gson\t common");
+        int paddingWidth = 16;
+        String header = StringUtil.repeat(' ', paddingWidth) +
+                StringUtil.padding("for-each", paddingWidth) +
+                StringUtil.padding("common", paddingWidth) +
+                StringUtil.padding("jackson", paddingWidth) +
+                StringUtil.padding("gson", paddingWidth);
+        System.out.println(header);
         for (int i = 1; i < (1 << bound); i *= 2) {
-            for (int k = levelStart; k <= levelEnd; k++) {
+            for (int k = levelStart; k < (1 << levelEnd); k *= 2) {
                 int finalK = k;
                 String ts = Timeit.ofActions()
                         .addUnaryAction(() -> jsonGen.apply(finalK), it -> {
                             for (int x = 0, len = it.length(); x < len; x++) {
-                                char c = it.charAt(x);
+                                char ignore = it.charAt(x);
                             }
+                        })
+                        .addUnaryAction(() -> jsonGen.apply(finalK), it -> {
+                            Object ignore = JsonMapper.parse(it);
                         })
                         .addUnaryAction(() -> jsonGen.apply(finalK), it -> {
                             JsonNode ignore = objectMapper.readTree(it);
@@ -61,12 +70,10 @@ public class JsonParseSpeedTest {
                         .addUnaryAction(() -> jsonGen.apply(finalK), it -> {
                             JsonElement ignore = gson.fromJson(it, JsonElement.class);
                         })
-                        .addUnaryAction(() -> jsonGen.apply(finalK), it -> {
-                            Object ignore = JsonMapper.parse(it);
-                        })
-                        .count(10).skip(2).repeat(i)
-                        .runAndFormatUs();
-                System.out.printf("%4d %2d \t %s\n", i, k, ts);
+                        .count(1).skip(0).repeat(i)
+                        .runAndFormatUs(paddingWidth);
+                String prefix = String.format("%4d %2d", i, k);
+                System.out.printf("%s%s\n", StringUtil.padding(prefix, paddingWidth), ts);
             }
         }
     }
@@ -86,7 +93,6 @@ public class JsonParseSpeedTest {
                                     String ignore = gson.toJson(it);
                                 })
                         .addUnaryAction(() -> JsonMapper.parse(jsonGen.apply(finalK)), it -> {
-                            @SuppressWarnings("deprecation")
                             String ignore = JsonMapper.stringify(it);
                         })
                         .count(10).skip(2).repeat(i)

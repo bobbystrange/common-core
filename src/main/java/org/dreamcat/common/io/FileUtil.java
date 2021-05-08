@@ -40,7 +40,7 @@ import org.dreamcat.common.util.ObjectUtil;
 @Slf4j
 public final class FileUtil {
 
-    private FileUtil(){
+    private FileUtil() {
     }
 
     /**

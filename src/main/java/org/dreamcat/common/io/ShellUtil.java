@@ -16,20 +16,23 @@ import org.dreamcat.common.util.ObjectUtil;
  * Create by tuke on 2019-02-13
  */
 @Slf4j
-public class ShellUtil {
+public final class ShellUtil {
+
+    private ShellUtil() {
+    }
 
     public static List<String> exec(String... cmd)
-            throws IOException, InterruptedException, RuntimeException {
+            throws IOException, InterruptedException {
         return exec(false, cmd);
     }
 
     public static List<String> exec(boolean verbose, String... cmd)
-            throws IOException, InterruptedException, RuntimeException {
+            throws IOException, InterruptedException {
         return exec(null, verbose, cmd);
     }
 
     public static List<String> exec(Duration timeout, String... cmd)
-            throws IOException, InterruptedException, RuntimeException {
+            throws IOException, InterruptedException {
         return exec(timeout, false, cmd);
     }
 
@@ -47,7 +50,7 @@ public class ShellUtil {
      * @throws RuntimeException     exit value is not equal 0
      */
     public static List<String> exec(Duration timeout, boolean verbose, String... cmd)
-            throws IOException, InterruptedException, RuntimeException {
+            throws IOException, InterruptedException {
         Process process = process(cmd);
         try {
             if (timeout == null) {
@@ -161,6 +164,9 @@ public class ShellUtil {
                 return Long.parseLong(lines.get(0));
             }
         } catch (Exception e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt(); // Restore interrupted state...
+            }
             log.error(e.getMessage());
         }
         throw new RuntimeException("Failed to get the free size of disk");
@@ -174,6 +180,9 @@ public class ShellUtil {
                 return Long.parseLong(lines.get(0));
             }
         } catch (Exception e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt(); // Restore interrupted state...
+            }
             log.error(e.getMessage());
         }
         throw new RuntimeException("Failed to get the used size of path " + path);

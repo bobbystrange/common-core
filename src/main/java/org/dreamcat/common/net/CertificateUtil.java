@@ -29,7 +29,7 @@ public final class CertificateUtil {
     // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     private static final String SunX509 = "SunX509";
-    private static final String SSL = "SSL";
+    private static final String TLS = "TLS";
 
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
@@ -45,7 +45,7 @@ public final class CertificateUtil {
         KeyStore trustkeyStore = getKeyStore(trustKeyStorePath, password);
         trustManagerFactory.init(trustkeyStore);
 
-        SSLContext sslContext = SSLContext.getInstance(SSL);
+        SSLContext sslContext = SSLContext.getInstance(TLS);
         sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory
                 .getTrustManagers(), null);
 

@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.IntPredicate;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntToLongFunction;
 import java.util.function.IntUnaryOperator;
@@ -18,6 +19,7 @@ import org.dreamcat.common.function.IntToByteFunction;
  * <p>
  * Note that end is endIndexExclusive since We follow the common rules or JDK
  */
+@SuppressWarnings({"unchecked"})
 public final class ArrayUtil {
 
     private ArrayUtil() {
@@ -295,7 +297,7 @@ public final class ArrayUtil {
         }
     }
 
-    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
 
     public static int binarySearch(int[] a, int key, Pair<Boolean, Integer> result) {
         return binarySearch(a, 0, a.length, key, result);
@@ -480,6 +482,178 @@ public final class ArrayUtil {
         return a.get(index);
     }
 
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static <T> T[] removeAt(T[] a, int index) {
+        int length = a.length;
+        if (index == 0) {
+            return Arrays.copyOfRange(a, 1, length);
+        }
+        if (index == length - 1) {
+            return Arrays.copyOf(a, length - 1);
+        }
+        T[] b = (T[]) Array.newInstance(a.getClass().getComponentType(), length - 1);
+        System.arraycopy(a, 0, b, 0, index);
+        System.arraycopy(a, index + 1, b, index, length - index - 1);
+        return b;
+    }
+
+    public static int[] removeAt(int[] a, int index) {
+        int length = a.length;
+        if (index == 0) {
+            return Arrays.copyOfRange(a, 1, length);
+        }
+        if (index == length - 1) {
+            return Arrays.copyOf(a, length - 1);
+        }
+        int[] b = new int[length - 1];
+        System.arraycopy(a, 0, b, 0, index);
+        System.arraycopy(a, index + 1, b, index, length - index - 1);
+        return b;
+    }
+
+    public static long[] removeAt(long[] a, int index) {
+        int length = a.length;
+        if (index == 0) {
+            return Arrays.copyOfRange(a, 1, length);
+        }
+        if (index == length - 1) {
+            return Arrays.copyOf(a, length - 1);
+        }
+        long[] b = new long[length - 1];
+        System.arraycopy(a, 0, b, 0, index);
+        System.arraycopy(a, index + 1, b, index, length - index - 1);
+        return b;
+    }
+
+    public static double[] removeAt(double[] a, int index) {
+        int length = a.length;
+        if (index == 0) {
+            return Arrays.copyOfRange(a, 1, length);
+        }
+        if (index == length - 1) {
+            return Arrays.copyOf(a, length - 1);
+        }
+        double[] b = new double[length - 1];
+        System.arraycopy(a, 0, b, 0, index);
+        System.arraycopy(a, index + 1, b, index, length - index - 1);
+        return b;
+    }
+
+    public static byte[] removeAt(byte[] a, int index) {
+        int length = a.length;
+        if (index == 0) {
+            return Arrays.copyOfRange(a, 1, length);
+        }
+        if (index == length - 1) {
+            return Arrays.copyOf(a, length - 1);
+        }
+        byte[] b = new byte[length - 1];
+        System.arraycopy(a, 0, b, 0, index);
+        System.arraycopy(a, index + 1, b, index, length - index - 1);
+        return b;
+    }
+
+    public static char[] removeAt(char[] a, int index) {
+        int length = a.length;
+        if (index == 0) {
+            return Arrays.copyOfRange(a, 1, length);
+        }
+        if (index == length - 1) {
+            return Arrays.copyOf(a, length - 1);
+        }
+        char[] b = new char[length - 1];
+        System.arraycopy(a, 0, b, 0, index);
+        System.arraycopy(a, index + 1, b, index, length - index - 1);
+        return b;
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static <T> T[] addAt(T[] a, int index, T elem) {
+        int length = a.length;
+        T[] b = (T[]) Array.newInstance(a.getClass().getComponentType(), length + 1);
+        b[index] = elem;
+
+        if (index > 0) {
+            System.arraycopy(a, 0, b, 0, index);
+        }
+        if (index < length) {
+            System.arraycopy(a, index, b, index + 1, length - index);
+        }
+        return b;
+    }
+
+    public static int[] addAt(int[] a, int index, int elem) {
+        int length = a.length;
+        int[] b = new int[length + 1];
+        b[index] = elem;
+
+        if (index > 0) {
+            System.arraycopy(a, 0, b, 0, index);
+        }
+        if (index < length) {
+            System.arraycopy(a, index, b, index + 1, length - index);
+        }
+        return b;
+    }
+
+    public static long[] addAt(long[] a, int index, long elem) {
+        int length = a.length;
+        long[] b = new long[length + 1];
+        b[index] = elem;
+
+        if (index > 0) {
+            System.arraycopy(a, 0, b, 0, index);
+        }
+        if (index < length) {
+            System.arraycopy(a, index, b, index + 1, length - index);
+        }
+        return b;
+    }
+
+    public static double[] addAt(double[] a, int index, double elem) {
+        int length = a.length;
+        double[] b = new double[length + 1];
+        b[index] = elem;
+
+        if (index > 0) {
+            System.arraycopy(a, 0, b, 0, index);
+        }
+        if (index < length) {
+            System.arraycopy(a, index, b, index + 1, length - index);
+        }
+        return b;
+    }
+
+    public static byte[] addAt(byte[] a, int index, byte elem) {
+        int length = a.length;
+        byte[] b = new byte[length + 1];
+        b[index] = elem;
+
+        if (index > 0) {
+            System.arraycopy(a, 0, b, 0, index);
+        }
+        if (index < length) {
+            System.arraycopy(a, index, b, index + 1, length - index);
+        }
+        return b;
+    }
+
+    public static char[] addAt(char[] a, int index, char elem) {
+        int length = a.length;
+        char[] b = new char[length + 1];
+        b[index] = elem;
+
+        if (index > 0) {
+            System.arraycopy(a, 0, b, 0, index);
+        }
+        if (index < length) {
+            System.arraycopy(a, index, b, index + 1, length - index);
+        }
+        return b;
+    }
+
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <T, R> List<List<R>> map(List<List<T>> list, Function<T, R> function) {
@@ -547,4 +721,30 @@ public final class ArrayUtil {
         return new int[]{start, end};
     }
 
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+    public static int[] partitionSort(int[] a, IntPredicate predicate) {
+        int length = a.length;
+        if (length <= 1) return a;
+
+        // find the first element which cannot pass the test
+        int middle = -1;
+        for (int i = 0; i < length; i++) {
+            if (!predicate.test(a[i])) {
+                middle = i;
+                break;
+            }
+        }
+        // the first element is the last one in the array, or not found
+        if (middle == length - 1 || middle == -1) return a;
+
+        // split three region: _test_, middle, _unsorted_
+        for (int i = middle + 1; i < length; i++) {
+            if (predicate.test(a[i])) {
+                SwapUtil.swap(a, i, middle);
+                middle++;
+            }
+        }
+        return a;
+    }
 }
