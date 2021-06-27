@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 
 /**
  * Create by tuke on 2020/5/29

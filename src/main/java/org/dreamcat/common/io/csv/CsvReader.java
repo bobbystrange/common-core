@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 import org.dreamcat.common.util.ArrayUtil;
 
 /**

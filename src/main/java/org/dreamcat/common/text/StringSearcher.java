@@ -9,6 +9,9 @@ import org.dreamcat.common.util.StringUtil;
  */
 public final class StringSearcher {
 
+    private StringSearcher() {
+    }
+
     public static Boolean extractBool(String s, int offset) {
         int size = s.length();
         int diff = size - offset;

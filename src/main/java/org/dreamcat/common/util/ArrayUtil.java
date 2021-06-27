@@ -11,7 +11,7 @@ import java.util.function.IntPredicate;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntToLongFunction;
 import java.util.function.IntUnaryOperator;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 import org.dreamcat.common.function.IntToByteFunction;
 
 /**

@@ -10,7 +10,7 @@ import static org.dreamcat.common.util.RandomUtil.randi;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.Timeit;
 import org.dreamcat.common.el.ElContext;
 import org.dreamcat.common.el.ElOperator;
 import org.dreamcat.common.el.ElString;

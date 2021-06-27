@@ -1,7 +1,7 @@
 package org.dreamcat.common.io.json;
 
 import java.util.Map;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 import org.dreamcat.common.text.NumericSearcher;
 import org.junit.Test;
 

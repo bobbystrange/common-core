@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.function.IntBinaryOperator;
 import lombok.RequiredArgsConstructor;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 import org.dreamcat.common.io.image.ImageUtil;
 import org.dreamcat.common.util.ObjectUtil;
 

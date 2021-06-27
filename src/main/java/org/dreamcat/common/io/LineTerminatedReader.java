@@ -2,7 +2,7 @@ package org.dreamcat.common.io;
 
 import java.io.IOException;
 import java.io.Reader;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 
 /**
  * Create by tuke on 2020/8/6

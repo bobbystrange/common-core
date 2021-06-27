@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.ComparatorUtil;
 import org.dreamcat.common.util.ObjectUtil;

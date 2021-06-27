@@ -3,7 +3,7 @@ package org.dreamcat.common.io.captcha;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 import org.dreamcat.common.io.image.ImageUtil;
 import org.junit.Ignore;
 import org.junit.Test;

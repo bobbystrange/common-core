@@ -1,6 +1,6 @@
 package org.dreamcat.common.util.array;
 
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 import org.dreamcat.common.util.ArrayUtil;
 import org.junit.Test;
 

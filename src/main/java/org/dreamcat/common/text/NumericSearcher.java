@@ -2,12 +2,15 @@ package org.dreamcat.common.text;
 
 import java.io.IOException;
 import java.io.Reader;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 
 /**
  * Create by tuke on 2019-02-16
  */
 public final class NumericSearcher {
+
+    private NumericSearcher() {
+    }
 
     // for double, 1sign + 11 exponent + 52 fraction, such as +1023.2251799813685248
     private static final int EXPECT_MAX_NUMBER_SIZE = 22;

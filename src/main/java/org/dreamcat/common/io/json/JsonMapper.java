@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.dreamcat.common.core.Pair;
-import org.dreamcat.common.core.Triple;
+import org.dreamcat.common.Pair;
+import org.dreamcat.common.Triple;
 import org.dreamcat.common.text.NumericSearcher;
 
 /**

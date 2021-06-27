@@ -1,6 +1,6 @@
 package org.dreamcat.java.concurrent.speed;
 
-import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.Timeit;
 import org.junit.Ignore;
 import org.junit.Test;
 

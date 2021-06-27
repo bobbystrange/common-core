@@ -18,6 +18,9 @@ import org.dreamcat.common.util.StringUtil;
  */
 public final class DollarInterpolation {
 
+    private DollarInterpolation() {
+    }
+
     public static String format(String s, Map<String, String> context) {
         return format(s, context, true, null);
     }

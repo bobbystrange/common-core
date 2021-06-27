@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
-import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.Timeit;
 import org.junit.Ignore;
 import org.junit.Test;
 

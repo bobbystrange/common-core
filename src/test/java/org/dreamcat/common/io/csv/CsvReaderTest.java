@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.dreamcat.common.core.Pair;
+import org.dreamcat.common.Pair;
 import org.dreamcat.common.io.LineTerminatedReaderTest;
 import org.junit.Test;
 

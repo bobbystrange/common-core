@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import java.util.function.IntFunction;
-import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.Timeit;
 import org.dreamcat.common.util.StringUtil;
 import org.junit.Ignore;
 import org.junit.Test;

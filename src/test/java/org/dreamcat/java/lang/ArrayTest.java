@@ -3,7 +3,7 @@ package org.dreamcat.java.lang;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
-import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.Timeit;
 import org.junit.Ignore;
 import org.junit.Test;
 

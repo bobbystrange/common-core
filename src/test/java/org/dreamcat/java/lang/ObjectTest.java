@@ -2,7 +2,7 @@ package org.dreamcat.java.lang;
 
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
-import org.dreamcat.common.core.Timeit;
+import org.dreamcat.common.Timeit;
 import org.junit.Ignore;
 import org.junit.Test;
 
