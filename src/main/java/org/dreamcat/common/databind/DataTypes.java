@@ -1,8 +1,13 @@
 package org.dreamcat.common.databind;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import org.dreamcat.common.util.ObjectUtil;
 
 /**
  * @author Jerry Will
@@ -13,6 +18,12 @@ public final class DataTypes {
     private DataTypes() {
     }
 
+    public static DataType fromType(Class<?> type, Type... parameterTypes) {
+        if (ObjectUtil.isEmpty(parameterTypes)) return fromType(type, EMPTY_ARRAY);
+        return fromType(type, Arrays.stream(parameterTypes).map(DataTypes::fromType)
+                .toArray(DataType[]::new));
+    }
+
     public static DataType fromType(Class<?> type) {
         return fromType(type, EMPTY_ARRAY);
     }
@@ -21,48 +32,52 @@ public final class DataTypes {
         if (!type.isArray()) {
             return new DataType(type, parameterTypes);
         }
-        Class<?> componentType = type.getComponentType();
-        DataType componentDataType = fromType(componentType);
-        return new DataType(componentDataType, parameterTypes);
+        return arrayType(type.getComponentType());
     }
 
-    public static DataType fromArrayType(Class<?> componentType) {
-        return fromArrayType(fromType(componentType));
+    public static DataType arrayType(Class<?> componentType) {
+        return arrayType(fromType(componentType));
     }
 
-    public static DataType fromArrayType(DataType componentType) {
-        return new DataType(componentType, EMPTY_ARRAY);
+    public static DataType arrayType(DataType componentDataType) {
+        return new DataType(componentDataType);
     }
 
-    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+    public static DataType fromType(Type type) {
+        return fromType(type, Collections.emptyMap());
+    }
 
-    public static DataType fromField(Field field) {
-        Class<?> clazz = field.getType();
-        if (clazz.isArray()) {
-            return fromArrayType(fromType(clazz.getComponentType()));
+    public static DataType fromType(Type type, Map<String, DataType> typeVars) {
+        if (type instanceof ParameterizedType) {
+            ParameterizedType genericType = (ParameterizedType) type;
+            Class<?> rawType = (Class<?>) genericType.getRawType();
+            DataType[] parameterTypes = getTypeArguments(genericType, typeVars);
+            return new DataType(rawType, parameterTypes);
+        } else if (type instanceof GenericArrayType) {
+            GenericArrayType genericType = (GenericArrayType) type;
+            Type genericComponentType = genericType.getGenericComponentType();
+            DataType componentType = fromType(genericComponentType, typeVars);
+            return new DataType(componentType);
+        } else if (type instanceof Class) {
+            Class<?> clazz = (Class<?>) type;
+            return fromType(clazz);
+        } else if (type instanceof DataType) {
+            return (DataType) type;
+        } else if (type instanceof TypeVariable) {
+            TypeVariable<?> tv = (TypeVariable<?>) type;
+            return typeVars.getOrDefault(tv.getName(), DataType.OBJECT);
+        } else {
+            return new DataType(Object.class);
         }
-        Type genericType = field.getGenericType();
-        if (genericType instanceof ParameterizedType) {
-            return fromType(clazz, getTypeArguments((ParameterizedType) genericType));
-        }
-        return fromType(clazz);
     }
 
-    private static DataType[] getTypeArguments(ParameterizedType parameterizedType) {
+    private static DataType[] getTypeArguments(ParameterizedType parameterizedType, Map<String, DataType> typeVars) {
         Type[] arguments = parameterizedType.getActualTypeArguments();
 
         int size = arguments.length;
         DataType[] types = new DataType[size];
         for (int i = 0; i < size; i++) {
-            Type argument = arguments[i];
-            if (argument instanceof ParameterizedType) {
-                ParameterizedType subParameterizedType = (ParameterizedType) argument;
-                Type rawType = subParameterizedType.getRawType();
-                DataType[] parameterTypes = getTypeArguments(subParameterizedType);
-                types[i] = fromType((Class<?>) rawType, parameterTypes);
-            } else {
-                types[i] = fromType((Class<?>) argument);
-            }
+            types[i] = fromType(arguments[i], typeVars);
         }
         return types;
     }

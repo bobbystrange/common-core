@@ -1,6 +1,5 @@
 package org.dreamcat.common.databind;
 
-import static org.dreamcat.common.databind.DataTypes.fromArrayType;
 import static org.dreamcat.common.databind.DataTypes.fromType;
 
 import java.util.Map;
@@ -14,6 +13,12 @@ import org.junit.Test;
 public class DataTypeTest {
 
     Result<int[][], Result<Map<String, Object>, Some<Long[][][]>>> result = new Result<>();
+
+    @Test
+    public void test() {
+        DataType t = fromType(String[][][].class);
+        log.info("{}", t);
+    }
 
     @Test
     public void testField() {
@@ -46,7 +51,7 @@ public class DataTypeTest {
                     assert b.equals(fromType(Some.class, fromType(A.class)));
 
                     assert x.equals("value");
-                    assert y.equals(fromType(Object.class));
+                    assert y.equals(fromType(A.class));
                 });
             });
         });
@@ -54,33 +59,37 @@ public class DataTypeTest {
 
     @Test
     public void testArray() {
-        DataType int_a_a = fromArrayType(fromArrayType(int.class));
-        DataType map = fromType(Map.class, fromType(String.class), fromType(Object.class));
-        DataType long_a_a_a = fromArrayType(fromArrayType(fromArrayType(Long.class)));
-        DataType some = fromType(Some.class, long_a_a_a);
-        DataType result_map_some = fromType(Result.class, map, some);
-
-        DataType resultType = fromType(Result.class, int_a_a, result_map_some);
+        DataType resultType = resultType();
         log.info("\n{}", resultType);
     }
 
-    private static class Some<V> {
+    static DataType resultType() {
+        DataType int_a_a = fromType(int[][].class);
+        DataType map = fromType(Map.class, fromType(String.class), fromType(Object.class));
+        DataType long_a_a_a = fromType(Long[][][].class);
+        DataType some = fromType(Some.class, long_a_a_a);
+        DataType result_map_some = fromType(Result.class, map, some);
+
+        return fromType(Result.class, int_a_a, result_map_some);
+    }
+
+    static class Some<V> {
 
         V value;
     }
 
-    private static class Result<Ok, Err> {
+    static class Result<Ok, Err> {
 
         Ok ok;
         Err error;
     }
 
-    private static class A {
+    static class A {
 
         B b;
     }
 
-    private static class B {
+    static class B {
 
         Some<A> some;
     }

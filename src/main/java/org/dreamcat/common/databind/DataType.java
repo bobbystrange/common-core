@@ -3,11 +3,14 @@ package org.dreamcat.common.databind;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.dreamcat.common.util.CollectionUtil;
 import org.dreamcat.common.util.ObjectUtil;
 import org.dreamcat.common.util.ReflectUtil;
 
@@ -23,38 +27,40 @@ import org.dreamcat.common.util.ReflectUtil;
  * Create by tuke on 2021/4/15
  */
 @Slf4j
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class DataType implements Type {
 
     /**
      * java type
      */
     @Getter
-    protected final Class<?> type;
+    final Class type;
 
     /**
      * generic type arguments
      */
     @Getter
-    protected final DataType[] parameterTypes;
+    final DataType[] parameterTypes;
 
     /**
      * array component type
      */
     @Getter
-    protected final DataType componentType;
+    final DataType componentType;
     /**
      * a immutable empty array and thus can be shared
      */
     @Getter
-    protected final Object emptyArray;
+    final Object emptyArray;
 
     /// transient fields
 
+    volatile Map<String, DataType> typeVars;
     /**
      * expressive op, only valid on a pojo type
      * note that lossy generic type since generic erasure
      */
-    protected volatile Map<String, DataType> fields;
+    volatile Map<String, DataType> fields;
 
     public DataType(Class<?> type, DataType... parameterTypes) {
         this.type = type;
@@ -63,10 +69,10 @@ public class DataType implements Type {
         this.emptyArray = null;
     }
 
-    public DataType(DataType componentType, DataType... parameterTypes) {
+    public DataType(DataType componentType) {
         Class<?> componentClass = componentType.getType();
         this.type = ReflectUtil.getArrayClass(componentClass);
-        this.parameterTypes = parameterTypes;
+        this.parameterTypes = null;
         this.componentType = componentType;
         this.emptyArray = Array.newInstance(componentClass, 0);
     }
@@ -156,14 +162,24 @@ public class DataType implements Type {
         return fields;
     }
 
+    public Map<String, DataType> loadTypeVars() {
+        if (typeVars != null) return typeVars;
+        synchronized (this) {
+            if (typeVars == null) {
+                this.initTypeVars();
+            }
+        }
+        return typeVars;
+    }
+
     private void initFields(Map<DataType, DataType> cache) {
         Map<String, Field> fieldMap = ReflectUtil.retrieveNoStaticFieldMap(type);
-        this.fields = new HashMap<>(fieldMap.size());
+        this.fields = new LinkedHashMap<>(fieldMap.size());
         for (Entry<String, Field> entry : fieldMap.entrySet()) {
             String fieldName = entry.getKey();
             Field field = entry.getValue();
 
-            DataType dataType = DataTypes.fromField(field);
+            DataType dataType = DataTypes.fromType(field.getGenericType(), this.loadTypeVars());
             DataType existingDataType = cache.get(dataType);
             if (existingDataType == null) {
                 cache.put(dataType, dataType);
@@ -174,5 +190,24 @@ public class DataType implements Type {
             this.fields.put(fieldName, dataType);
         }
     }
+
+    void initTypeVars() {
+        TypeVariable<Class>[] tvs = type.getTypeParameters();
+        if (ObjectUtil.isEmpty(tvs)) {
+            this.typeVars = Collections.emptyMap();
+            return;
+        }
+
+        this.typeVars = new LinkedHashMap<>();
+        int i = 0;
+        for (TypeVariable<Class> tv : tvs) {
+            DataType parameterType = CollectionUtil.elementAt(parameterTypes, i++, OBJECT);
+            this.typeVars.put(tv.getName(), parameterType);
+        }
+    }
+
+    // ---- ---- ---- ----    ---- ---- ---- ----    ---- ---- ---- ----
+
+    public static final DataType OBJECT = new DataType(Object.class);
 
 }

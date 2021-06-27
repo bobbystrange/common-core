@@ -650,12 +650,13 @@ public final class ReflectUtil {
         }
 
         try {
-            ClassLoader classLoader = componentType.getClassLoader();
-            if (classLoader != null) {
-                return classLoader.loadClass(name);
-            } else {
-                return Class.forName(name);
-            }
+            // ClassLoader classLoader = componentType.getClassLoader();
+            // if (classLoader != null) {
+            //     return classLoader.loadClass(name);
+            // } else {
+            //     return Class.forName(name);
+            // }
+            return Class.forName(name);
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(e);
         }

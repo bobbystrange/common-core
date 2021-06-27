@@ -70,14 +70,22 @@ public final class CollectionUtil {
     }
 
     public static <T> T elementAt(List<T> o, int index) {
-        if (ObjectUtil.isEmpty(o)) return null;
-        if (index < 0 || index >= o.size()) return null;
+        return elementAt(o, index, null);
+    }
+
+    public static <T> T elementAt(List<T> o, int index, T defaultVal) {
+        if (ObjectUtil.isEmpty(o)) return defaultVal;
+        if (index < 0 || index >= o.size()) return defaultVal;
         return o.get(index);
     }
 
     public static <T> T elementAt(T[] o, int index) {
-        if (ObjectUtil.isEmpty(o)) return null;
-        if (index < 0 || index >= o.length) return null;
+        return elementAt(o, index, null);
+    }
+
+    public static <T> T elementAt(T[] o, int index, T defaultVal) {
+        if (ObjectUtil.isEmpty(o)) return defaultVal;
+        if (index < 0 || index >= o.length) return defaultVal;
         return o[index];
     }
 
