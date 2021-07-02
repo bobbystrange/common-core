@@ -1,6 +1,6 @@
 package org.dreamcat.common.pattern.creator;
 
-import org.dreamcat.common.function.ThrowableFunction;
+import org.dreamcat.common.function.ExpFunction;
 import org.dreamcat.common.pattern.chain.Interceptor;
 import org.dreamcat.common.pattern.chain.RealCall;
 import org.dreamcat.common.pattern.chain.RealInterceptTarget;
@@ -11,19 +11,19 @@ import org.dreamcat.common.pattern.chain.RealInterceptTarget;
 public class CreatorCall<T> implements ModalCreator.Call<T> {
 
     private final Object original;
-    private final ThrowableFunction<Object, T> converter;
+    private final ExpFunction<Object, T, ?> converter;
 
     private RealCall<Object, T> realCall;
     private boolean executed;
     private volatile boolean canceled;
 
-    private CreatorCall(Object original, ThrowableFunction<Object, T> converter) {
+    private CreatorCall(Object original, ExpFunction<Object, T, ?> converter) {
         this.original = original;
         this.converter = converter;
     }
 
     public static <T> CreatorCall<T> newCall(
-            Object original, ThrowableFunction<Object, T> converter) {
+            Object original, ExpFunction<Object, T, ?> converter) {
         return new CreatorCall<>(original, converter);
     }
 
@@ -90,14 +90,14 @@ public class CreatorCall<T> implements ModalCreator.Call<T> {
     }
 
     @Override
-    public <R> ModalCreator.Call<R> to(ThrowableFunction<T, R> converter) {
-        ThrowableFunction<Object, R> newConverter = it -> converter.apply(
+    public <R> ModalCreator.Call<R> to(ExpFunction<T, R, ?> converter) {
+        ExpFunction<Object, R, ?> newConverter = it -> converter.apply(
                 CreatorCall.this.converter.apply(it));
         return newCall(original, newConverter);
     }
 
     private RealCall<Object, T> newRawCall(
-            Object original, ThrowableFunction<Object, T> converter) {
+            Object original, ExpFunction<Object, T, ?> converter) {
         RealInterceptTarget<Object, T> interceptable =
                 new RealInterceptTarget.Builder<>(converter)
                         .build();

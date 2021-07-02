@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.helpers.MessageFormatter;
 
 /**
  * Create by tuke on 2019-02-16
@@ -13,6 +14,19 @@ public final class StringUtil {
 
     private StringUtil() {
     }
+
+    /**
+     * replace {} with args
+     *
+     * @param pattern pattern contains {}
+     * @param args    arg array
+     * @return formatted string
+     */
+    public static String format(String pattern, Object... args) {
+        return MessageFormatter.arrayFormat(pattern, args).getMessage();
+    }
+
+    // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     /**
      * repeat a string and fill gaps

@@ -3,14 +3,14 @@ package org.dreamcat.common.pattern.chain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import org.dreamcat.common.function.ThrowableFunction;
+import org.dreamcat.common.function.ExpFunction;
 
 /**
  * Create by tuke on 2018-09-08
  */
 public class RealInterceptTarget<I, O> implements InterceptTarget<I, O>, Interceptor<I, O> {
 
-    protected final ThrowableFunction<I, O> function;
+    protected final ExpFunction<I, O, ?> function;
 
     protected Interceptor.Dispatcher<I, O> dispatcher;
 
@@ -21,7 +21,7 @@ public class RealInterceptTarget<I, O> implements InterceptTarget<I, O>, Interce
     protected Function<I, String> originalName;
 
     // don't call it directly, use Builder instead
-    protected RealInterceptTarget(ThrowableFunction<I, O> function) {
+    protected RealInterceptTarget(ExpFunction<I, O, ?> function) {
         this.function = function;
         this.dispatcher = new RealDispatcher<>();
         this.interceptors = new ArrayList<>();
@@ -30,7 +30,7 @@ public class RealInterceptTarget<I, O> implements InterceptTarget<I, O>, Interce
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <I, O> Builder<I, O> builder(
-            ThrowableFunction<I, O> function) {
+            ExpFunction<I, O, ?> function) {
         return new Builder<>(function);
     }
 
@@ -65,7 +65,7 @@ public class RealInterceptTarget<I, O> implements InterceptTarget<I, O>, Interce
 
         private final RealInterceptTarget<I, O> target;
 
-        public Builder(ThrowableFunction<I, O> function) {
+        public Builder(ExpFunction<I, O, ?> function) {
             this.target = new RealInterceptTarget<>(function);
         }
 

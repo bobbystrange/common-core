@@ -8,8 +8,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
-import org.dreamcat.common.function.ThrowableSupplier;
-import org.dreamcat.common.function.ThrowableVoidConsumer;
+import org.dreamcat.common.function.ExpSupplier;
+import org.dreamcat.common.function.ExpVoidConsumer;
 
 public final class ThreadUtil {
 
@@ -52,7 +52,7 @@ public final class ThreadUtil {
     // ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
 
     public static <V> FutureTask<V> futureTask(
-            ThrowableSupplier<V> callable) {
+            ExpSupplier<V, ?> callable) {
         return new FutureTask<>(() -> {
             try {
                 return callable.get();
@@ -63,7 +63,7 @@ public final class ThreadUtil {
     }
 
     public static FutureTask<Exception> futureTask(
-            ThrowableVoidConsumer runnable) {
+            ExpVoidConsumer<?> runnable) {
         return new FutureTask<>(() -> {
             try {
                 runnable.accept();

@@ -5,7 +5,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import org.dreamcat.common.function.ThrowableFunction;
+import org.dreamcat.common.function.ExpFunction;
 
 /**
  * Create by tuke on 2018-09-09
@@ -113,7 +113,7 @@ public interface ModalCreator {
 
         Object original();
 
-        <R> Call<R> to(ThrowableFunction<T, R> converter);
+        <R> Call<R> to(ExpFunction<T, R, ?> converter);
     }
 
     interface Callback<T> {

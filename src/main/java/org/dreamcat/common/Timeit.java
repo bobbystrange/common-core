@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
-import org.dreamcat.common.function.ThrowableConsumer;
-import org.dreamcat.common.function.ThrowableObjectArrayConsumer;
-import org.dreamcat.common.function.ThrowableSupplier;
-import org.dreamcat.common.function.ThrowableVoidConsumer;
+import org.dreamcat.common.function.ExpConsumer;
+import org.dreamcat.common.function.ExpObjectArrayConsumer;
+import org.dreamcat.common.function.ExpSupplier;
+import org.dreamcat.common.function.ExpVoidConsumer;
 import org.dreamcat.common.util.ArrayUtil;
 import org.dreamcat.common.util.ObjectUtil;
 import org.dreamcat.common.util.StringUtil;
@@ -121,18 +121,18 @@ public class Timeit {
     }
 
     public Timeit addAction(
-            ThrowableSupplier<Object[]> supplier,
-            ThrowableObjectArrayConsumer action) {
+            ExpSupplier<Object[], ?> supplier,
+            ExpObjectArrayConsumer<?> action) {
         this.actions.add(new Actor(supplier, action));
         return this;
     }
 
-    public Timeit addAction(ThrowableVoidConsumer action) {
+    public Timeit addAction(ExpVoidConsumer<?> action) {
         this.actions.add(new VoidActor(action));
         return this;
     }
 
-    public <T> Timeit addUnaryAction(ThrowableSupplier<T> supplier, ThrowableConsumer<T> action) {
+    public <T> Timeit addUnaryAction(ExpSupplier<T, ?> supplier, ExpConsumer<T, ?> action) {
         this.actions.add(new UnaryActor(supplier, action));
         return this;
     }
@@ -241,20 +241,20 @@ public class Timeit {
     @AllArgsConstructor
     private static class Actor {
 
-        ThrowableSupplier<Object[]> supplier;
-        ThrowableObjectArrayConsumer action;
+        ExpSupplier<Object[], ?> supplier;
+        ExpObjectArrayConsumer<?> action;
     }
 
     @AllArgsConstructor
     private static class UnaryActor<T> {
 
-        ThrowableSupplier<T> supplier;
-        ThrowableConsumer<T> action;
+        ExpSupplier<T, ?> supplier;
+        ExpConsumer<T, ?> action;
     }
 
     @AllArgsConstructor
     private static class VoidActor {
 
-        ThrowableVoidConsumer action;
+        ExpVoidConsumer<?> action;
     }
 }
